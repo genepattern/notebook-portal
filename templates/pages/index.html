@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load pages_tags mezzanine_tags keyword_tags i18n staticfiles static %}
+
+{% block meta_title %}GenePattern Notebook{% endblock %}
+{% block title %}GenePattern Notebook{% endblock %}
+
+{% block meta_keywords %}{% metablock %}
+{% keywords_for page as keywords %}
+{% for keyword in keywords %}
+    {% if not forloop.first %}, {% endif %}
+    {{ keyword }}
+{% endfor %}
+{% endmetablock %}{% endblock %}
+
+{% block meta_description %}{% metablock %}
+{{ page.description }}
+{% endmetablock %}{% endblock %}
+
+{% block extra_css %}
+    <style type="text/css">
+        div.lead-cover {
+            height: 60vh;
+        }
+
+        .main-container {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block lead %}
+    <div class="lead-cover">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="lead-big">GenePattern <span class="gray">Notebook</span></h1>
+                    <h3>Integrating <a href="https://genepattern.org"><img class="index-logo" src="/static/images/genepattern.png" /> <strong>GenePattern</strong></a> Genomic Analyses with the <a href="https://jupyter.org"><img class="index-logo" src="/static/images/jupyter-white.png" /> <strong>Jupyter</strong></a> Notebook Environment</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="info-block">
+                    <h3>Getting Started</h3>
+                    <p>Learn how to use GenePattern Notebook</p>
+                    <ul>
+                        <li><a href="user-guide/">Quick-Start</a></li>
+                        <li><a href="basic-features/">Basic Features</a></li>
+                        <li><a href="tutorials/">Tutorial Videos</a></li>
+                        <li><a href="https://gpnotebook-website-docs.readthedocs.io/en/latest/faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <p class="more-info"><a class="btn btn-secondary" href="/user-guide/">Quick-Start</a></p>
+            </div>
+            <div class="col-sm-4">
+                <div class="info-block">
+                    <h3>Use GenePattern Notebook</h3>
+                    <p>For free on our hosted servers or locally</p>
+                    <ul>
+                        <li><a href="https://notebooks.genepattern.org">Login or Register</a></li>
+                        <li><a href="/user-guide/">User Guide</a></li>
+                        <li><a href="/library/">Notebook Library</a></li>
+                        <li><a href="/install/">How to Install</a></li>
+                    </ul>
+                </div>
+                <p class="more-info"><a class="btn btn-secondary" href="https://notebook.genepattern.org/hub/login">Login or Register</a></p>
+            </div>
+            <div class="col-sm-4">
+                <div class="info-block">
+                    <h3>Develop Notebooks</h3>
+                    <p>Join our bioinformatics notebook community</p>
+                    <ul>
+                        <li><a href="/documentation/">Documentation</a></li>
+                        <li><a href="/programmatic-features/">Programmatic Features</a></li>
+                        <li><a href="https://github.com/genepattern/genepattern-notebook">Github Page</a></li>
+                        <li><a href="/best-practices/">Best Practices</a></li>
+                    </ul>
+                </div>
+                <p class="more-info"><a class="btn btn-secondary" href="/sphinx/build/html/">Documentation</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container index-row-middle">
+        <div class="row">
+            <div class="col-md-12 info-block">
+                <h2>In the News</h2>
+                <div>
+                    <a href="https://blogs.nature.com/naturejobs/2017/09/15/techblog-jupyter-powers-bioinformatics-again">
+                        <img src="/static/images/naturejobs.png"/>
+                    </a>
+                    <a href="https://www.bio-itworld.com/2017/08/31/genepattern-notebook-environment-needs-only-web-browser-analyses.aspx">
+                        <img src="/static/images/bioit.png"/></a>
+                    <a href="https://www.genomeweb.com/informatics/broads-genepattern-now-has-notebook-aggregation-collaboration-features">
+                        <img src="/static/images/genomeweb.png"/>
+                    </a>
+                </div>
+
+                <div>
+                    <a href="https://blogs.nature.com/naturejobs/2017/09/15/techblog-jupyter-powers-bioinformatics-again">
+                        "TechBlog: Jupyter powers bioinformatics, again"
+                    </a><br/>
+                    <a href="https://www.bio-itworld.com/2017/08/31/genepattern-notebook-environment-needs-only-web-browser-analyses.aspx">
+                        "GenePattern Notebook Environment Needs Only A Web Browser To Run Analyses"
+                    </a><br/>
+                    <a href="https://www.genomeweb.com/informatics/broads-genepattern-now-has-notebook-aggregation-collaboration-features">
+                        "Broad's GenePattern Now Has 'Notebook' Aggregation, Collaboration Features"
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container index-row-middle">
+        <div class="row">
+            <div class="col-md-12 info-block">
+                <h2>How to Cite</h2>
+                <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5572818/">
+                    Reich et al. The GenePattern Notebook Environment. Cell Systems. 2017(5):149-51
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container index-row-bottom">
+        <div class="row">
+            <div class="col-md-12 info-block">
+                <h2>Introduction to the GenePattern Notebook Environment</h2>
+                <div class="text-center">
+                    <iframe src="https://www.youtube.com/embed/8npzyGLpUHU" allowfullscreen="" width="80%" height="530px" frameborder="0" align="middle"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block main %}
+{% endblock %}

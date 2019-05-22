@@ -1,0 +1,57 @@
+{% extends "pages/page.html" %}
+{% load mezzanine_tags keyword_tags staticfiles static %}
+
+{% block meta_title %}Job Results{% endblock %}
+{% block title %}Job Results{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static "css/gpnb-extension.css" %}">
+    <style type="text/css">
+        #jobs_header {
+            margin-bottom: 20px;
+        }
+
+        .job-widget {
+            margin-bottom: 10px;
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block body_class %}no-cover{% endblock %}
+
+{% block extra_head %}
+    <script src="{% static "js/gp.js" %}"></script>
+    <script src="{% static "js/gp-widget.js" %}"></script>
+{% endblock %}
+
+{% block main %}
+    <h1>Job Results</h1>
+    <div id="jobs_header" class="row">
+        <div class="col-md-4 text-left">
+            <select class="form-control">
+                <option>Show My Job Results</option>
+                <option selected>Show All Job Results</option>
+            </select>
+        </div>
+        <div class="col-md-4 text-left"></div>
+        <div class="col-md-4 text-right">
+            <input type="search" placeholder="Search Jobs" class="form-control" />
+        </div>
+    </div>
+    <div id="jobs"></div>
+{% endblock %}
+
+{% block footer_js %}
+    <script type="module">
+        // Import the application module
+        import * as GenePattern from "/static/js/app.js";
+
+        // Display the sidebar
+        GenePattern.display_sidebar();
+
+        // Initialize the jobs list
+        GenePattern.jobs("#jobs");
+
+    </script>
+{% endblock %}

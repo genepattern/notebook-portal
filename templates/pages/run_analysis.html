@@ -1,0 +1,50 @@
+{% extends "pages/page.html" %}
+{% load mezzanine_tags keyword_tags staticfiles static %}
+
+{% block meta_title %}GenePattern Analyses{% endblock %}
+{% block title %}GenePattern Analyses{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static "css/gpnb-extension.css" %}">
+    <style type="text/css">
+        .task-widget {
+            width: 100%;
+        }
+
+        .task-widget-param-wrapper {
+            width: calc(100% - 150px);
+        }
+
+        .file-widget, .text-widget-input, .choice-widget-select {
+            min-width: 100%;
+        }
+
+        button.task-widget-run-button {
+            margin-right: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block body_class %}no-cover{% endblock %}
+
+{% block extra_head %}
+    <script src="{% static "js/gp.js" %}"></script>
+    <script src="{% static "js/gp-widget.js" %}"></script>
+{% endblock %}
+
+{% block main %}
+    <div id="run_analysis"></div>
+{% endblock %}
+
+{% block footer_js %}
+    <script type="module">
+        // Import the application module
+        import * as GenePattern from "/static/js/app.js";
+
+        // Display the sidebar
+        GenePattern.display_sidebar();
+
+        // Initialize module search/browse
+        GenePattern.run_analysis("#run_analysis", '{{ lsid }}');
+    </script>
+{% endblock %}

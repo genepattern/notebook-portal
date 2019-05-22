@@ -1,0 +1,49 @@
+{% extends "pages/page.html" %}
+{% load mezzanine_tags keyword_tags staticfiles static %}
+
+{% block meta_title %}GenePattern Analyses{% endblock %}
+{% block title %}GenePattern Analyses{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static "css/gpnb-extension.css" %}">
+    <style type="text/css">
+        #analyses_header {
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block body_class %}no-cover{% endblock %}
+
+{% block extra_head %}
+    <script src="{% static "js/gp.js" %}"></script>
+    <script src="{% static "js/gp-widget.js" %}"></script>
+{% endblock %}
+
+{% block main %}
+    <div id="analyses">
+        <div id="analyses_header">
+            <h1>GenePattern Analyses</h1>
+            <input type="search" placeholder="Search Analyses" class="form-control mod-search" v-model="search" />
+        </div>
+        <div class="categories">
+            <module-category v-for="c in categories" :category="c"></module-category>
+        </div>
+        <div class="modules d-none">
+            <module-category v-for="m in modules" :category="m"></module-category>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer_js %}
+    <script type="module">
+        // Import the application module
+        import * as GenePattern from "/static/js/app.js";
+
+        // Display the sidebar
+        GenePattern.display_sidebar();
+
+        // Initialize module search/browse
+        GenePattern.analyses("#analyses");
+    </script>
+{% endblock %}
