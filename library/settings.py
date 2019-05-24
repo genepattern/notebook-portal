@@ -367,10 +367,12 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'library.auth.GenePatternAuthentication',
         'nbrepo.auth.JupyterHubAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'library.auth.GenePatternAuthentication',
     ),
     # 'PAGE_SIZE': 1000,
     #'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoObjectPermissionsFilter',),

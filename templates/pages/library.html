@@ -1,0 +1,40 @@
+{% extends "pages/page.html" %}
+{% load mezzanine_tags keyword_tags staticfiles static %}
+
+{% block meta_title %}GenePattern Analyses{% endblock %}
+{% block title %}GenePattern Analyses{% endblock %}
+
+{% block extra_css %}
+    <style type="text/css">
+        #library_header {
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block body_class %}no-cover{% endblock %}
+
+{% block main %}
+    <div id="library">
+        <div id="library_header">
+            <h1>Notebook Library</h1>
+            <input type="search" placeholder="Search Notebooks" class="form-control mod-search" v-model="search" />
+        </div>
+        <div class="notebooks">
+            <notebook-card v-for="nb in notebooks" :nb="nb"></notebook-card>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer_js %}
+    <script type="module">
+        // Import the application module
+        import * as GenePattern from "/static/js/app.js";
+
+        // Display the sidebar
+        GenePattern.display_sidebar();
+
+        // Initialize module search/browse
+        GenePattern.library("#library");
+    </script>
+{% endblock %}

@@ -64,7 +64,24 @@
         </div>
     {% endblock %}
 
+    <!-- Display alerts -->
+    {% block alerts %}
+        {% nevercache %}
+            <div id="messages" class="container">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-dismissable alert-{{ message.tags }}" data-alert="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endnevercache %}
+    {% endblock %}
+
     {% block sidebar %}
+        {% if user.is_authenticated %}
         <div class="sidebar" style="display: none;">
             <a class="sidebar-link" href="/dashboard/">
                 <i class="fas fa-tachometer-alt sidebar-icon"></i>
@@ -91,22 +108,7 @@
                 <div class="sidebar-title">Workspace</div>
             </a>
         </div>
-    {% endblock %}
-
-    <!-- Display alerts -->
-    {% block alerts %}
-        {% nevercache %}
-            {% if messages %}
-                <div class="messages">
-                    {% for message in messages %}
-                        <div class="alert alert-dismissable alert-{{ message.tags }}" data-alert="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endnevercache %}
+        {% endif %}
     {% endblock %}
 
     <!-- Display the main content -->

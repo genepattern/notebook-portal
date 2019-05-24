@@ -66,7 +66,84 @@ export function module_categories() {
     });
 }
 
+export function modal({title='GenePattern Dialog', body='', buttons={'OK':{}}}) {
+    // Create the base modal element
+    const modal_base = $(`<div class="modal fade" tabindex="-1" role="dialog" style="display: none;">`)
+        .append(
+            $(`<div class="modal-dialog modal-dialog-centered modal-lg" role="document"></div>`)
+                .append(
+                    $(`<div class="modal-content"></div>`)
+                        .append(
+                            $(`<div class="modal-header">`)
+                                .append($(`<h5 class="modal-title">${title}</h5>`))
+                                .append($(`<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>`))
+                        )
+                        .append(
+                            $(`<div class="modal-body"></div>`)
+                                .html(body)
+                        )
+                        .append(
+                            $(`<div class="modal-footer"></div>`)
+                        )
+                )
+        );
+
+    // Add the buttons
+    const footer = modal_base.find('.modal-footer');
+    Object.keys(buttons).forEach(function(label) {
+        // Defaults
+        const value = buttons[label];
+        let btn_class = 'btn-secondary';
+        let click = close_modal;
+
+        // Read options
+        if (typeof value === 'function') click = value;
+        if (typeof value === 'object') {
+            if (value['class']) btn_class = value['class'];
+            if (value['click']) click = value['click'];
+        }
+
+        // Add the button
+        footer.append(
+            $(`<button type="button" class="btn ${btn_class}">${label}</button>`)
+                .click(click)
+        );
+    });
+
+    // Attach and show the dialog
+    $("body").append(modal_base);
+    modal_base.modal("show");
+}
+
+export function close_modal() {
+    $('.modal').modal('hide');
+}
+
+export function message(msg, type='info') {
+    const messages_box = $('#messages');
+    const alert = $(`<div class="alert row alert-${type} alert-dismissible fade show" role="alert">${msg}</div>`)
+        .append($(`<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                   </button>`));
+    messages_box.append(alert)
+}
+
+export function system_message() {
+    // Get the status message
+    fetch(`${GENEPATTERN_SERVER}rest/v1/config/system-message`)
+        .then(msg => msg.text())
+        .then(msg => message(msg));
+}
+
+
+/*****************
+ * Vue page apps *
+ *****************/
+
 export function dashboard(selector) {
+    // Display the system message
+    system_message();
+
     const dashboard_app = new Vue({
         el: selector,
         delimiters: ['[[', ']]'],
@@ -93,6 +170,24 @@ export function dashboard(selector) {
     });
 
     return dashboard_app;
+}
+
+export function library(selector) {
+    const library_app = new Vue({
+        el: selector,
+        delimiters: ['[[', ']]'],
+        data: {
+            notebooks: [],
+            search: ''
+        },
+        computed: {},
+        created() {
+            GenePattern.public_notebooks().then(r => this.notebooks = r);
+        },
+        methods: {}
+    });
+
+    return library_app;
 }
 
 export function jobs(selector) {
@@ -172,6 +267,108 @@ export function analyses(selector) {
     });
 
     return analyses_app;
+}
+
+export function register_form(selector) {
+    const register_app = new Vue({
+        el: selector,
+        delimiters: ['[[', ']]'],
+        data: {
+            username: '',
+            password: '',
+            password_confirm: '',
+            email: ''
+        },
+        watch: {
+            'password_confirm': () => register_app.validate_password(),
+            'password': () => register_app.validate_password()
+        },
+        methods: {
+            'show_spinner': function() {
+                const footer = $(selector).find(".modal-footer");
+                let spinner = footer.find('.spinner-border');
+
+                // Toggle visibility on if spinner exists
+                if (spinner.length) spinner.show();
+
+                // Otherwise, add the spinner
+                else footer.prepend(
+                    $(`<div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>`)
+                );
+            },
+            'hide_spinner': function() {
+                const spinner = $(selector).find(".modal-footer").find('.spinner-border');
+                if (spinner) spinner.hide();
+            },
+            'validate_password': function() {
+                const registration_form = $(selector);
+                const password = registration_form.find('input[name=password]');
+                const confirm = registration_form.find("input[name='confirm']");
+
+                if (password.val() === confirm.val()) {
+                    confirm[0].setCustomValidity('');
+                    registration_form.closest('.modal').find('.btn.btn-primary').attr("disabled", false);
+                    return true;
+                }
+                else {
+                    confirm[0].setCustomValidity("Passwords don't match");
+                    registration_form.closest('.modal').find('.btn.btn-primary').attr("disabled", true);
+                    return false;
+                }
+            },
+            'submit': function () {
+                // Gather the form data
+                const formData = {
+                    'username': this.username,
+                    'password': this.password,
+                    'email': this.email,
+                    'client_id': 'GenePattern Notebook Library'
+                };
+
+                // Submit the form
+                this.show_spinner();
+                $.ajax({
+                    beforeSend: function(xhrObj){
+                        xhrObj.setRequestHeader("Content-Type","application/json");
+                        xhrObj.setRequestHeader("Accept","application/json");
+                    },
+                    type: 'POST',
+                    url: `${GENEPATTERN_SERVER}rest/v1/oauth2/register`,
+                    crossDomain: true,
+                    data: JSON.stringify(formData),
+                    dataType: 'json',
+                    success: function (data) {
+                        close_modal();
+                        message("GenePattern registration successful.", "success");
+                    },
+                    error: function(xhr) {
+                        close_modal();
+                        this.hide_spinner();
+
+                        // Handle errors
+                        if (xhr.status === 404) {
+                            message("Unable to register user. Could not contact the GenePattern server or remote registration unsupported.", 'danger');
+                        }
+                        else {
+                            try {
+                                message(JSON.parse(xhr.responseText).error, 'danger');
+                            }
+                            catch(e) {
+                                message(xhr.responseText, 'danger');
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    // Store reference to app in the data
+    $(selector).data('app', register_app);
+
+    return register_app;
 }
 
 /******************
@@ -280,8 +477,6 @@ Vue.component('notebook-carousel', {
     },
     methods: {
         next_page() {
-            console.log(this.page_count());
-            console.log(this.size);
             if (this.page_number === this.page_count()-1) this.page_number = 0;
             this.page_number++;
         },
@@ -317,6 +512,97 @@ Vue.component('notebook-carousel', {
                        <button class="nb-carousel-button" v-on:click="next_page">
                            <i class="fas fa-arrow-circle-right"></i>
                        </button>
+                   </div>
+               </div>`
+});
+
+Vue.component('login-register', {
+    delimiters: ['[[', ']]'],
+    props: ['title'],
+    methods: {
+        'login_dialog': function() {
+            modal({
+                'title': 'Log in to GenePattern',
+                'body': `<form>
+                             <div class="form-group row">
+                                 <label for="username" class="col-sm-2 col-sm-3">Username</label>
+                                 <div class="col-sm-9">
+                                     <input name="username" type="text" class="form-control" placeholder="Username">
+                                 </div>
+                             </div>
+                             <div class="form-group row">
+                                 <label for="password" class="col-sm-2 col-sm-3">Password</label>
+                                 <div class="col-sm-9">
+                                     <input name="password" type="password" class="form-control" placeholder="Password">
+                                 </div>
+                             </div>
+                         </form>`,
+                'buttons': {
+                    'Forgot Password': {
+                        'class': 'btn-outline-secondary',
+                        'click': function() {
+                            console.log('ok');
+                        }
+                    },
+                    'Cancel': {},
+                    'Login': {
+                        'class': 'btn-primary',
+                        'click': function() {
+                            console.log('ok');
+                        }
+                    }
+                }
+            });
+        },
+        'register_dialog': function() {
+            modal({
+                'title': 'Register for a GenePattern Account',
+                'body': `<form id="register_form">
+                             <div class="form-group row">
+                                 <label for="username" class="col-sm-2 col-sm-3">Username</label>
+                                 <div class="col-sm-9">
+                                     <input name="username" type="text" class="form-control" placeholder="Username" v-model="username">
+                                 </div>
+                             </div>
+                             <div class="form-group row">
+                                 <label for="password" class="col-sm-2 col-sm-3">Password</label>
+                                 <div class="col-sm-9">
+                                     <input name="password" type="password" class="form-control" placeholder="Password" v-model="password">
+                                 </div>
+                             </div>
+                             <div class="form-group row">
+                                 <label for="confirm" class="col-sm-2 col-sm-3">Password (again)</label>
+                                 <div class="col-sm-9">
+                                     <input name="confirm" type="password" class="form-control" placeholder="Password (again)" v-model="password_confirm">
+                                 </div>
+                             </div>
+                             <div class="form-group row">
+                                 <label for="email" class="col-sm-2 col-sm-3">Email</label>
+                                 <div class="col-sm-9">
+                                     <input name="email" type="email" class="form-control" placeholder="Email Address" v-model="email">
+                                 </div>
+                             </div>
+                         </form>`,
+                'buttons': {
+                    'Cancel': {},
+                    'Register': {
+                        'class': 'btn-primary',
+                        'click': function() {
+                            const app = $('#register_form').data("app");
+                            app.submit();
+                        }
+                    }
+                }
+            });
+            register_form('#register_form');
+        }
+    },
+    mounted: function() {},
+    template: `<div class="login-register">
+                   <h1>[[ title ]]</h1>
+                   <div class="card login-card">
+                       <a class="btn btn-lg btn-primary" v-on:click="login_dialog">Login</a> 
+                       <a class="btn btn-lg btn-secondary" v-on:click="register_dialog">Register</a>
                    </div>
                </div>`
 });

@@ -375,3 +375,7 @@ div.nb-card {
     max-height: 48px;
     overflow: hidden;
 }
+
+.login-register .btn {
+    cursor: pointer;
+}

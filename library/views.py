@@ -29,6 +29,12 @@ def dashboard(request):
     return HttpResponse(template.render(context, request))
 
 
+def library(request):
+    # Display the run template
+    template = loader.get_template('pages/library.html')
+    return HttpResponse(template.render({}, request))
+
+
 def jobs(request):
     # Display the jobs template
     template = loader.get_template('pages/jobs.html')

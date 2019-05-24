@@ -16,19 +16,11 @@
 
 {% block main %}
     <div id="vue">
-        <h1>Your Notebooks</h1>
-        <div class="card login-card">
-            <a class="btn btn-lg btn-primary">Login</a> <a class="btn btn-lg btn-secondary">Register</a>
-        </div>
-
+        <login-register title="Your Notebooks"></login-register>
         <notebook-carousel header="Tutorial Notebooks" v-bind:nblist="tutorial_notebooks"></notebook-carousel>
         <notebook-carousel header="Public Notebooks" v-bind:nblist="notebooks"></notebook-carousel>
         <notebook-carousel header="Analyses" v-bind:nblist="modules"></notebook-carousel>
-
-        <h1>Shared Notebooks</h1>
-        <div class="card login-card">
-            <a class="btn btn-lg btn-primary">Login</a> <a class="btn btn-lg btn-secondary">Register</a>
-        </div>
+        <login-register title="Shared Notebooks"></login-register>
     </div>
 {% endblock %}
 
