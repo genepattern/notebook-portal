@@ -9,7 +9,8 @@ let _workspace_notebooks = null;
 let _genepattern_modules = null;
 
 export function display_sidebar() {
-    document.querySelector('.sidebar').style.display = 'block';
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) sidebar.style.display = 'block';
 }
 
 /**
