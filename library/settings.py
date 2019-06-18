@@ -74,7 +74,10 @@ USE_I18N = False
 # Whether a user's session cookie expires when the Web browser is closed.
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-AUTHENTICATION_BACKENDS = ("mezzanine.core.auth_backends.MezzanineBackend",)
+AUTHENTICATION_BACKENDS = (
+    'library.auth.GenePatternAuthenticationBackend',
+    "mezzanine.core.auth_backends.MezzanineBackend",
+)
 
 # The numeric mode to set newly-uploaded files to. The value should be
 # a mode you'd pass directly to os.chmod.
@@ -367,12 +370,11 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'library.auth.GenePatternAuthentication',
-        'nbrepo.auth.JupyterHubAuthentication',
+        'library.auth.GenePatternAuthentication',
+        #'nbrepo.auth.JupyterHubAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'library.auth.GenePatternAuthentication',
     ),
     # 'PAGE_SIZE': 1000,
     #'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoObjectPermissionsFilter',),
