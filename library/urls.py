@@ -6,7 +6,7 @@ from django.contrib import admin
 from django.views.i18n import set_language
 from mezzanine.core.views import direct_to_template
 from mezzanine.conf import settings
-from mezzanine.pages.views import page
+from django.conf.urls.static import static
 
 
 # Uncomment to use blog as home page. See also urlpatterns section below.
@@ -72,7 +72,7 @@ urlpatterns = i18n_patterns(
 if settings.USE_MODELTRANSLATION:
     urlpatterns += [
         url('^i18n/$', set_language, name='set_language'),
-    ]
+    ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += [
     # We don't want to presume how your homepage works, so here are a
