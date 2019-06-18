@@ -10,6 +10,12 @@ cryptography==2.6.1
 decorator==4.4.0
 Django==1.11.20
 django-contrib-comments==1.9.1
+django-cors-headers==3.0.1
+django-crispy-forms==1.6.0
+django-filter==2.1.0
+django-guardian==1.5.1
+djangorestframework==3.9.4
+djangorestframework-guardian==0.1.1
 filebrowser-safe==0.5.0
 future==0.17.1
 grappelli-safe==0.5.2

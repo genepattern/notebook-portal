@@ -62,15 +62,12 @@ RUN git clone https://github.com/genepattern/notebook-library.git /srv/notebook-
 # Add the repository webservice settings
 RUN cp /srv/notebook-library/library/settings.py /config/settings.py
 RUN rm /srv/notebook-library/library/settings.py
-RUN ln -s /data/settings.py /srv/notebook-library/library/settings.py
-
-RUN ln -s /srv/notebook-library/library /opt/conda/envs/webapp/lib/python3.6/site-packages/library
-RUN ls -al
+RUN ln -s /config/settings.py /srv/notebook-library/library/settings.py
 
 RUN /bin/bash -c "source activate webapp && \
     /srv/notebook-library/manage.py makemigrations"
 RUN /bin/bash -c "source activate webapp && \
-    /srv/notebook-library/manage.py library --run-syncdb"
+    /srv/notebook-library/manage.py migrate --run-syncdb"
 RUN /bin/bash -c "source activate webapp && \
     /srv/notebook-library/manage.py collectstatic --noinput"
 
@@ -80,7 +77,7 @@ RUN /bin/bash -c "source activate webapp && \
 
 RUN echo "#!/bin/bash" >> /srv/notebook-library/start-server.sh
 RUN echo "source activate webapp" >> /srv/notebook-library/start-server.sh
-RUN echo "/srv/notebook-library/manage.py runserver" >> /srv/notebook-library/start-server.sh
+RUN echo "/srv/notebook-library/manage.py runserver 0.0.0.0" >> /srv/notebook-library/start-server.sh
 RUN chmod +x /srv/notebook-library/start-server.sh
 
 #############################################
