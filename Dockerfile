@@ -77,7 +77,7 @@ RUN /bin/bash -c "source activate webapp && \
 
 RUN echo "#!/bin/bash" >> /srv/notebook-library/start-server.sh
 RUN echo "source activate webapp" >> /srv/notebook-library/start-server.sh
-RUN echo "/srv/notebook-library/manage.py runserver 0.0.0.0" >> /srv/notebook-library/start-server.sh
+RUN echo "/srv/notebook-library/manage.py runserver 0.0.0.0:8000" >> /srv/notebook-library/start-server.sh
 RUN chmod +x /srv/notebook-library/start-server.sh
 
 #############################################
