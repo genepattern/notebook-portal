@@ -10,7 +10,7 @@ MAINTAINER Thorin Tabor <tmtabor@cloud.ucsd.edu>
 
 RUN apt-get -y update && \
     apt-get -y upgrade && \
-    apt-get -y install wget git bzip2 libcurl4-gnutls-dev gcc && \
+    apt-get -y install wget git bzip2 libcurl4-gnutls-dev gcc python3-dev libmysqlclient-dev && \
     apt-get purge && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
