@@ -59,10 +59,15 @@ RUN git clone https://github.com/genepattern/notebook-library.git /srv/notebook-
 ##      Configure the repository           ##
 #############################################
 
-# Add the repository webservice settings
+# Add settings.py to config dir
 RUN cp /srv/notebook-library/library/settings.py /config/settings.py
 RUN rm /srv/notebook-library/library/settings.py
 RUN ln -s /config/settings.py /srv/notebook-library/library/settings.py
+
+# Add the templates to the config dir
+RUN cp -r /srv/notebook-library/templates /config/
+RUN rm -r /srv/notebook-library/templates
+RUN ln -s /config/templates /srv/notebook-library/templates
 
 RUN /bin/bash -c "source activate webapp && \
     /srv/notebook-library/manage.py makemigrations"
