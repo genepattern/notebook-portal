@@ -1,8 +1,12 @@
 {% load pages_tags mezzanine_tags i18n staticfiles static %}
 
 <header class="fixed-top">
-    <nav id="top-nav" class="navbar navbar-expand-lg navbar-dark container">
-    <a class="navbar-brand" href="/"><img src="/static/images/logo.png" alt="GenePattern Notebook"/></a>
+    <nav id="top-nav" class="navbar navbar-expand-sm navbar-dark container ">
+
+    <a class="navbar-brand" href="/">
+        <!-- <img src="/static/images/gpnb-logo.png" width="300px;"> -->
+        <img src="/static/images/logo.png" alt="GenePattern Notebook"/>
+    </a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-dropdown" aria-controls="navbar-dropdown" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -41,7 +45,9 @@
                     </div>
                 </li>
             {% else %}
-                <li class="nav-item"><a class="nav-link" href="/accounts/login/">Login</a></li>
+                <li class="nav-item">
+                    <p class="nav-link" style="width: 350px;"><a class="btn btn-secondary" href="https://notebook.genepattern.org/hub/login">Login or Register</a></p>
+                </li>
             {% endif %}
         </ul>
     </div>

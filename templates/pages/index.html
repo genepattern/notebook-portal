@@ -18,6 +18,7 @@
 
 {% block extra_css %}
     <style type="text/css">
+        
         div.lead-cover {
             height: 60vh;
         }
@@ -32,16 +33,30 @@
     <div class="lead-cover">
         <div class="container">
             <div class="row">
-                <div class="col-md-12">
-                    <h1 class="lead-big">GenePattern <span class="gray">Notebook</span></h1>
-                    <h3>Integrating <a href="https://genepattern.org"><img class="index-logo" src="/static/images/genepattern.png" /> <strong>GenePattern</strong></a> Genomic Analyses with the <a href="https://jupyter.org"><img class="index-logo" src="/static/images/jupyter-white.png" /> <strong>Jupyter</strong></a> Notebook Environment</h3>
+                <div class="col-md-6" style="padding-top: 35vh; ">
+                    <h3 style="background: white; padding: 20px;">Integrating <a href="https://genepattern.org"><img class="index-logo" src="/static/images/genepattern.png" /> <strong style="font-weight:600">GenePattern</strong></a> Genomic Analyses with the <a href="https://jupyter.org"><img class="index-logo" src="/static/images/jupyter-white-empty.png" /> <strong style="font-weight:600">Jupyter</strong></a> Notebook Environment</h3>
+                </div>
+                <div class="col-md-6">
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="3000">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img class="d-block w-100" src="http://mesirovlab.org/img/gpnb-soft.png" alt="First slide">
+                            </div>
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="http://mesirovlab.org/img/gpnb-soft.png" alt="Second slide">
+                            </div>
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="http://mesirovlab.org/img/gpnb-soft.png" alt="Third slide">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container">
-        <div class="row">
+    <div class="container" style="padding-top: 100px;">
+        <div class="row" id="three-boxes">
             <div class="col-sm-4">
                 <div class="info-block">
                     <h3>Getting Started</h3>
@@ -51,9 +66,9 @@
                         <li><a href="basic-features/">Basic Features</a></li>
                         <li><a href="tutorials/">Tutorial Videos</a></li>
                         <li><a href="https://gpnotebook-website-docs.readthedocs.io/en/latest/faq">FAQ</a></li>
+                        <li><a>Blog</a></li>
                     </ul>
                 </div>
-                <p class="more-info"><a class="btn btn-secondary" href="/user-guide/">Quick-Start</a></p>
             </div>
             <div class="col-sm-4">
                 <div class="info-block">
@@ -63,10 +78,9 @@
                         <li><a href="https://notebooks.genepattern.org">Login or Register</a></li>
                         <li><a href="/user-guide/">User Guide</a></li>
                         <li><a href="/library/">Notebook Library</a></li>
-                        <li><a href="/install/">How to Install</a></li>
+                        <li><a href="/install/">How to Install Locally</a></li>
                     </ul>
                 </div>
-                <p class="more-info"><a class="btn btn-secondary" href="https://notebook.genepattern.org/hub/login">Login or Register</a></p>
             </div>
             <div class="col-sm-4">
                 <div class="info-block">
@@ -77,9 +91,9 @@
                         <li><a href="/programmatic-features/">Programmatic Features</a></li>
                         <li><a href="https://github.com/genepattern/genepattern-notebook">Github Page</a></li>
                         <li><a href="/best-practices/">Best Practices</a></li>
+                        <li><a>Related Projects</a></li>
                     </ul>
                 </div>
-                <p class="more-info"><a class="btn btn-secondary" href="/sphinx/build/html/">Documentation</a></p>
             </div>
         </div>
     </div>
@@ -87,7 +101,7 @@
     <div class="container index-row-middle">
         <div class="row">
             <div class="col-md-12 info-block">
-                <h2>In the News</h2>
+                <h3>In the News</h3>
                 <div>
                     <a href="https://blogs.nature.com/naturejobs/2017/09/15/techblog-jupyter-powers-bioinformatics-again">
                         <img src="/static/images/naturejobs.png"/>
@@ -99,7 +113,7 @@
                     </a>
                 </div>
 
-                <div>
+                <div style="padding-top: 10px;">
                     <a href="https://blogs.nature.com/naturejobs/2017/09/15/techblog-jupyter-powers-bioinformatics-again">
                         "TechBlog: Jupyter powers bioinformatics, again"
                     </a><br/>
@@ -117,7 +131,7 @@
     <div class="container index-row-middle">
         <div class="row">
             <div class="col-md-12 info-block">
-                <h2>How to Cite</h2>
+                <h3>How to Cite</h3>
                 <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5572818/">
                     Reich et al. The GenePattern Notebook Environment. Cell Systems. 2017(5):149-51
                 </a>
