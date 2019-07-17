@@ -35,12 +35,6 @@ def library(request):
     return HttpResponse(template.render({}, request))
 
 
-def jobs(request):
-    # Display the jobs template
-    template = loader.get_template('pages/jobs.html')
-    return HttpResponse(template.render({}, request))
-
-
 def analyses(request):
     # Display the analysis template
     template = loader.get_template('pages/analyses.html')
@@ -51,3 +45,13 @@ def run_analysis(request, lsid):
     # Display the run template
     template = loader.get_template('pages/run_analysis.html')
     return HttpResponse(template.render({'lsid': lsid}, request))
+
+def guide(request):
+    # Display the guide template
+    template = loader.get_template('pages/guide.html')
+    return HttpResponse(template.render({}, request))
+
+def documentation(request):
+    # Display the guide template
+    template = loader.get_template('pages/documentation.html')
+    return HttpResponse(template.render({}, request))

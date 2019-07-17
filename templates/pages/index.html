@@ -32,11 +32,15 @@
 {% block lead %}
     <div class="lead-cover">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6" style="padding-top: 35vh; ">
-                    <h3 style="background: white; padding: 20px;">Integrating <a href="https://genepattern.org"><img class="index-logo" src="/static/images/genepattern.png" /> <strong style="font-weight:600">GenePattern</strong></a> Genomic Analyses with the <a href="https://jupyter.org"><img class="index-logo" src="/static/images/jupyter-white-empty.png" /> <strong style="font-weight:600">Jupyter</strong></a> Notebook Environment</h3>
+            <div class="row" style="padding-top: 0vh;">
+                <div class="col-md-5" style="padding-top: 25vh;">
+                    <h3 id="slogan">Integrating <a href="https://genepattern.org" style="font-weight:600; "><img class="index-logo" src="/static/images/genepattern.png" /> GenePattern</a> Genomic Analyses with the <a href="https://jupyter.org" style="font-weight:600; "><img class="index-logo" src="/static/images/jupyter-white-empty.png" /> Jupyter</a> Notebook Environment</h3>
+                    <button class="button btn" style="font-weight: 100;" id="gs-btn"><a href="https://notebook.genepattern.org/hub/login" style="color:white;">Login/Register</a>
+                    </button>
+                    <button class="button btn" id="gs-btn" style="font-weight: 100;margin-left: 25px;"><a href="" style="color:white;">Getting Started Video</a>
+                    </button>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-7" style="margin: auto;">
                     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="3000">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
@@ -52,98 +56,53 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
-    <div class="container" style="padding-top: 100px;">
+    <div class="container" style="padding-top: 150px;">
         <div class="row" id="three-boxes">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <div class="info-block">
                     <h3>Getting Started</h3>
                     <p>Learn how to use GenePattern Notebook</p>
-                    <ul>
-                        <li><a href="user-guide/">Quick-Start</a></li>
+                    <ul style="columns:2">
+                        <li><a href="user-guide/">Quick Start</a></li>
                         <li><a href="basic-features/">Basic Features</a></li>
                         <li><a href="tutorials/">Tutorial Videos</a></li>
                         <li><a href="https://gpnotebook-website-docs.readthedocs.io/en/latest/faq">FAQ</a></li>
                         <li><a>Blog</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="info-block">
-                    <h3>Use GenePattern Notebook</h3>
-                    <p>For free on our hosted servers or locally</p>
-                    <ul>
-                        <li><a href="https://notebooks.genepattern.org">Login or Register</a></li>
                         <li><a href="/user-guide/">User Guide</a></li>
                         <li><a href="/library/">Notebook Library</a></li>
                         <li><a href="/install/">How to Install Locally</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <div class="info-block">
                     <h3>Develop Notebooks</h3>
                     <p>Join our bioinformatics notebook community</p>
-                    <ul>
+                    <ul style="columns:2">
                         <li><a href="/documentation/">Documentation</a></li>
                         <li><a href="/programmatic-features/">Programmatic Features</a></li>
                         <li><a href="https://github.com/genepattern/genepattern-notebook">Github Page</a></li>
                         <li><a href="/best-practices/">Best Practices</a></li>
                         <li><a>Related Projects</a></li>
+                        <li><a>Collaborations</a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container index-row-middle">
-        <div class="row">
-            <div class="col-md-12 info-block">
-                <h3>In the News</h3>
-                <div>
-                    <a href="https://blogs.nature.com/naturejobs/2017/09/15/techblog-jupyter-powers-bioinformatics-again">
-                        <img src="/static/images/naturejobs.png"/>
-                    </a>
-                    <a href="https://www.bio-itworld.com/2017/08/31/genepattern-notebook-environment-needs-only-web-browser-analyses.aspx">
-                        <img src="/static/images/bioit.png"/></a>
-                    <a href="https://www.genomeweb.com/informatics/broads-genepattern-now-has-notebook-aggregation-collaboration-features">
-                        <img src="/static/images/genomeweb.png"/>
-                    </a>
-                </div>
+    {% block content %}
+    {% endblock %}
 
-                <div style="padding-top: 10px;">
-                    <a href="https://blogs.nature.com/naturejobs/2017/09/15/techblog-jupyter-powers-bioinformatics-again">
-                        "TechBlog: Jupyter powers bioinformatics, again"
-                    </a><br/>
-                    <a href="https://www.bio-itworld.com/2017/08/31/genepattern-notebook-environment-needs-only-web-browser-analyses.aspx">
-                        "GenePattern Notebook Environment Needs Only A Web Browser To Run Analyses"
-                    </a><br/>
-                    <a href="https://www.genomeweb.com/informatics/broads-genepattern-now-has-notebook-aggregation-collaboration-features">
-                        "Broad's GenePattern Now Has 'Notebook' Aggregation, Collaboration Features"
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container index-row-middle">
-        <div class="row">
-            <div class="col-md-12 info-block">
-                <h3>How to Cite</h3>
-                <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5572818/">
-                    Reich et al. The GenePattern Notebook Environment. Cell Systems. 2017(5):149-51
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="container index-row-bottom">
-        <div class="row">
-            <div class="col-md-12 info-block">
-                <h2>Introduction to the GenePattern Notebook Environment</h2>
-                <div class="text-center">
+    <div class="container">
+        <div class="row" style="padding: 20px;">
+            <div class="col-md-12 info-block" >
+                <h3>Introduction to the GenePattern Notebook Environment</h3>
+                <div class="text-center" style="padding: 50px 0px;">
                     <iframe src="https://www.youtube.com/embed/8npzyGLpUHU" allowfullscreen="" width="80%" height="530px" frameborder="0" align="middle"></iframe>
                 </div>
             </div>

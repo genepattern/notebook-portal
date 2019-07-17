@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load mezzanine_tags keyword_tags staticfiles static %}
+
+<html>
+
+<body>
+
+    {% block meta_title %}Documentation{% endblock %}
+    {% block title %}Documentation{% endblock %}
+    {% block description %}Hello this is a description{% endblock %}
+
+    {% block extra_css %}
+    <link rel="stylesheet" href="{% static "css/gpnb-extension.css" %}">
+    {% endblock %}
+
+    {% block body_class %}no-cover{% endblock %}
+
+    {% block extra_head %}
+    <script src="{% static "js/gp.js" %}"></script>
+    <script src="{% static "js/gp-widget.js" %}"></script>
+    {% endblock %}
+
+    
+    {% block content %}
+    <div class="card-columns">
+        <div class="card bg-light mb-3">
+            <div class="card-header">User Guide</div>
+            <div class="card-body">
+                <p class="card-text">
+                    <a href="#">Quickstart</a><br>
+                    <a href="#">Basic Features</a><br>
+                    <a href="#">Tutorial Videos</a><br>
+                    <a href="#">FAQ</a><br>
+                </p>
+            </div>
+        </div>
+        <div class="card bg-light mb-3">
+            <div class="card-header"></div>
+            <div class="card-body">
+                <p class="card-text">
+                </p>
+            </div>
+        </div>
+        <div class="card bg-light mb-3">
+            <div class="card-header">Programmer Documentation</div>
+            <div class="card-body">
+                <p class="card-text">
+                    <a href="#">Read the Docs</a><br>
+                    <a href="#">Programmatic Features</a><br>
+                    <a href="#">Github Page</a><br>
+                    <a href="#">Best Practices</a><br>
+                    <a href="#">Notebook Best Practices</a><br>
+                </p>
+            </div>
+        </div>
+        <div class="card bg-light mb-3">
+            <div class="card-header"></div>
+            <div class="card-body">
+                <p class="card-text">
+                </p>
+            </div>
+        </div>
+        <div class="card bg-light mb-3">
+            <div class="card-header"></div>
+            <div class="card-body">
+                <p class="card-text">
+                </p>
+            </div>
+        </div>
+        <div class="card bg-light mb-3">
+            <div class="card-header"></div>
+            <div class="card-body">
+                <p class="card-text">
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    
+
+    {% block footer_js %}
+    {% endblock %}
+
+</body>
+
+</html>

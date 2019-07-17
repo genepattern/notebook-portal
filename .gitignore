@@ -2,3 +2,6 @@ db.sqlite3
 error.log
 image-drafts
 __pycache__/
+*.pptx
+.DS_Store
+static/.DS_Store
