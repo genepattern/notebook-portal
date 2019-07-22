@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "pages/page.html" %}
 {% load pages_tags mezzanine_tags keyword_tags i18n staticfiles static %}
 
 {% block meta_title %}GenePattern Notebook{% endblock %}
@@ -23,21 +23,21 @@
             height: 60vh;
         }
 
-        .main-container {
-            display: none;
-        }
     </style>
 {% endblock %}
 
 {% block lead %}
+{% endblock %}
+
+{% block index %}
     <div class="lead-cover">
         <div class="container">
             <div class="row" style="padding-top: 0vh;">
-                <div class="col-md-5" style="padding-top: 25vh;">
+                <div class="col-md-5" style="padding-top: 22vh;">
                     <h3 id="slogan">Integrating <a href="https://genepattern.org" style="font-weight:600; "><img class="index-logo" src="/static/images/genepattern.png" /> GenePattern</a> Genomic Analyses with the <a href="https://jupyter.org" style="font-weight:600; "><img class="index-logo" src="/static/images/jupyter-white-empty.png" /> Jupyter</a> Notebook Environment</h3>
                     <button class="button btn" style="font-weight: 100;" id="gs-btn"><a href="https://notebook.genepattern.org/hub/login" style="color:white;">Login/Register</a>
                     </button>
-                    <button class="button btn" id="gs-btn" style="font-weight: 100;margin-left: 25px;"><a href="" style="color:white;">Getting Started Video</a>
+                    <button class="button btn" id="gs-btn" style="font-weight: 100;margin-left: 25px;"><a href="#video" style="color:white;">Getting Started Video</a>
                     </button>
                 </div>
                 <div class="col-md-7" style="margin: auto;">
@@ -56,11 +56,10 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <div class="container" style="padding-top: 150px;">
+    <!-- <div class="container" style="padding-top: 100px;">
         <div class="row" id="three-boxes">
             <div class="col-sm-6">
                 <div class="info-block">
@@ -74,16 +73,17 @@
                         <li><a>Blog</a></li>
                         <li><a href="/user-guide/">User Guide</a></li>
                         <li><a href="/library/">Notebook Library</a></li>
+                        <li><a href="//">GenePattern Module</a></li>
                         <li><a href="/install/">How to Install Locally</a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="info-block">
-                    <h3>Develop Notebooks</h3>
+                    <h3>Advanced Users</h3>
                     <p>Join our bioinformatics notebook community</p>
                     <ul style="columns:2">
-                        <li><a href="/documentation/">Documentation</a></li>
+                        <li><a href="/documentation/">Documentation Homepage</a></li>
                         <li><a href="/programmatic-features/">Programmatic Features</a></li>
                         <li><a href="https://github.com/genepattern/genepattern-notebook">Github Page</a></li>
                         <li><a href="/best-practices/">Best Practices</a></li>
@@ -93,12 +93,104 @@
                 </div>
             </div>
         </div>
+    </div> -->
+
+    <div class="site-map">
+        <div class="row">
+            <div class="gcse-searchresults"></div>
+            <div class="card-columns">
+                <div class="card bg-light mb-3">
+                    <div class="card-header">
+                        <img src=""><br>
+                        All Users
+                    </div>
+                    <div class="card-body">
+                        <ul class="card-text">
+                            <li><a href="#">Quickstart</a></li>
+                            <li><a href="#">Basic Features</a></li>
+                            <li><a href="#">Tutorial Videos</a></li>
+                            <li><a href="#">Best Practices</a></li>
+                            <li><a href="#">Use Cases</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card bg-light mb-3">
+                    <div class="card-header">News/Releases</div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <a href="#">Release Notes</a><br>
+                            <a href="#">Blog</a><br>
+                            <a href="#">Related Publications</a><br>
+                        </p>
+                    </div>
+                </div>
+                <div class="card bg-light mb-3">
+                    <div class="card-header">Advanced Users</div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <a href="#">Programmers Guide</a><br>
+                            <a href="#">Programmatic Features</a><br>
+                            <a href="#">Fork us on GitHub</a><br>
+                            <a href="#">Python UI Builder</a><br>
+                        </p>
+                    </div>
+                </div>
+                <div class="card bg-light mb-3">
+                    <div class="card-header">Help/Contact
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <a href="http://software.broadinstitute.org/cancer/software/genepattern/contact">GenePattern Contact
+                                Page</a><br>
+                            <a href="#">GenePattern Help Forum</a><br>
+                            <a href="#">Mesirov Lab</a><br>
+                            <a href="#"></a><br>
+                            <a href="#"></a><br>
+                        </p>
+                    </div>
+                </div>
+                <div class="card bg-light mb-3">
+                    <div class="card-header">Notebook Features</div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <a href="#">Public Notebook Library</a><br>
+                            <a href="#">Available GenePattern Analyses</a><br>
+                            <a href="#">Features</a><br>
+                            <a href="#">Python UI Builder</a><br>
+                            
+                        </p>
+                    </div>
+                </div>
+                <div class="card bg-light mb-3">
+                    <div class="card-header">Additional Information</div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <a href="#">How to Cite</a><br>
+                            <a href="#">Code of Conduct</a><br>
+                            <a href="#">Diversity Statement</a><br>
+                            <a href="#">Related Projects</a><br>
+                            <a href="#"></a><br>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    {% block content %}
-    {% endblock %}
+    <div class="row news">
+        <div class="col-md-8">
+            <h3>News
+            </h3>
+        </div>
+        <div class="col-md-4" style="right: 0px">
+            <a class="twitter-timeline" data-width="300" data-height="500" data-theme="light"
+                href="https://twitter.com/GenePattern?ref_src=twsrc%5Etfw">Tweets by GenePattern</a>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+    </div>
 
-    <div class="container">
+    <div class="container" id="video">
         <div class="row" style="padding: 20px;">
             <div class="col-md-12 info-block" >
                 <h3>Introduction to the GenePattern Notebook Environment</h3>
@@ -111,5 +203,7 @@
 
 {% endblock %}
 
-{% block main %}
+{% block main-content %}
+{% block content %}
+{% endblock %}
 {% endblock %}
