@@ -215,6 +215,14 @@ if DJANGO_VERSION < (1, 9):
 ################
 
 INSTALLED_APPS = (
+    #Mezzanine API
+    'mezzanine_api',
+    'rest_framework',
+    'django_filters',
+    'rest_framework_swagger',
+    'oauth2_provider',
+
+    #Django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -223,6 +231,8 @@ INSTALLED_APPS = (
     "django.contrib.sites",
     "django.contrib.sitemaps",
     "django.contrib.staticfiles",
+
+    #Mezzanine
     "mezzanine.boot",
     "mezzanine.conf",
     "mezzanine.core",
@@ -238,14 +248,15 @@ INSTALLED_APPS = (
     # Django Rest Framework
     'crispy_forms',
     'corsheaders',
-    'django_filters',
-    'rest_framework',
+    #'django_filters',
+    #'rest_framework',
     'rest_framework.authtoken',
     'guardian',
 
     # Notebook Library
     "library",
     'nbrepo',
+    
 )
 
 
@@ -257,8 +268,10 @@ INSTALLED_APPS = (
 # these middleware classes will be applied in the order given, and in the
 # response phase the middleware will be applied in reverse order.
 MIDDLEWARE = (
-    "mezzanine.core.middleware.UpdateCacheMiddleware",
+    #Mezzanine API
+    'mezzanine_api.middleware.ApiMiddleware',
 
+    "mezzanine.core.middleware.UpdateCacheMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     # Uncomment if using internationalisation or localisation
     # 'django.middleware.locale.LocaleMiddleware',
@@ -385,6 +398,13 @@ SCREENSHOT_PASSWORD = "xxx"
 DEFAULT_NB_DIR = '/Users/tabor/data/defaults'
 AUTOSCALE_SCRIPT = '/Users/tabor/data/autoscale.py'
 
+#####################
+# REST API SETTINGS #
+#####################
+try:
+    from mezzanine_api.settings import *
+except ImportError:
+    pass
 
 ##################
 # LOCAL SETTINGS #

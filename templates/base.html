@@ -41,6 +41,16 @@
     <!-- Include App javascript -->
     <script type="module" src="{% static "js/app.js" %}"></script>
 
+    <!-- Include favicon -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" />
+
+    <!-- Search Bar -->
+    <script async src="https://cse.google.com/cse.js?cx=014618441920599537683:ncj2utofxeo"></script>
+
+    <!-- Smooth scroll  -->
+    <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15/dist/smooth-scroll.polyfills.min.js"></script>
+
+
     {% block extra_head %}{% endblock %}
 </head>
 
@@ -52,17 +62,19 @@
     <!-- Display the leading content -->
     {% block lead %}
         <div class="lead-cover">
-            <div class="container">
+            <div class="container" style="padding:0px;">
                 <div class="row">
                     <div class="col-md-12">
-                        {% editable page.title %}
-                            <h1>{% block title %}{% endblock %}</h1>
-                        {% endeditable %}
+                            <h1 id="page-title">{% block title %}{% endblock %}</h1>
+                            <h4 id="page-description">{% block description %}{% endblock %}</h4>
                     </div>
                 </div>
             </div>
         </div>
     {% endblock %}
+
+    {% block index%}
+    {% endblock%}
 
     <!-- Display alerts -->
     {% block alerts %}
@@ -80,7 +92,7 @@
         {% endnevercache %}
     {% endblock %}
 
-    {% block sidebar %}
+    <!-- {% block sidebar %}
         {% if user.is_authenticated %}
         <div class="sidebar" style="display: none;">
             <a class="sidebar-link" href="/dashboard/">
@@ -109,21 +121,71 @@
             </a>
         </div>
         {% endif %}
-    {% endblock %}
+    {% endblock %} -->
+
 
     <!-- Display the main content -->
-    <div class="container main-container">
-        <div class="row">
-            <div class="col-md-12">
+    {% block main-content %}
+    <div class="container main-container" id="main-content">
+        <div class="row" id="main-row">
+            {% block content %}
+            <div class="wrapper col-sm-3">
+                <nav id="sidebar">
+                    <div class="sidebar-header">
+                        <h4>Getting Started</h4>
+                    </div>
+                    <ul class="list-unstyled components">
+                        <li><a href="#">Quickstart</a></li>
+                        <li><a href="#">Basic Features</a></li>
+                        <li><a href="#">Tutorial Videos</a></li>
+                        <li><a href="#">Use Cases</a></li>
+                        <li><a href="#">Formatting</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                    <div class="sidebar-header">
+                        <h4>Advanced Users</h4>
+                    </div>
+                    <ul class="list-unstyled components">
+                        <li><a href="#">Read the Docs</a></li>
+                        <li><a href="#">Programmatic Features</a></li>
+                        <li><a href="#">Github Page</a></li>
+                        <li><a href="#">Best Practices</a></li>
+                        <li><a href="#">UI Builder</a></li>
+                    </ul>
+                    <div class="sidebar-header">
+                        <h4>News/Releases</h4>
+                    </div>
+                    <ul class="list-unstyled components">
+                        <li><a href="#">Release Notes</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Related Publications</a></li>
+
+                    </ul>
+                    <div class="sidebar-header">
+                        <h4>Contact</h4>
+                    </div>
+                    <ul class="list-unstyled components">
+                        <li><a href="#">GenePattern Contact Page</a></li>
+                        <li><a href="#">GenePattern Help Forum</a></li>
+                        <li><a href="#">Lab Website</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-sm-9" style="padding-top: 20px;padding-left:50px;">
                 {% block main %}{% endblock %}
             </div>
+            {% endblock %}
         </div>
     </div>
+    {% endblock %}
 
     <!-- Display the footer -->
     {% page_menu "blocks/footer.html" %}
 
     {% include "includes/footer_scripts.html" %}
+    <script>
+        var scroll = new SmoothScroll('a[href*="#"]');
+    </script>
     <script type="module" src="{% static "js/main.js" %}"></script>
     {% block footer_js %}{% endblock %}
 </body>
