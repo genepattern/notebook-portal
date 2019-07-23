@@ -129,8 +129,8 @@
     <div class="container main-container" id="main-content">
         <div class="row" id="main-row">
             {% block content %}
-            <div class="wrapper">
-                <nav class="col-md-3"  id="sidebar">
+            <div class="wrapper col-sm-3">
+                <nav id="sidebar">
                     <div class="sidebar-header">
                         <h4>Getting Started</h4>
                     </div>
@@ -171,7 +171,7 @@
                     </ul>
                 </nav>
             </div>
-            <div class="col-md-9" style="padding-top: 20px;padding-left:50px;">
+            <div class="col-sm-9" style="padding-top: 20px;padding-left:50px;">
                 {% block main %}{% endblock %}
             </div>
             {% endblock %}

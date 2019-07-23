@@ -33,7 +33,7 @@ body {
 }
 
 a.editable-link {
-    left: 0px !important;
+    left: 30px !important;
 }
 
 a {
@@ -221,7 +221,11 @@ header.shrink .navbar-nav .nav-link {
 .news {
     color: white;
     padding: 50px; 
-    background: rgba(35, 56, 96, 0.6)
+    background: rgba(35, 56, 96, 0.5)
+}
+.news-title {
+    font-weight: 100;
+    padding-bottom: 20px;
 }
 
 .form-control {
@@ -282,7 +286,7 @@ header.shrink .navbar-nav .nav-link {
 .card-header {
     font-size: 22px;
     font-weight: 100;
-    text-align: left;
+    text-align: center;
 }
 .card-columns {
     text-align: center; 
@@ -393,6 +397,10 @@ h1.lead-big {
 
 .registration-main {
     padding: 50px;
+}
+
+.news-bulletin {
+    background: rgba(0,0,0,.125)
 }
 
 .info-block {

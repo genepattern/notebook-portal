@@ -101,77 +101,76 @@
             <div class="card-columns">
                 <div class="card bg-light mb-3">
                     <div class="card-header">
-                        <img src=""><br>
+                        <img src="">
                         All Users
                     </div>
                     <div class="card-body">
                         <ul class="card-text">
                             <li><a href="#">Quickstart</a></li>
+                            <li><a href="#">Use GenePattern Notebook</a></li>
                             <li><a href="#">Basic Features</a></li>
+                            <li><a href="#">Publish and Share Notebooks</a></li>
                             <li><a href="#">Tutorial Videos</a></li>
                             <li><a href="#">Best Practices</a></li>
                             <li><a href="#">Use Cases</a></li>
-                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Cheat Sheet</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="card bg-light mb-3">
-                    <div class="card-header">News/Releases</div>
+                    <div class="card-header">Notebook Features</div>
                     <div class="card-body">
-                        <p class="card-text">
-                            <a href="#">Release Notes</a><br>
-                            <a href="#">Blog</a><br>
-                            <a href="#">Related Publications</a><br>
-                        </p>
+                        <ul class="card-text">
+                            <li><a href="#">Public Notebook Library</a></li>
+                            <li><a href="#">Available GenePattern Analyses</a></li>
+                            <li><a href="#">Python UI Builder</a></li>
+                
+                        </ul>
                     </div>
                 </div>
                 <div class="card bg-light mb-3">
                     <div class="card-header">Advanced Users</div>
                     <div class="card-body">
-                        <p class="card-text">
-                            <a href="#">Programmers Guide</a><br>
-                            <a href="#">Programmatic Features</a><br>
-                            <a href="#">Fork us on GitHub</a><br>
-                            <a href="#">Python UI Builder</a><br>
-                        </p>
+                        <ul class="card-text">
+                            <li><a href="#">Fork us on GitHub</a></li>
+                            <li><a href="https://gpnotebook-website-docs.readthedocs.io/en/latest">Documentation</a></li>
+                            <li><a href="#">Programmatic Features</a></li>
+                        </ul>
                     </div>
                 </div>
                 <div class="card bg-light mb-3">
                     <div class="card-header">Help/Contact
                     </div>
                     <div class="card-body">
-                        <p class="card-text">
-                            <a href="http://software.broadinstitute.org/cancer/software/genepattern/contact">GenePattern Contact
-                                Page</a><br>
-                            <a href="#">GenePattern Help Forum</a><br>
-                            <a href="#">Mesirov Lab</a><br>
-                            <a href="#"></a><br>
-                            <a href="#"></a><br>
-                        </p>
+                        <ul class="card-text">
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="http://software.broadinstitute.org/cancer/software/genepattern/contact">GenePattern Contact
+                                Page</a></li>
+                            <li><a href="#">GenePattern Help Forum</a></li>
+                            <li><a href="#">Mesirov Lab</a></li>
+                        </ul>
                     </div>
                 </div>
                 <div class="card bg-light mb-3">
-                    <div class="card-header">Notebook Features</div>
+                    <div class="card-header">News/Releases</div>
                     <div class="card-body">
-                        <p class="card-text">
-                            <a href="#">Public Notebook Library</a><br>
-                            <a href="#">Available GenePattern Analyses</a><br>
-                            <a href="#">Features</a><br>
-                            <a href="#">Python UI Builder</a><br>
-                            
-                        </p>
+                        <ul class="card-text">
+                            <li><a href="#">New Features</a></li>
+                            <li><a href="#">Release Notes</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Related Publications</a></li>
+                        </ul>
                     </div>
                 </div>
                 <div class="card bg-light mb-3">
                     <div class="card-header">Additional Information</div>
                     <div class="card-body">
-                        <p class="card-text">
-                            <a href="#">How to Cite</a><br>
-                            <a href="#">Code of Conduct</a><br>
-                            <a href="#">Diversity Statement</a><br>
-                            <a href="#">Related Projects</a><br>
-                            <a href="#"></a><br>
-                        </p>
+                        <ul class="card-text">
+                            <li><a href="#">How to Cite</a></li>
+                            <li><a href="#">Code of Conduct</a></li>
+                            <li><a href="#">Diversity Statement</a></li>
+                            <li><a href="#">Related Projects</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -179,9 +178,13 @@
     </div>
 
     <div class="row news">
-        <div class="col-md-8">
-            <h3>News
-            </h3>
+        <div class="col-md-8 news-bulletin">
+            <h3 class="news-title">News Bulletin</h3>
+            {% block main %}{{ block.super }}
+            {% editable page.richtextpage.content %}
+            {{ page.richtextpage.content|safe }}
+            {% endeditable %}
+            {% endblock main %}
         </div>
         <div class="col-md-4" style="right: 0px">
             <a class="twitter-timeline" data-width="300" data-height="500" data-theme="light"
@@ -200,7 +203,6 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block main-content %}

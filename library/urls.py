@@ -5,15 +5,14 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.views.i18n import set_language
 from mezzanine.core.views import direct_to_template
+from mezzanine.pages.views import page # mezzanine homepage
 from mezzanine.conf import settings
 from django.conf.urls.static import static
-
 
 # Uncomment to use blog as home page. See also urlpatterns section below.
 # from mezzanine.blog import views as blog_views
 from rest_framework import routers
-
-from library.views import dashboard, analyses, run_analysis, serve_thumbnail, library, guide, documentation #home
+from library.views import dashboard, analyses, run_analysis, serve_thumbnail, library, guide, documentation
 from nbrepo import preview
 from nbrepo.preview import preview_image
 from nbrepo.sharing import SharingViewSet, CollaboratorViewSet
@@ -89,7 +88,7 @@ urlpatterns += [
     # one homepage pattern, so if you use a different one, comment this
     # one out.
 
-    url(r"^$", direct_to_template, {"template": "pages/index.html"}, name="home"),
+    #url(r"^$", direct_to_template, {"template": "pages/index.html"}, name="home"),
 
     # HOMEPAGE AS AN EDITABLE PAGE IN THE PAGE TREE
     # ---------------------------------------------
@@ -105,7 +104,7 @@ urlpatterns += [
     # should be used if you want to customize the homepage's template.
     # NOTE: Don't forget to import the view function too!
 
-    # url("^$", home, {"slug": "/", "template": "pages/index.html"}, name="home"),
+    url("^$", page, {"slug": "/", "template": "pages/index.html"}, name="home"),
 
     # HOMEPAGE FOR A BLOG-ONLY SITE
     # -----------------------------
