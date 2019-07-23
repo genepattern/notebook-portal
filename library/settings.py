@@ -69,7 +69,7 @@ USE_I18N = False
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 AUTHENTICATION_BACKENDS = (
-    # 'library.auth.GenePatternAuthenticationBackend',
+    'library.auth.GenePatternAuthenticationBackend',
     "mezzanine.core.auth_backends.MezzanineBackend",
     'guardian.backends.ObjectPermissionBackend',
 )
@@ -256,10 +256,6 @@ INSTALLED_APPS = (
     # Notebook Library
     "library",
     'nbrepo',
-
-    # Styling
-    "django_bootstrap_breadcrumbs",
-
     
 )
 
