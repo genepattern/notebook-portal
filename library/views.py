@@ -56,7 +56,7 @@ def documentation(request):
     template = loader.get_template('pages/documentation.html')
     return HttpResponse(template.render({}, request))
 
-def home(request):
-    # Display the home template
-    template = loader.get_template('pages/index.html')
-    return HttpResponse(template.render({}, request))
+# def home(request):
+#     # Display the home template
+#     template = loader.get_template('pages/index.html')
+#     return HttpResponse(template.render({}, request))
