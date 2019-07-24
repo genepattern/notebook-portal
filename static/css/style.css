@@ -10,16 +10,14 @@ body {
     background-image: url(/static/images/banner-grayscale4.png);
     /* background-image: url(/static/images/banner.jpg); */
     background-repeat: repeat;
-    background-size: cover;
+    /* background-size: cover; */
     position: relative;
     font-weight: 100;
     color: #525252;
     margin: 0px;
     padding: 0px;
     margin-top: 60px;
-    padding-bottom: 20px;
     min-height: calc(100vh - 40px);
-
 }
 
 .main-container {
@@ -28,12 +26,12 @@ body {
 }
 
 .container {
-    max-width: 1400px;
+    max-width: 100%;
     border-radius: 0px;
 }
 
 a.editable-link {
-    left: 30px !important;
+    left: 0px !important;
 }
 
 a {
@@ -46,6 +44,17 @@ a:hover {
 .col-md-6, .col-md-12, .col-md-5, .col-md-7, .col-md-8, .col-md-4 {
     padding: 30px;
     margin: 0px;
+}
+#slogan {
+    font-size: 25px;
+}
+#video {
+    background: white;
+    padding: 30px;
+    font-weight: 100;
+}
+.video-title {
+    font-weight: 100;
 }
 
 a:hover {
@@ -65,6 +74,7 @@ header, footer {
 
 footer {
     color: white;
+    margin-top: 0px;
 }
 
 header a,
@@ -210,12 +220,19 @@ header.shrink .navbar-nav .nav-link {
     background: #ed1c24
 }
 
-.site-map {
+.about {
     background: white;
     width: 100%;
     padding: 50px;
-    margin-top: 75px;
-    padding-top: 50px;
+    margin-top: 25px;
+    padding-top: 25px;
+}
+
+.site-map {
+    background: rgba(255,255,255,0);
+    width: 100%;
+    padding: 50px;
+    padding-bottom: 20px;
 }
 
 .news {
@@ -235,9 +252,75 @@ header.shrink .navbar-nav .nav-link {
 .form-control::placeholder {
     font-size: 14px;
 }
+.section {
+    margin: right
+}
+
+/* sidenav */
+
+
+#main {
+    height: 100%;
+}
+#dot-nav{    
+    position: fixed;
+    right: 10px;
+	top: 50%;
+	height: 100px;
+	z-index: 999;
+}
+
+#dot-nav ul {
+	list-style: none;
+	margin:0;
+	padding: 0;
+}
+#dot-nav li {
+	position: relative;
+	background-color: #bdc3c7;
+	border:3px solid #bdc3c7;
+	border-radius: 15px 15px 15px 15px;
+	cursor: pointer;
+	padding: 5px;
+	height: 10px;
+	margin: 10px 10px 0px 0px;
+	width: 10px;
+	vertical-align:bottom;
+}
+#dot-nav li.active, #dot-nav li:hover {
+	background-color: #3C6DC1;
+}
+
+#dot-nav a {
+	outline: 0;
+	vertical-align:top;
+	margin: 0px 0px 0px 0px;
+	position: relative;
+	top:-5px;
+}
+
+
+/*
+.awesome-tooltip + .tooltip > .tooltip-inner {
+    color: #f5f5f5; 
+    border: 1px solid #8e44ad; 
+}
+.awesome-tooltip + .tooltip.left > .tooltip-arrow{
+    top:50%;
+    right:0;
+    margin-top:-5px;
+    border-top:5px solid transparent;
+    border-bottom:5px solid transparent;
+    border-left:5px solid #8e44ad;
+}
+*/
 
 /* MAIN PAGES */
 
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
 .main-container {
     background: white;
     box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.28);
@@ -286,11 +369,13 @@ header.shrink .navbar-nav .nav-link {
 .card-header {
     font-size: 22px;
     font-weight: 100;
-    text-align: center;
+    text-align: left;
+    background: rgba(21, 114, 176,0.9);
+    color:white;
 }
 .card-columns {
-    text-align: center; 
-    width:95%;
+    text-align: left; 
+    width:100%;
     margin:auto; 
     padding-top: 10px;
 }
@@ -325,7 +410,6 @@ header.shrink .navbar-nav .nav-link {
 }
 
 .lead-cover .col-md-6, .lead-cover .col-md-5, .lead-cover .col-md-7 {
-    padding-top: 5vh;
     display: table-cell;
     vertical-align: middle;
 }
@@ -375,6 +459,8 @@ h1.lead-big {
 
 #gs-btn {
     margin-top: 25px;
+    font-size: 15px;
+    padding: 10px;
     background: #555599;
 }
 #gs-btn:hover {
