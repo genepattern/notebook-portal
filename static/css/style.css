@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Oswald|PT+Sans');
+/* CSS Styling
+Author: Forrest Kim, Thorin Tabor
+*/
+
 
 html {
     height: 100%;
@@ -18,6 +21,10 @@ body {
     padding: 0px;
     margin-top: 60px;
     min-height: calc(100vh - 40px);
+}
+
+p {
+    font-size: 15px;
 }
 
 .main-container {
@@ -67,14 +74,25 @@ a:hover {
 }
 
 header, footer {
-    background: rgba(35, 56, 96, 0.9);
     border: none;
     color: white;
+    background: rgb(11, 81, 128);
+    opacity: 0.9;
 }
-
 footer {
     color: white;
-    margin-top: 0px;
+    margin: 0px;
+    position: absolute;
+    padding: 0px;
+    right: 0;
+    left: 0;
+}
+header {
+    padding: 0;
+    margin: 0;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    /* background: rgba(35, 56, 96, 0.9); */
 }
 
 header a,
@@ -88,20 +106,7 @@ footer a:hover {
     font-family: 'Oswald', sans-serif;
 } */
 
-footer {
-    position: absolute;
-    padding: 0px;
-    right: 0;
-    left: 0;
-}
 
-header {
-    padding: 0;
-    margin: 0;
-    transition: all 0.5s;
-    -webkit-transition: all 0.5s;
-    background: rgba(35, 56, 96, 0.9);
-}
 
 header .dropdown-menu {
     line-height: initial;
@@ -122,14 +127,13 @@ header .navbar-dark .navbar-nav .nav-link {
     font-size: 14px;
     padding-top: 5px;
 }
-
 p.nav-link {
     margin-top: 0px;
     padding:0px;
 }
 
 .navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover{
-    color: white;
+    color: #ed1c24;
 }
 
 .navbar-brand {
@@ -220,12 +224,16 @@ header.shrink .navbar-nav .nav-link {
     background: #ed1c24
 }
 
+#messages {
+    padding: 0px;
+}
+
 .about {
     background: white;
     width: 100%;
     padding: 50px;
     margin-top: 25px;
-    padding-top: 25px;
+    padding-top: 50px;
 }
 
 .site-map {
@@ -233,6 +241,10 @@ header.shrink .navbar-nav .nav-link {
     width: 100%;
     padding: 50px;
     padding-bottom: 20px;
+}
+
+h3 {
+    font-weight: 400;
 }
 
 .news {
@@ -288,7 +300,8 @@ header.shrink .navbar-nav .nav-link {
 	vertical-align:bottom;
 }
 #dot-nav li.active, #dot-nav li:hover {
-	background-color: #3C6DC1;
+    background-color: rgba(11, 81, 128, 0.9);
+    
 }
 
 #dot-nav a {
@@ -298,7 +311,6 @@ header.shrink .navbar-nav .nav-link {
 	position: relative;
 	top:-5px;
 }
-
 
 /*
 .awesome-tooltip + .tooltip > .tooltip-inner {
@@ -341,7 +353,7 @@ header.shrink .navbar-nav .nav-link {
     background: rgba(71, 83, 105, 0.1);
     padding: 30px;
 }
-.sidebar-header h4 {
+.sidebar-header h4, .sidebar-header h5 {
     font-weight: 100;
     text-align: left;
 }
@@ -362,7 +374,9 @@ header.shrink .navbar-nav .nav-link {
 #three-boxes .info-block {
     height: 260px;
 }
-
+.card-columns .card {
+    border-radius: 5px;
+}
 .card-text {
     text-align: left;
 }
@@ -370,7 +384,9 @@ header.shrink .navbar-nav .nav-link {
     font-size: 22px;
     font-weight: 100;
     text-align: left;
-    background: rgba(21, 114, 176,0.9);
+    /* background: rgba(21, 114, 176,0.9); */
+    background: rgb(11, 81, 128);
+    opacity: 0.9;;
     color:white;
 }
 .card-columns {
@@ -382,6 +398,7 @@ header.shrink .navbar-nav .nav-link {
 .card {
     /* box-shadow: 0 3px 6px rgba(0, 0, 0, .24); */
     border-radius: 0px;
+    border: none;
 }
 .sidebar-header {
     padding-top: 10px;
@@ -437,18 +454,31 @@ header.shrink .navbar-nav .nav-link {
     font-weight: 100;
 }
 
+/* .mce-container.mce-panel.mce-floatpanel.mce-menu.mce-contextmenu.mce-menu-has-icons.mce-menu-align {
+    left: 100px !important;
+    top: 100px !important;
+} */
+
+/* .mce-container.mce-panel.mce-floatpanel.mce-menu.mce-menu-align {
+    left: 100px !important;
+    top: 100px !important;
+} */
+
 #page-title {
     text-align: center;
     padding-top: 50px;
     font-weight: 500;
     font-size: 40px;
+    
 }
 #page-description {
     text-align: center;
     font-weight: 100;
     font-size: 18px;
+    width: 70%;
+    margin: auto;
+    padding-bottom: 50px;
 }
-
 .index-logo {
     height: 1.5em;
 }
@@ -461,7 +491,8 @@ h1.lead-big {
     margin-top: 25px;
     font-size: 15px;
     padding: 10px;
-    background: #555599;
+    background: rgb(11, 81, 128);
+    opacity: 0.9;;
 }
 #gs-btn:hover {
     background: #ed1c24;

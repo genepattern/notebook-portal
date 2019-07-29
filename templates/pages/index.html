@@ -43,8 +43,8 @@
 <section id="home">
     <div class="lead-cover">
         <div class="container">
-            <div class="row" style="padding-top: 0vh;">
-                <div class="col-md-5" style="padding-top: 20vh;">
+            <div class="row" style="padding-top: 3vh;">
+                <div class="col-md-5" style="padding-top: 18vh;">
                     <h3 id="slogan">Integrating <a href="https://genepattern.org" style="font-weight:600; "><img class="index-logo" src="/static/images/genepattern.png" /> GenePattern</a> Genomic Analyses with the <a href="https://jupyter.org" style="font-weight:600; "><img class="index-logo" src="/static/images/jupyter-white-empty.png" /> Jupyter</a> Notebook Environment</h3>
                     <button class="button btn" style="font-weight: 100;" id="gs-btn"><a href="https://notebook.genepattern.org/hub/login" style="color:white;">Login/Register</a>
                     </button>
@@ -70,6 +70,22 @@
         </div>
     </div>
 </section>
+
+<!-- Display alerts -->
+{% block alerts %}
+    {% nevercache %}
+    <div id="messages" class="container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-dismissable alert-{{ message.tags }}" data-alert="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    {% endnevercache %}
+{% endblock %}
 
 <section id="about">
     <div class="about">
@@ -107,7 +123,6 @@
                             <h5 style="font-weight: 100; margin:0px;">All Users</h5>
                             <ul class="card-text">
                                 <li><a href="quickstart/">Quickstart</a></li>
-                                <li><a href="use/">Use GenePattern Notebook</a></li>
                                 <li><a href="basic-features/">Basic Features</a></li>
                                 <li><a href="publish-and-sharing/">Publish and Share Notebooks</a></li>
                                 <li><a href="tutorial-videos/">Tutorial Videos</a></li>
@@ -118,7 +133,7 @@
 
                             <h5 style="font-weight: 100; margin:0px;">Advanced Users</h5>
                             <ul class="card-text">
-                                <li><a href="https://github.com/genepattern?utf8=%E2%9C%93&q=notebook&type=&language=">Fork us
+                                <li><a href="https://github.com/genepattern?q=notebook">Fork us
                                         on GitHub</a></li>
                                 <li><a href="https://gpnotebook-website-docs.readthedocs.io/en/latest">Documentation</a></li>
                                 <li><a href="programmatic/">Programmatic Features</a></li>
@@ -131,7 +146,7 @@
                             <ul class="card-text">
                                 <li><a href="notebook-library/">Public Notebook Library</a></li>
                                 <li><a href="genepattern-analyses/">Available GenePattern Analyses</a></li>
-                                <li><a href="ui-builder/">Python UI Builder</a></li>
+                                <li><a href="ui-builder/">UI Builder for Python and R</a></li>
                     
                             </ul>
                         </div>
@@ -195,7 +210,4 @@
         </div>
     </div>
 </section>
-{% endblock %}
-
-{% block alerts %}
 {% endblock %}
