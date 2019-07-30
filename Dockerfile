@@ -69,6 +69,11 @@ RUN cp -r /srv/notebook-library/templates /config/
 RUN rm -r /srv/notebook-library/templates
 RUN ln -s /config/templates /srv/notebook-library/templates
 
+# Add the static files to the config dir
+RUN cp -r /srv/notebook-library/static /config/
+RUN rm -r /srv/notebook-library/static
+RUN ln -s /config/static /srv/notebook-library/static
+
 RUN /bin/bash -c "source activate webapp && \
     /srv/notebook-library/manage.py makemigrations"
 RUN /bin/bash -c "source activate webapp && \
