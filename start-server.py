@@ -24,6 +24,6 @@ try:
                                   --name=notebook_library \
                                   -p {args.port}:8000 \
                                   -v {args.config}:/config \
-                                  -v /var/run/docker.sock:/var/run/docker.sock genepattern/notebook-library:19.07'.split())
+                                  genepattern/notebook-library:19.07'.split())
 except KeyboardInterrupt:
     print('Shutting down Notebook Library')
