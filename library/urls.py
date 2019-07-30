@@ -57,7 +57,7 @@ urlpatterns = i18n_patterns(
     url(r'^rest/notebooks/(?P<pk>[0-9]+)/preview/image/$', preview_image),
 
     # REST API URLs
-    url("^api/", include("mezzanine_api.urls")),
+    # url("^api/", include("mezzanine_api.urls")),
 
     # Webtour endpoints
     url(r'^rest/webtours/(?P<user>.*)/$', webtour_seen),

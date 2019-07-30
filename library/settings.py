@@ -71,7 +71,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 AUTHENTICATION_BACKENDS = (
     # 'library.auth.GenePatternAuthenticationBackend',
     "mezzanine.core.auth_backends.MezzanineBackend",
-    'guardian.backends.ObjectPermissionBackend',
+    # 'guardian.backends.ObjectPermissionBackend',
 )
 
 # The numeric mode to set newly-uploaded files to. The value should be
@@ -216,11 +216,11 @@ if DJANGO_VERSION < (1, 9):
 
 INSTALLED_APPS = (
     #Mezzanine API
-    'mezzanine_api',
-    'rest_framework',
-    'django_filters',
-    'rest_framework_swagger',
-    'oauth2_provider',
+    #'mezzanine_api',
+    #'rest_framework',
+    #'django_filters',
+    #'rest_framework_swagger',
+    #'oauth2_provider',
 
     #Django
     "django.contrib.admin",
@@ -269,7 +269,7 @@ INSTALLED_APPS = (
 # response phase the middleware will be applied in reverse order.
 MIDDLEWARE = (
     #Mezzanine API
-    'mezzanine_api.middleware.ApiMiddleware',
+    #'mezzanine_api.middleware.ApiMiddleware',
 
     "mezzanine.core.middleware.UpdateCacheMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -401,10 +401,10 @@ AUTOSCALE_SCRIPT = '/Users/tabor/data/autoscale.py'
 #####################
 # REST API SETTINGS #
 #####################
-try:
-    from mezzanine_api.settings import *
-except ImportError:
-    pass
+# try:
+#     from mezzanine_api.settings import *
+# except ImportError:
+#     pass
 
 ##################
 # LOCAL SETTINGS #
