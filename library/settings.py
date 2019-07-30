@@ -69,9 +69,9 @@ USE_I18N = False
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 AUTHENTICATION_BACKENDS = (
-    # 'library.auth.GenePatternAuthenticationBackend',
+    'library.auth.GenePatternAuthenticationBackend',
     "mezzanine.core.auth_backends.MezzanineBackend",
-    # 'guardian.backends.ObjectPermissionBackend',
+    'guardian.backends.ObjectPermissionBackend',
 )
 
 # The numeric mode to set newly-uploaded files to. The value should be
@@ -248,15 +248,14 @@ INSTALLED_APPS = (
     # Django Rest Framework
     'crispy_forms',
     'corsheaders',
-    #'django_filters',
-    #'rest_framework',
+    'django_filters',
+    'rest_framework',
     'rest_framework.authtoken',
     'guardian',
 
     # Notebook Library
     "library",
     'nbrepo',
-    
 )
 
 
