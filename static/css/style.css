@@ -47,6 +47,14 @@ a {
 a:hover {
     color:#ed1c24;
 }
+iframe {
+    border: none;
+    padding: 20px;
+    width: 100%;
+}
+p img {
+    width: 100% !important;
+} 
 
 .col-md-6, .col-md-12, .col-md-5, .col-md-7, .col-md-8, .col-md-4 {
     padding: 30px;
