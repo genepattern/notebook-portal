@@ -11,6 +11,7 @@ from django.conf.urls.static import static
 
 # Uncomment to use blog as home page. See also urlpatterns section below.
 # from mezzanine.blog import views as blog_views
+from mezzanine_api.views import PageViewSet, PostViewSet, CategoryViewSet, SiteViewSet
 from rest_framework import routers
 
 from library.views import dashboard, jobs, analyses, run_analysis, serve_thumbnail, library
@@ -32,6 +33,10 @@ router.register(r'notebooks', NotebookViewSet)
 router.register(r'tags', TagViewSet)
 router.register(r'sharing', SharingViewSet)
 router.register(r'collaborators', CollaboratorViewSet)
+router.register(r'pages', PageViewSet)
+router.register(r'posts', PostViewSet)
+router.register(r'categories', CategoryViewSet)
+router.register(r'site', SiteViewSet, SiteViewSet.as_view({'get': 'retrieve'}))
 
 # Add the urlpatterns for any custom Django applications here.
 # You can also change the ``home`` view to add your own functionality

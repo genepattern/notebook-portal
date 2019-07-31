@@ -215,13 +215,6 @@ if DJANGO_VERSION < (1, 9):
 ################
 
 INSTALLED_APPS = (
-    #Mezzanine API
-    #'mezzanine_api',
-    #'rest_framework',
-    #'django_filters',
-    #'rest_framework_swagger',
-    #'oauth2_provider',
-
     #Django
     "django.contrib.admin",
     "django.contrib.auth",
@@ -253,6 +246,11 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'guardian',
 
+    # Mezzanine API
+    'mezzanine_api',
+    'rest_framework_swagger',
+    'oauth2_provider',
+
     # Notebook Library
     "library",
     'nbrepo',
@@ -268,7 +266,7 @@ INSTALLED_APPS = (
 # response phase the middleware will be applied in reverse order.
 MIDDLEWARE = (
     #Mezzanine API
-    #'mezzanine_api.middleware.ApiMiddleware',
+    'mezzanine_api.middleware.ApiMiddleware',
 
     "mezzanine.core.middleware.UpdateCacheMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -400,10 +398,10 @@ AUTOSCALE_SCRIPT = '/Users/tabor/data/autoscale.py'
 #####################
 # REST API SETTINGS #
 #####################
-# try:
-#     from mezzanine_api.settings import *
-# except ImportError:
-#     pass
+try:
+    from mezzanine_api.settings import *
+except ImportError:
+    pass
 
 ##################
 # LOCAL SETTINGS #
