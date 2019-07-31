@@ -99,17 +99,34 @@
 <section id="about">
     <div class="about">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <h3>What is GenePattern Notebook?</h3>
-                <p>
-                    The GenePattern Notebook environment integrates <a href="">GenePattern's</a> analysis platform with the <a href="">Jupyter
-                    Notebook</a> system, allowing researchers to create documents that interleave formatted text, graphics and
-                    other multimedia, executable code, and GenePattern analyses, creating a single "research narrative" that
-                    puts scientific discussion and analyses in the same place.
+                <hr>
+                <p>The GenePattern Notebook environment integrates <a href="https://genepattern.org">GenePattern's</a> analysis platform with the <a href="https://jupyter.org">Jupyter Notebook</a> system, allowing researchers to create documents that interleave formatted text, graphics and other multimedia, executable code, and GenePattern analyses, creating a single "research narrative" that puts scientific discussion and analyses in the same place.
                 </p>
-                <div style="padding: 10px 0px; ">
-                    <iframe src="https://www.youtube.com/embed/8npzyGLpUHU" width="75%" height="450px" frameborder="0" align="middle" style="margin: auto;"></iframe>
+                <div style="">
+                    <iframe src="https://www.youtube.com/embed/8npzyGLpUHU" width="75%" height="450px" frameborder="0" align="middle" style="margin: auto; padding: 0px;"></iframe>
                 </div>
+            </div>
+            <div class="col-md-4">
+                <h3 style="padding-top: 0px;">In the Press</h3>
+                <hr>
+                <ul>
+                    <li><a href="https://blogs.nature.com/naturejobs/2017/09/15/techblog-jupyter-powers-bioinformatics-again">"TechBlog:
+                            Jupyter powers bioinformatics, again"</a></li>
+                    <li><a
+                            href="https://www.bio-itworld.com/2017/08/31/genepattern-notebook-environment-needs-only-web-browser-analyses.aspx">"GenePattern
+                            Notebook Environment Needs Only A Web Browser To Run Analyses"</a></li>
+                    <li><a
+                            href="https://www.genomeweb.com/informatics/broads-genepattern-now-has-notebook-aggregation-collaboration-features">"Broad's
+                            GenePattern Now Has 'Notebook' Aggregation, Collaboration Features"</a></li>
+                </ul>
+                <h3>How to Cite</h3>
+                <hr>
+                <ul>
+                    <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5572818/">Reich et al. The GenePattern Notebook Environment. Cell Systems. 2017(5):149-51</a></li>
+                </ul>
+                
             </div>
         </div>
     </div>
@@ -120,7 +137,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div>
-                    <h3>Using GenePattern Notebook</h3><br>
+                    <h3>Using GenePattern Notebook</h3>
+                    <hr>
                 </div>
                 <div class="card-columns">
                     <div class="card bg-light mb-3">
@@ -167,7 +185,6 @@
                                 <li><a href="new-features/">New Features</a></li>
                                 <li><a href="releases/">Release Notes</a></li>
                                 <li><a href="blog/">Blog</a></li>
-                                <li><a href="publications/">Related Publications</a></li>
                             </ul>
                         </div>
                     </div>
@@ -188,9 +205,9 @@
                         <div class="card-header">Additional Information</div>
                         <div class="card-body">
                             <ul class="card-text">
-                                <li><a href="how-to-cite/">How to Cite</a></li>
                                 <li><a href="https://github.com/genepattern/genepattern-notebook/blob/master/Code_of_Conduct.md">Code of Conduct</a></li>
                                 <li><a href="related-projects/">Related Projects</a></li>
+                                <li><a href="publications/">Related Publications</a></li>
                             </ul>
                         </div>
                     </div>
@@ -204,7 +221,8 @@
 <section id="news">
     <div class="row news">
         <div class="col-md-8 news-bulletin">
-            <h3 class="news-title">News Bulletin</h3>
+            <h3>News Bulletin</h3>
+            <hr>
             {% block main %}{{ block.super }}
             {% editable page.richtextpage.content %}
             {{ page.richtextpage.content|safe }}

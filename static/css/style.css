@@ -56,12 +56,12 @@ p img {
     width: 100% !important;
 } 
 
-.col-md-6, .col-md-12, .col-md-5, .col-md-7, .col-md-8, .col-md-4 {
+.col-md-6, .col-md-12, .col-md-5, .col-md-7, .col-md-8, .col-md-4, .col-md-3 {
     padding: 30px;
     margin: 0px;
 }
 #slogan {
-    font-size: 25px;
+    font-size: 30px;
 }
 #video {
     background: white;
