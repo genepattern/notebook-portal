@@ -11,6 +11,13 @@
     {{ keyword }}
 {% endfor %}
 {% endmetablock %}{% endblock %}
+    
+{% block extra_head %}
+<!-- Smooth scroll  -->
+<script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15/dist/smooth-scroll.polyfills.min.js"></script>
+{% endblock %}
+
+
 
 {% block meta_description %}{% metablock %}
 {{ page.description }}
@@ -51,7 +58,7 @@
                     <button class="button btn" id="gs-btn" style="font-weight: 100; margin-left: 5px"><a href="#about" style="color:white;">Learn More</a>
                     </button>
                 </div>
-                <div class="col-md-7" style="margin: auto; padding:20px; padding-right: 30px;">
+                <div class="col-md-6" style="margin: auto; padding:20px; padding-right: 30px;">
                     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="3000">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
@@ -65,6 +72,8 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-1">
                 </div>
             </div>
         </div>
