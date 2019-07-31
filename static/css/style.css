@@ -360,11 +360,19 @@ h3 {
 .wrapper {
     background: rgba(71, 83, 105, 0.1);
     padding: 30px;
+    padding-top:10px;
 }
 .sidebar-header h4, .sidebar-header h5 {
     font-weight: 100;
     text-align: left;
 }
+.sidebar-header h5 {
+    font-size: 17px
+}
+#sidebar a {
+    font-size: 15px;
+}
+
 
 @media (min-width: 768px) {
     .col-md-3 {
