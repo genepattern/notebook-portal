@@ -219,20 +219,22 @@
 </section>
     
 <section id="news">
-    <div class="row news">
-        <div class="col-md-8 news-bulletin">
-            <h3>News Bulletin</h3>
-            <hr>
-            {% block main %}{{ block.super }}
-            {% editable page.richtextpage.content %}
-            {{ page.richtextpage.content|safe }}
-            {% endeditable %}
-            {% endblock main %}
-        </div>
-        <div class="col-md-4" style="padding: 10px;">
-            <a class="twitter-timeline" data-width="400" data-height="400" data-theme="light"
-                href="https://twitter.com/GenePattern?ref_src=twsrc%5Etfw">Tweets by GenePattern</a>
-            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <div class="news">
+        <h3>News Bulletin</h3>
+        <hr>
+        <div class="row">
+            <div class="col-md-8 news-bulletin">
+                {% block main %}{{ block.super }}
+                {% editable page.richtextpage.content %}
+                {{ page.richtextpage.content|safe }}
+                {% endeditable %}
+                {% endblock main %}
+            </div>
+            <div class="col-md-4" style="padding: 10px;">
+                <a class="twitter-timeline" data-width="400" data-height="400" data-theme="light"
+                    href="https://twitter.com/GenePattern?ref_src=twsrc%5Etfw">Tweets by GenePattern</a>
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
         </div>
     </div>
 </section>
