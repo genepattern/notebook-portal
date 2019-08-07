@@ -12,6 +12,11 @@
 {% endfor %}
 {% endmetablock %}{% endblock %}
 
+{% block extra_head %}
+<!-- Smooth scroll  -->
+<script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15/dist/smooth-scroll.polyfills.min.js"></script>
+{% endblock %}
+
 {% block meta_description %}{% metablock %}
 {{ page.description }}
 {% endmetablock %}{% endblock %}
@@ -53,7 +58,7 @@
                     <button class="button btn" id="gs-btn" style="font-weight: 100; margin-left: 5px"><a href="#about" style="color:white;">Learn More</a>
                     </button>
                 </div>
-                <div class="col-md-7" style="margin: auto; padding:20px; padding-right: 30px;">
+                <div class="col-md-6" style="margin: auto; padding:20px; padding-right: 30px;">
                     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="3000">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
@@ -67,6 +72,8 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-1">
                 </div>
             </div>
         </div>
@@ -92,17 +99,34 @@
 <section id="about">
     <div class="about">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <h3>What is GenePattern Notebook?</h3>
-                <p>
-                    The GenePattern Notebook environment integrates <a href="">GenePattern's</a> analysis platform with the <a href="">Jupyter
-                    Notebook</a> system, allowing researchers to create documents that interleave formatted text, graphics and
-                    other multimedia, executable code, and GenePattern analyses, creating a single "research narrative" that
-                    puts scientific discussion and analyses in the same place.
+                <hr>
+                <p>The GenePattern Notebook environment integrates <a href="https://genepattern.org">GenePattern's</a> analysis platform with the <a href="https://jupyter.org">Jupyter Notebook</a> system, allowing researchers to create documents that interleave formatted text, graphics and other multimedia, executable code, and GenePattern analyses, creating a single "research narrative" that puts scientific discussion and analyses in the same place.
                 </p>
-                <div style="padding: 10px 0px; ">
-                    <iframe src="https://www.youtube.com/embed/8npzyGLpUHU" width="75%" height="450px" frameborder="0" align="middle" style="margin: auto;"></iframe>
+                <div style="">
+                    <iframe src="https://www.youtube.com/embed/8npzyGLpUHU" width="75%" height="450px" frameborder="0" align="middle" style="margin: auto; padding: 0px;"></iframe>
                 </div>
+            </div>
+            <div class="col-md-4">
+                <h3 style="padding-top: 0px;">In the Press</h3>
+                <hr>
+                <ul>
+                    <li><a href="https://blogs.nature.com/naturejobs/2017/09/15/techblog-jupyter-powers-bioinformatics-again">"TechBlog:
+                            Jupyter powers bioinformatics, again"</a></li>
+                    <li><a
+                            href="https://www.bio-itworld.com/2017/08/31/genepattern-notebook-environment-needs-only-web-browser-analyses.aspx">"GenePattern
+                            Notebook Environment Needs Only A Web Browser To Run Analyses"</a></li>
+                    <li><a
+                            href="https://www.genomeweb.com/informatics/broads-genepattern-now-has-notebook-aggregation-collaboration-features">"Broad's
+                            GenePattern Now Has 'Notebook' Aggregation, Collaboration Features"</a></li>
+                </ul>
+                <h3>How to Cite</h3>
+                <hr>
+                <ul>
+                    <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5572818/">Reich et al. The GenePattern Notebook Environment. Cell Systems. 2017(5):149-51</a></li>
+                </ul>
+
             </div>
         </div>
     </div>
@@ -113,7 +137,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div>
-                    <h3>Using GenePattern Notebook</h3><br>
+                    <h3>Using GenePattern Notebook</h3>
+                    <hr>
                 </div>
                 <div class="site-map card-columns">
                     <div class="card bg-light mb-3">
@@ -160,7 +185,6 @@
                                 <li><a href="new-features/">New Features</a></li>
                                 <li><a href="releases/">Release Notes</a></li>
                                 <li><a href="blog/">Blog</a></li>
-                                <li><a href="publications/">Related Publications</a></li>
                             </ul>
                         </div>
                     </div>
@@ -181,10 +205,9 @@
                         <div class="card-header">Additional Information</div>
                         <div class="card-body">
                             <ul class="card-text">
-                                <li><a href="how-to-cite/">How to Cite</a></li>
-                                <li><a href="#">Code of Conduct</a></li>
-                                <li><a href="#">Diversity Statement</a></li>
+                                <li><a href="https://github.com/genepattern/genepattern-notebook/blob/master/Code_of_Conduct.md">Code of Conduct</a></li>
                                 <li><a href="related-projects/">Related Projects</a></li>
+                                <li><a href="publications/">Related Publications</a></li>
                             </ul>
                         </div>
                     </div>
@@ -196,19 +219,22 @@
 </section>
     
 <section id="news">
-    <div class="row news">
-        <div class="col-md-8 news-bulletin">
-            <h3 class="news-title">News Bulletin</h3>
-            {% block main %}{{ block.super }}
-            {% editable page.richtextpage.content %}
-            {{ page.richtextpage.content|safe }}
-            {% endeditable %}
-            {% endblock main %}
-        </div>
-        <div class="col-md-4" style="padding: 10px;">
-            <a class="twitter-timeline" data-width="400" data-height="400" data-theme="light"
-                href="https://twitter.com/GenePattern?ref_src=twsrc%5Etfw">Tweets by GenePattern</a>
-            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <div class="news">
+        <h3>News Bulletin</h3>
+        <hr>
+        <div class="row">
+            <div class="col-md-8 news-bulletin">
+                {% block main %}{{ block.super }}
+                {% editable page.richtextpage.content %}
+                {{ page.richtextpage.content|safe }}
+                {% endeditable %}
+                {% endblock main %}
+            </div>
+            <div class="col-md-4" style="padding: 10px;">
+                <a class="twitter-timeline" data-width="400" data-height="400" data-theme="light"
+                    href="https://twitter.com/GenePattern?ref_src=twsrc%5Etfw">Tweets by GenePattern</a>
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
         </div>
     </div>
 </section>
