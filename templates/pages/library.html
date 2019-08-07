@@ -1,8 +1,8 @@
 {% extends "pages/page.html" %}
 {% load mezzanine_tags keyword_tags staticfiles static %}
 
-{% block meta_title %}GenePattern Analyses{% endblock %}
-{% block title %}GenePattern Analyses{% endblock %}
+{% block meta_title %}Notebook Library{% endblock %}
+{% block title %}Notebook Library{% endblock %}
 
 {% block extra_css %}
     <style type="text/css">
@@ -31,10 +31,7 @@
         // Import the application module
         import * as GenePattern from "/static/js/app.js";
 
-        // Display the sidebar
-        GenePattern.display_sidebar();
-
-        // Initialize module search/browse
+        // Initialize notebook search/browse
         GenePattern.library("#library");
     </script>
 {% endblock %}

@@ -19,14 +19,16 @@
 {% block extra_css %}
 {% endblock %}
 
+{% block body_class %}no-sidebar{% endblock %}
+
 {% block lead %}
 {% endblock %}
 
 {% block index %}
 
 {% block main-content %}
-{% block content %}
-{% endblock %}
+    {% block content %}
+    {% endblock %}
 {% endblock %}
 
 <script src="/static/js/dot-nav.js"></script>
@@ -113,7 +115,7 @@
                 <div>
                     <h3>Using GenePattern Notebook</h3><br>
                 </div>
-                <div class="card-columns">
+                <div class="site-map card-columns">
                     <div class="card bg-light mb-3">
                         <div class="card-header">
                             <img src="">
@@ -144,8 +146,8 @@
                         <div class="card-header">Notebook Features</div>
                         <div class="card-body">
                             <ul class="card-text">
-                                <li><a href="notebook-library/">Public Notebook Library</a></li>
-                                <li><a href="genepattern-analyses/">Available GenePattern Analyses</a></li>
+                                <li><a href="library/">Notebook Library</a></li>
+                                <li><a href="analyses/">Available GenePattern Analyses</a></li>
                                 <li><a href="ui-builder/">UI Builder for Python and R</a></li>
                     
                             </ul>

@@ -8,6 +8,9 @@ window.GenePattern = GenePattern;
  * Code to run when the document is ready
  */
 $(document).ready(function() {
+    // Init smooth scrolling
+    const scroll = new SmoothScroll('a[href*="#"]');
+
     // Check the size of the header at load
     if ($(document).scrollTop() > 50) {
         $('header').addClass('shrink');

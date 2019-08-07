@@ -23,28 +23,5 @@
 {% editable page.description %}{{ page.description }}{% endeditable %}
 {% endblock %}
 
-<!-- Display alerts -->
-{% block alerts %}
-{% nevercache %}
-<div id="messages" class="container">
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-dismissable alert-{{ message.tags }}" data-alert="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {{ message }}
-    </div>
-    {% endfor %}
-    {% endif %}
-</div>
-{% endnevercache %}
-{% endblock %}
-
-{% block side %}
-{% endblock %}
-
 {% block main %}
 {% endblock %}
-
-{% block footer_js %}
-{% endblock %}
-

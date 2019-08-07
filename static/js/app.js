@@ -8,11 +8,6 @@ let _shared_notebooks = null;
 let _workspace_notebooks = null;
 let _genepattern_modules = null;
 
-export function display_sidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    if (sidebar) sidebar.style.display = 'block';
-}
-
 /**
  * Retrieves the public notebooks from the cache, if possible, from the server if not
  *
@@ -185,7 +180,21 @@ export function library(selector) {
         created() {
             GenePattern.public_notebooks().then(r => this.notebooks = r);
         },
-        methods: {}
+        methods: {},
+        watch: {
+            'search': function(event) {
+                const search = this.search.trim().toLowerCase();
+
+                const cards = document.querySelector(selector).querySelector('.notebooks').querySelectorAll('.nb-card');
+                cards.forEach(function(card) {
+                    // Matching module
+                    if (card.textContent.toLowerCase().includes(search)) card.classList.remove('d-none');
+
+                    // Not matching module
+                    else card.classList.add('d-none');
+                });
+            }
+        }
     });
 
     return library_app;
