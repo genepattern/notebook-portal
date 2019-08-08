@@ -4,26 +4,35 @@ from PIL import Image
 from library import settings
 
 
-def path(id):
-    return os.path.join('static/images/thumbnails', f'{id}.png')
+def thumbnail_path(id):
+    return os.path.join(settings.STATIC_ROOT, 'images', 'thumbnails', f'{id}.png')
 
 
 def exists(id):
-    return os.path.exists(path(id))
+    path = thumbnail_path(id)
+    return os.path.exists(path) and os.path.getsize(path) > 1024
 
 
 def generate(id):
     url = f'{settings.BASE_HUB_URL}/services/sharing/notebooks/{id}/preview/image/'
 
+    # Lazily create thumbnail directory
+    filename = thumbnail_path(id)
+    create_directory(os.path.dirname(filename))
+
     # Download the preview image
     r = requests.get(url)
-    filename = path(id)
     thumb_file = open(filename, 'wb')
     thumb_file.write(r.content)
     thumb_file.close()
 
     # Overwrite it with the thumbnail
     create_thumbnail(filename)
+
+
+def create_directory(directory_path):
+    if not os.path.exists(directory_path):
+        os.mkdir(directory_path)
 
 
 def create_thumbnail(filename):

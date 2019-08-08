@@ -10,7 +10,7 @@ def serve_thumbnail(request, id):
     if not thumbnail.exists(id):
         thumbnail.generate(id)
 
-    path = thumbnail.path(id)
+    path = thumbnail.thumbnail_path(id)
 
     # Serve the file
     response = serve(request, os.path.basename(path), os.path.dirname(path))
