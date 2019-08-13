@@ -756,17 +756,19 @@ div.nb-card {
     text-align: center;
 }
 
-.mod-search {
+.mod-search,
+.nb-search {
     width: 33%;
     right: 25px;
     position: absolute;
     top: 10px;
 }
 
+.tag-card,
 .mod-card {
     width: calc(33% - 10px);
     display: inline-block;
-    margin-left: 10px;
+    margin-right: 10px;
     margin-bottom: 10px;
     cursor: pointer;
     float: left;
@@ -776,14 +778,17 @@ div.nb-card {
     height: 100px;
 }
 
+.tag-card,
 .mod-card.category {
     height: 48px;
 }
 
-.mod-card > .card-body {
+.mod-card > .card-body,
+.tag-card > .card-body {
     padding: 10px;
 }
 
+.tag-card:hover,
 .mod-card:hover {
     background: #FEFEFE;
     border-color: #555599;
