@@ -1,0 +1,81 @@
+{% load pages_tags mezzanine_tags i18n staticfiles static %}
+
+<nav id="sidebar" class="col-md-3 wrapper">
+    {% if user.is_authenticated %}
+        <a class="sidebar-link" href="/dashboard/">
+            <i class="fas fa-tachometer-alt sidebar-icon"></i>
+            <div class="sidebar-title">Dashboard</div>
+        </a>
+
+        <a class="sidebar-link" href="/library/">
+            <i class="fas fa-book-reader sidebar-icon"></i>
+            <div class="sidebar-title">Library</div>
+        </a>
+
+        <a class="sidebar-link" href="/analyses/">
+            <i class="fas fa-flask sidebar-icon"></i>
+            <div class="sidebar-title">Analyses</div>
+        </a>
+
+        <a class="sidebar-link" href="/jobs/">
+            <i class="fas fa-hdd sidebar-icon"></i>
+            <div class="sidebar-title">Jobs</div>
+        </a>
+
+{#        <a class="sidebar-link" href="/workspace/">#}
+{#            <i class="fas fa-book sidebar-icon"></i>#}
+{#            <div class="sidebar-title">Workspace</div>#}
+{#        </a>#}
+    {% endif %}
+
+    <div class="sidebar-header">
+        <h4>User Guide</h4>
+    </div>
+    <div class="sidebar-header" style="padding-top: 0px;font-weight:100;">
+        <h5>All Users</h5>
+    </div>
+    <ul class="list-unstyled components">
+        <li><a href="/quickstart/">Quickstart</a></li>
+        <li><a href="/basic-features/">Basic Features</a></li>
+        <li><a href="/publish-and-sharing/">Publish and Share Notebooks</a></li>
+        <li><a href="/tutorial-videos/">Tutorial Videos</a></li>
+        <li><a href="/best-practices/">Best Practices</a></li>
+        <li><a href="/use-cases/">Use Cases</a></li>
+        <li><a href="/cheat-sheet/">Cheat Sheet</a></li>
+    </ul>
+    <div class="sidebar-header" style="padding-top: 0px;font-weight:100;">
+        <h5>Advanced Users</h5>
+    </div>
+    <ul class="list-unstyled components">
+        <li><a href="https://github.com/genepattern?utf8=%E2%9C%93&q=notebook&type=&language=">Fork us
+                on GitHub</a></li>
+        <li><a href="https://gpnotebook-website-docs.readthedocs.io/en/latest">Documentation</a></li>
+        <li><a href="/programmatic/">Programmatic Features</a></li>
+    </ul>
+    <div class="sidebar-header">
+        <h4>Notebook Features</h4>
+    </div>
+    <ul class="list-unstyled components">
+        <li><a href="/library/">Notebook Library</a></li>
+        <li><a href="/analyses/">GenePattern Analyses</a></li>
+        <li><a href="/ui-builder/">Python UI Builder</a></li>
+    </ul>
+    <div class="sidebar-header">
+        <h4>News/Releases</h4>
+    </div>
+    <ul class="list-unstyled components">
+        <li><a href="/new-features/">New Features</a></li>
+        <li><a href="/releases/">Release Notes</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/publications/">Related Publications</a></li>
+    </ul>
+    <div class="sidebar-header">
+        <h4>Help/Contact</h4>
+    </div>
+    <ul class="list-unstyled components">
+        <li><a href="https://groups.google.com/group/genepattern-help">GenePattern
+                Help Forum</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="http://mesirovlab.org">Mesirov Lab</a></li>
+    </ul>
+</nav>

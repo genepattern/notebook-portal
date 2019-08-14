@@ -12,7 +12,7 @@
     </style>
 {% endblock %}
 
-{% block body_class %}no-cover{% endblock %}
+{% block body_class %}no-cover no-sidebar{% endblock %}
 
 {% block content %}
     <div id="vue">
@@ -28,9 +28,6 @@
     <script type="module">
         // Import the application module
         import * as GenePattern from "/static/js/app.js";
-
-        // Display the sidebar
-        GenePattern.display_sidebar();
 
         // Initialize the dashboard
         GenePattern.dashboard("#vue");

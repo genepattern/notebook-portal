@@ -20,7 +20,7 @@ body {
     color: #525252;
     margin: 0px;
     padding: 0px;
-    margin-top: 60px;
+    margin-top: 50px;
     min-height: calc(100vh - 40px);
 }
 
@@ -391,13 +391,16 @@ h3 {
 #three-boxes .info-block {
     height: 260px;
 }
-.card-columns .card {
+
+.site-map .card {
     border-radius: 5px;
 }
-.card-text {
+
+.site-map .card-text {
     text-align: left;
 }
-.card-header {
+
+.site-map .card-header {
     font-size: 22px;
     font-weight: 100;
     text-align: left;
@@ -406,17 +409,20 @@ h3 {
     opacity: 0.9;;
     color:white;
 }
-.card-columns {
-    text-align: left; 
+
+.site-map.card-columns {
+    text-align: left;
     width:100%;
-    margin:auto; 
+    margin:auto;
     padding-top: 10px;
 }
-.card {
-    /* box-shadow: 0 3px 6px rgba(0, 0, 0, .24); */
+
+.site-map .card {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .24);
     border-radius: 0px;
     border: none;
 }
+
 .sidebar-header {
     padding-top: 10px;
 }
@@ -581,6 +587,20 @@ h1.lead-big {
 
 /* DASHBOARD */
 
+body.no-cover div.lead-cover {
+    display: none;
+}
+
+body.no-sidebar #sidebar {
+    display: none;
+}
+
+body.no-sidebar #main-pane {
+    max-width: 100%;
+    width: 100%;
+    flex: 0 0 100%;
+}
+
 .nb-carousel .spinner-border {
     margin-top: 81px;
     height: 50px;
@@ -720,13 +740,15 @@ div.nb-card {
 } */
 
 .sidebar-link {
-    display: block;
+    display: inline-block;
     color: #525252;
     margin-bottom: 10px;
+    margin-right: 5px;
+    font-size: 0.8em;
 }
 
 .sidebar-icon {
-    font-size: 3em;
+    font-size: 2em;
     width: 100%;
     text-align: center;
 }
@@ -735,17 +757,19 @@ div.nb-card {
     text-align: center;
 }
 
-.mod-search {
+.mod-search,
+.nb-search {
     width: 33%;
     right: 25px;
     position: absolute;
     top: 10px;
 }
 
+.tag-card,
 .mod-card {
     width: calc(33% - 10px);
     display: inline-block;
-    margin-left: 10px;
+    margin-right: 10px;
     margin-bottom: 10px;
     cursor: pointer;
     float: left;
@@ -755,14 +779,17 @@ div.nb-card {
     height: 100px;
 }
 
+.tag-card,
 .mod-card.category {
     height: 48px;
 }
 
-.mod-card > .card-body {
+.mod-card > .card-body,
+.tag-card > .card-body {
     padding: 10px;
 }
 
+.tag-card:hover,
 .mod-card:hover {
     background: #FEFEFE;
     border-color: #555599;

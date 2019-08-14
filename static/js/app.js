@@ -4,14 +4,11 @@ export const GENEPATTERN_SERVER = 'https://cloud.genepattern.org/gp/';
 
 // Declare data cache
 let _public_notebooks = null;
+let _notebook_tags = null;
+let _pinned_tags = null;
 let _shared_notebooks = null;
 let _workspace_notebooks = null;
 let _genepattern_modules = null;
-
-export function display_sidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    if (sidebar) sidebar.style.display = 'block';
-}
 
 /**
  * Retrieves the public notebooks from the cache, if possible, from the server if not
@@ -25,14 +22,63 @@ export function public_notebooks() {
         });
 
     else
-    return fetch(PUBLIC_NOTEBOOK_SEVER + 'notebooks/')
-        .then(response => response.json())
-        .then(function(response) {
-            _public_notebooks = response;
-            return response['results'];
+        return fetch(PUBLIC_NOTEBOOK_SEVER + 'notebooks/')
+            .then(response => response.json())
+            .then(function(response) {
+                _public_notebooks = response;
+                return response['results'];
+            });
+}
+
+/**
+ * Retrieves the list of public notebook tags from the cache, if possible, from the server if not
+ *
+ * @returns {Promise<any>}
+ */
+export function notebook_tags() {
+    if (_notebook_tags !== null)
+        return new Promise(function(resolve) {
+            resolve(_notebook_tags);
+        });
+
+    else
+        return public_notebooks().then(function(all_notebooks) {
+            // Build the map of tags
+            const tag_map = {};
+            all_notebooks.forEach(function(nb) {
+                nb.tags.forEach(function(tag) {
+                    tag_map[tag.label] = tag;
+                });
+            });
+
+            // Assign and return
+            _notebook_tags = Object.values(tag_map);
+            return new Promise(function(resolve) {
+                resolve(_notebook_tags);
+            });
         });
 }
 
+export function pinned_tags() {
+    if (_pinned_tags !== null)
+        return new Promise(function(resolve) {
+            resolve(_pinned_tags);
+        });
+
+    else
+        return notebook_tags().then(function(all_tags) {
+            const pinned_list = [];
+            all_tags.forEach(function(tag) {
+                if (tag.pinned) pinned_list.push(tag);
+            });
+
+            // Assign and return
+            _pinned_tags = pinned_list;
+            return new Promise(function(resolve) {
+                resolve(_pinned_tags);
+            });
+        });
+}
 /**
  * Retrieves the list of GenePattern modules from cache, if possible, from the server if not
  * @returns {Promise<any>}
@@ -44,18 +90,18 @@ export function genepattern_modules() {
         });
 
     else
-    return fetch(GENEPATTERN_SERVER + 'rest/v1/tasks/all.json/', {
-            mode: 'cors',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(function(response) {
-            _genepattern_modules = response;
-            return response['all_modules'];
-        });
+        return fetch(GENEPATTERN_SERVER + 'rest/v1/tasks/all.json/', {
+                mode: 'cors',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(function(response) {
+                _genepattern_modules = response;
+                return response['all_modules'];
+            });
 }
 
 export function module_categories() {
@@ -179,13 +225,46 @@ export function library(selector) {
         delimiters: ['[[', ']]'],
         data: {
             notebooks: [],
+            tags: [],
+            pinned: [],
             search: ''
         },
         computed: {},
         created() {
             GenePattern.public_notebooks().then(r => this.notebooks = r);
+            GenePattern.notebook_tags().then(r => this.tags = r);
+            GenePattern.pinned_tags().then(r => this.pinned = r);
         },
-        methods: {}
+        methods: {},
+        watch: {
+            'search': function(event) {
+                let search = this.search.trim().toLowerCase();
+
+                // If search is blank display module categories
+                if (search === '') {
+                    document.querySelector(selector).querySelector('.tags').classList.remove('d-none');
+                    document.querySelector(selector).querySelector('.notebooks').classList.add('d-none');
+                }
+
+                // Otherwise show matching modules
+                else {
+                    // special case for "all notebooks"
+                    if (search === "all notebooks") search = "";
+
+                    document.querySelector(selector).querySelector('.tags').classList.add('d-none');
+                    document.querySelector(selector).querySelector('.notebooks').classList.remove('d-none');
+
+                    const cards = document.querySelector(selector).querySelector('.notebooks').querySelectorAll('.nb-card');
+                    cards.forEach(function(card) {
+                        // Matching module
+                        if (card.textContent.toLowerCase().includes(search)) card.classList.remove('d-none');
+
+                        // Not matching module
+                        else card.classList.add('d-none');
+                    });
+                }
+            }
+        }
     });
 
     return library_app;
@@ -406,6 +485,25 @@ Vue.component('module-category', {
                 </div>`
 });
 
+Vue.component('notebook-tag', {
+    delimiters: ['[[', ']]'],
+    props: ['tag'],
+    methods: {
+        'search_or_launch': function() {
+            document.querySelector('.nb-search').value = this.tag.label;
+            this.$root.search = this.tag.label;
+        }
+    },
+    mounted: function() {
+        this.$el.classList.add('tag');
+    },
+    template: `<div class="card tag-card" v-on:click="search_or_launch">  
+                    <div class="card-body"> 
+                        <h8 class="card-title">[[ tag.label ]]</h8>
+                    </div> 
+                </div>`
+});
+
 Vue.component('notebook-card', {
     delimiters: ['[[', ']]'],
     props: ['nb'],
@@ -434,6 +532,7 @@ Vue.component('notebook-card', {
                     <div class="card-body"> 
                         <h8 class="card-title">[[ nb.name ]]</h8> 
                         <p class="card-text">[[ nb.description ]]</p> 
+                        <div class="d-none">[[ nb.tags ]]</div>
                     </div> 
                 </div>`
 });

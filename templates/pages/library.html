@@ -1,8 +1,8 @@
 {% extends "pages/page.html" %}
 {% load mezzanine_tags keyword_tags staticfiles static %}
 
-{% block meta_title %}GenePattern Analyses{% endblock %}
-{% block title %}GenePattern Analyses{% endblock %}
+{% block meta_title %}Notebook Library{% endblock %}
+{% block title %}Notebook Library{% endblock %}
 
 {% block extra_css %}
     <style type="text/css">
@@ -18,9 +18,14 @@
     <div id="library">
         <div id="library_header">
             <h1>Notebook Library</h1>
-            <input type="search" placeholder="Search Notebooks" class="form-control mod-search" v-model="search" />
+            <input type="search" placeholder="Search Notebooks" class="form-control nb-search" v-model="search" />
         </div>
-        <div class="notebooks">
+        <div class="tags">
+            <p>Search for a public notebook using the box in the upper right or click on one of the featured categories below.</p>
+            <notebook-tag :tag="{'label': 'all notebooks'}"></notebook-tag>
+            <notebook-tag v-for="t in pinned" :tag="t"></notebook-tag>
+        </div>
+        <div class="notebooks d-none">
             <notebook-card v-for="nb in notebooks" :nb="nb"></notebook-card>
         </div>
     </div>
@@ -31,10 +36,7 @@
         // Import the application module
         import * as GenePattern from "/static/js/app.js";
 
-        // Display the sidebar
-        GenePattern.display_sidebar();
-
-        // Initialize module search/browse
+        // Initialize notebook search/browse
         GenePattern.library("#library");
     </script>
 {% endblock %}
