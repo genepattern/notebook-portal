@@ -216,7 +216,7 @@ header.shrink .navbar-nav .nav-link {
     color:rgb(150, 148, 148);
 }
 
-.nav-link {
+header .nav-link {
     padding: 0.1rem;
 }
 
@@ -272,9 +272,6 @@ h3 {
 
 .form-control::placeholder {
     font-size: 14px;
-}
-.section {
-    margin: right
 }
 
 /* sidenav */
@@ -655,6 +652,15 @@ div.login-card > a.btn:hover {
     color: white;
 }
 
+ul.tags,
+div.notebooks {
+    margin-bottom: 10px;
+}
+
+ul.tags .nav-link {
+    text-transform: capitalize;
+}
+
 div.nb-card {
     display: inline-block;
     width: 300px;
@@ -694,7 +700,7 @@ div.nb-card {
     /* for set '...' in absolute position */
     position: relative;
     /* max-height = line-height (1.2) * lines max number (3) */
-    max-height: 3em;
+    max-height: 3.6em;
     /* place for '...' */
     margin-right: -1em;
     padding-right: 1em;
@@ -780,7 +786,6 @@ div.nb-card {
     top: 10px;
 }
 
-.tag-card,
 .mod-card {
     width: calc(33% - 10px);
     display: inline-block;
@@ -794,18 +799,15 @@ div.nb-card {
     height: 100px;
 }
 
-.tag-card,
 .mod-card.category {
     height: 48px;
     text-transform: capitalize;
 }
 
-.mod-card > .card-body,
-.tag-card > .card-body {
+.mod-card > .card-body {
     padding: 10px;
 }
 
-.tag-card:hover,
 .mod-card:hover {
     background: #FEFEFE;
     border-color: #555599;

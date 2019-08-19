@@ -231,38 +231,43 @@ export function library(selector) {
         },
         computed: {},
         created() {
+            const app = this;
+
             GenePattern.public_notebooks().then(r => this.notebooks = r);
             GenePattern.notebook_tags().then(r => this.tags = r);
-            GenePattern.pinned_tags().then(r => this.pinned = r);
+            GenePattern.pinned_tags().then(r => this.pinned = r).then(function() {
+                // Display featured notebooks by default
+                app.search = "featured";
+                setTimeout(() => document.querySelector('.nb-search').value = '', 1);
+            });
         },
         methods: {},
         watch: {
             'search': function(event) {
                 let search = this.search.trim().toLowerCase();
 
-                // If search is blank display module categories
-                if (search === '') {
-                    document.querySelector(selector).querySelector('.tags').classList.remove('d-none');
-                    document.querySelector(selector).querySelector('.notebooks').classList.add('d-none');
-                }
+                // Set active tab
+                const tabs = document.querySelector('.tags').querySelectorAll('.tag-tab');
+                tabs.forEach(function(tab) {
+                    // Matching tab
+                    if (tab.textContent.toLowerCase() === search) tab.classList.add('active');
 
-                // Otherwise show matching modules
-                else {
-                    // special case for "all notebooks"
-                    if (search === "all notebooks") search = "";
+                    // Not matching tab
+                    else tab.classList.remove('active');
+                });
 
-                    document.querySelector(selector).querySelector('.tags').classList.add('d-none');
-                    document.querySelector(selector).querySelector('.notebooks').classList.remove('d-none');
+                // special case for "all notebooks"
+                if (search === "all notebooks") search = "";
 
-                    const cards = document.querySelector(selector).querySelector('.notebooks').querySelectorAll('.nb-card');
-                    cards.forEach(function(card) {
-                        // Matching module
-                        if (card.textContent.toLowerCase().includes(search)) card.classList.remove('d-none');
+                // Display the matching notebooks
+                const cards = document.querySelector(selector).querySelector('.notebooks').querySelectorAll('.nb-card');
+                cards.forEach(function(card) {
+                    // Matching notebook
+                    if (card.textContent.toLowerCase().includes(search)) card.classList.remove('d-none');
 
-                        // Not matching module
-                        else card.classList.add('d-none');
-                    });
-                }
+                    // Not matching notebook
+                    else card.classList.add('d-none');
+                });
             }
         }
     });
@@ -497,11 +502,14 @@ Vue.component('notebook-tag', {
     mounted: function() {
         this.$el.classList.add('tag');
     },
-    template: `<div class="card tag-card" v-on:click="search_or_launch">  
-                    <div class="card-body"> 
-                        <h8 class="card-title">[[ tag.label ]]</h8>
-                    </div> 
-                </div>`
+    template: `<ul class="nav-item" v-on:click="search_or_launch">  
+                   <a class="nav-link tag-tab" href="#">[[ tag.label ]]</a> 
+               </ul>`
+    // template: `<div class="nav-item tag-card" v-on:click="search_or_launch">
+    //                 <div class="nav-link">
+    //                     <h8>[[ tag.label ]]</h8>
+    //                 </div>
+    //             </div>`
 });
 
 Vue.component('notebook-card', {
