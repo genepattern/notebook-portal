@@ -657,17 +657,19 @@ div.login-card > a.btn:hover {
 
 div.nb-card {
     display: inline-block;
-    width: 200px;
+    width: 300px;
     vertical-align: top;
     height: 212px;
     margin-bottom: 10px;
-    margin-right: 5px;
+    margin-right: 10px;
     text-align: left;
     cursor: pointer;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, .24);
+    border: lightgray 1px solid;
 }
 
 .nb-card > .card-img-top {
-    width: 200px;
+    width: 100%;
     height: 100px;
     object-fit: cover;
     border-bottom: 1px solid rgba(0,0,0,.125);
@@ -677,7 +679,7 @@ div.nb-card {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 190px;
+    width: 290px;
     display: block;
 }
 
@@ -692,7 +694,7 @@ div.nb-card {
     /* for set '...' in absolute position */
     position: relative;
     /* max-height = line-height (1.2) * lines max number (3) */
-    max-height: 5em;
+    max-height: 3em;
     /* place for '...' */
     margin-right: -1em;
     padding-right: 1em;
@@ -723,6 +725,19 @@ div.nb-card {
     margin-top: 0.2em;
     /* bg color = bg color under block */
     background: white;
+}
+
+.nb-card > .card-body > .nb-card-tags {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    height: 1.3em;
+    overflow: hidden;
+}
+
+.nb-card > .card-body > .nb-card-tags > .badge {
+    display: inline-block;
+    margin-right: 3px;
 }
 
 .sidebar[style*="block"] + .main-container {
@@ -782,6 +797,7 @@ div.nb-card {
 .tag-card,
 .mod-card.category {
     height: 48px;
+    text-transform: capitalize;
 }
 
 .mod-card > .card-body,

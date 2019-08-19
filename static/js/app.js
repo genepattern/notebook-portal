@@ -532,7 +532,7 @@ Vue.component('notebook-card', {
                     <div class="card-body"> 
                         <h8 class="card-title">[[ nb.name ]]</h8> 
                         <p class="card-text">[[ nb.description ]]</p> 
-                        <div class="d-none">[[ nb.tags ]]</div>
+                        <div class="card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in nb.tags">[[ tag.label ]] </span></div>
                     </div> 
                 </div>`
 });
