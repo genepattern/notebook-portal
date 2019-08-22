@@ -20,12 +20,12 @@
             <h1>Notebook Library</h1>
             <input type="search" placeholder="Search Notebooks" class="form-control nb-search" v-model="search" />
         </div>
-        <div class="tags">
-            <p>Search for a public notebook using the box in the upper right or click on one of the featured categories below.</p>
+        <p>Search for a public notebook using the box in the upper right or click on one of the featured categories below.</p>
+        <ul class="nav nav-tabs tags">
             <notebook-tag :tag="{'label': 'all notebooks'}"></notebook-tag>
             <notebook-tag v-for="t in pinned" :tag="t"></notebook-tag>
-        </div>
-        <div class="notebooks d-none">
+        </ul>
+        <div class="notebooks">
             <notebook-card v-for="nb in notebooks" :nb="nb"></notebook-card>
         </div>
     </div>
@@ -37,6 +37,6 @@
         import * as GenePattern from "/static/js/app.js";
 
         // Initialize notebook search/browse
-        GenePattern.library("#library");
+        const library = GenePattern.library("#library");
     </script>
 {% endblock %}
