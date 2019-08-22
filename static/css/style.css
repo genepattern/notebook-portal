@@ -365,6 +365,9 @@ h3 {
     padding: 30px;
     padding-top:10px;
 }
+#sidebar {
+    padding: 30px;
+}
 .sidebar-header h4, .sidebar-header h5 {
     font-weight: 100;
     text-align: left;
@@ -584,6 +587,11 @@ h1.lead-big {
     top: -20px;
     box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.28);
 }
+#main-pane {
+    padding: 30px;
+    padding-left: 50px;
+}
+
 
 /* DASHBOARD */
 

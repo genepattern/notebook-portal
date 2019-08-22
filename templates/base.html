@@ -94,12 +94,12 @@
     {% block main-container %}
     <div class="container main-container">
         <div class="row">
+            <div id="main-pane" class="col-sm-9">
+                {% block main %}{% endblock %}
+            </div>
             {% block sidebar %}
                 {% include "includes/sidebar.html" %}
             {% endblock %}
-            <div id="main-pane" class="col-md-9">
-                {% block main %}{% endblock %}
-            </div>
         </div>
     </div>
     {% endblock main-container %}
