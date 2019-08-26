@@ -61,6 +61,11 @@ p img {
     padding: 30px;
     margin: 0px;
 }
+
+#using .col-lg-4 {
+    padding: 10px;
+}
+
 #slogan {
     font-size: 30px;
 }
@@ -85,8 +90,8 @@ a:hover {
 header, footer {
     border: none;
     color: white;
-    background: rgb(11, 81, 128);
-    opacity: 0.9;
+    background: rgb(60,88,136);
+    opacity: 1;
 }
 footer {
     color: white;
@@ -142,7 +147,7 @@ p.nav-link {
 }
 
 .navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover{
-    color: #ed1c24;
+    opacity: 0.8;
 }
 
 .navbar-brand {
@@ -290,7 +295,7 @@ h3 {
 	vertical-align:bottom;
 }
 #dot-nav li.active, #dot-nav li:hover {
-    background-color: rgba(11, 81, 128, 0.9);
+    background-color: rgb(60,88,136);
     
 }
 
@@ -344,6 +349,9 @@ h3 {
     padding: 30px;
     padding-top:10px;
 }
+#sidebar {
+    padding: 30px;
+}
 .sidebar-header h4, .sidebar-header h5 {
     font-weight: 100;
     text-align: left;
@@ -386,8 +394,7 @@ h3 {
     font-weight: 100;
     text-align: left;
     /* background: rgba(21, 114, 176,0.9); */
-    background: rgb(11, 81, 128);
-    opacity: 0.9;;
+    background: rgb(60,88,136);
     color:white;
 }
 
@@ -553,6 +560,11 @@ h1.lead-big {
     top: -20px;
     box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.28);
 }
+#main-pane {
+    padding: 30px;
+    padding-left: 50px;
+}
+
 
 /* DASHBOARD */
 

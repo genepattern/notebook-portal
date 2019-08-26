@@ -33,8 +33,8 @@
 
 {% block main-content %}
     {% block content %}
-    {% endblock %}
-{% endblock %}
+    {% endblock content %}
+{% endblock main-content %}
 
 <script src="/static/js/dot-nav.js"></script>
 
@@ -55,7 +55,7 @@
                     <h3 id="slogan">Integrating <a href="http://genepattern.org" style="font-weight:600; "><img class="index-logo" src="/static/images/genepattern.png" /> GenePattern</a> Genomic Analyses with the <a href="https://jupyter.org" style="font-weight:600; "><img class="index-logo" src="/static/images/jupyter-white-empty.png" /> Jupyter</a> Notebook Environment</h3>
                     <a href="#" class="btn" onclick="document.getElementById('login_link').click()">Login</a>
                     <a href="#" class="btn" onclick="document.getElementById('login_link').click()">Register</a>
-                    <a href="#about" class="btn">Learn More</a>
+                    <a href="#directory" class="btn">Using GenePattern Notebook</a>
                 </div>
                 <div class="col-md-6" style="margin: auto; padding:20px; padding-right: 30px;">
                     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="3000">
@@ -111,6 +111,8 @@
                 <h3 style="padding-top: 0px;">In the Press</h3>
                 <hr>
                 <ul>
+                    <li><a href="https://ocg.cancer.gov/news-publications/e-newsletter-issue/issue-22#2744">"GenePattern Notebook: Integration of Electronic Notebooks with Bioinformatics Tools for Genomic Data Analysis"</a></li>
+
                     <li><a href="https://blogs.nature.com/naturejobs/2017/09/15/techblog-jupyter-powers-bioinformatics-again">"TechBlog:
                             Jupyter powers bioinformatics, again"</a></li>
                     <li><a
@@ -139,79 +141,88 @@
                     <h3>Using GenePattern Notebook</h3>
                     <hr>
                 </div>
-                <div class="site-map card-columns">
-                    <div class="card bg-light mb-3">
-                        <div class="card-header">
-                            <img src="">
-                            User Guide
-                        </div>
-                        <div class="card-body">
-                            <h5 style="font-weight: 100; margin:0px;">All Users</h5>
-                            <ul class="card-text">
-                                <li><a href="/quickstart/">Quickstart</a></li>
-                                <li><a href="/basic-features/">Basic Features</a></li>
-                                <li><a href="/publish-and-sharing/">Publish and Share Notebooks</a></li>
-                                <li><a href="/tutorial-videos/">Tutorial Videos</a></li>
-                                <li><a href="/best-practices/">Best Practices</a></li>
-                                <li><a href="/use-cases/">Use Cases</a></li>
-                                <li><a href="/cheat-sheet/">Cheat Sheet</a></li>
-                            </ul>
+                <div class="row" id="using">
+                    <div class="col-lg-4">
+                        <div class="card bg-light">
+                            <div class="card-header">
+                                <img src="">
+                                User Guide
+                            </div>
+                            <div class="card-body">
+                                <h5 style="font-weight: 100; margin:0px;">All Users</h5>
+                                <ul class="card-text">
+                                    <li><a href="/quickstart/">Quickstart</a></li>
+                                    <li><a href="/basic-features/">Basic Features</a></li>
+                                    <li><a href="/publish-and-sharing/">Publish and Share Notebooks</a></li>
+                                    <li><a href="/tutorial-videos/">Tutorial Videos</a></li>
+                                    <li><a href="/best-practices/">Best Practices</a></li>
+                                    <li><a href="/use-cases/">Use Cases</a></li>
+                                    <li><a href="/cheat-sheet/">Cheat Sheet</a></li>
+                                </ul>
 
-                            <h5 style="font-weight: 100; margin:0px;">Advanced Users</h5>
-                            <ul class="card-text">
-                                <li><a href="https://github.com/genepattern?q=notebook">Fork us
-                                        on GitHub</a></li>
-                                <li><a href="https://gpnotebook-website-docs.readthedocs.io/en/latest">Documentation</a></li>
-                                <li><a href="/programmatic/">Programmatic Features</a></li>
-                            </ul>
+                                <h5 style="font-weight: 100; margin:0px;">Advanced Users</h5>
+                                <ul class="card-text">
+                                    <li><a href="https://github.com/genepattern?q=notebook">Fork us
+                                            on GitHub</a></li>
+                                    <li><a href="https://gpnotebook-website-docs.readthedocs.io/en/latest">Documentation</a></li>
+                                    <li><a href="/programmatic/">Programmatic Features</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                    <div class="card bg-light mb-3">
-                        <div class="card-header">Notebook Features</div>
-                        <div class="card-body">
-                            <ul class="card-text">
-                                <li><a href="/library/">Notebook Library</a></li>
-                                <li><a href="/analyses/">Available GenePattern Analyses</a></li>
-                                <li><a href="/ui-builder/">UI Builder for Python and R</a></li>
+                    <div class="col-lg-4">
+                        <div class="card bg-light mb-3">
+                            <div class="card-header" style="font-size: 20px;">Genomic Analyses and Workflows</div>
+                            <div class="card-body">
+                                <ul class="card-text">
+                                    <li><a href="/analyses/">Available GenePattern Analyses</a></li>
+                                    <li><a href="/library/">Library of Public GenePattern Notebooks</a></li>
                     
-                            </ul>
+                                    <li><a href="">Featured Notebook Collections</a></li>
+                                    <ul>
+                                        <li><a href="">Single-cell Analysis</a></li>
+                                        <li><a href="">RNA-seq</a></li>
+                                    </ul>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card bg-light mb-3">
+                            <div class="card-header">Additional Information</div>
+                            <div class="card-body">
+                                <ul class="card-text">
+                                    <li><a href="/related-projects/">Related Projects</a></li>
+                                    <li><a href="/publications/">Related Publications</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card bg-light mb-3">
+                            <div class="card-header">News/Releases</div>
+                            <div class="card-body">
+                                <ul class="card-text">
+                                    <li><a href="/new-features/">New Features</a></li>
+                                    <li><a href="/releases/">Release Notes</a></li>
+                                    <li><a href="/blog/">Blog</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card bg-light mb-3">
+                            <div class="card-header">Help/Contact
+                            </div>
+                            <div class="card-body">
+                                <ul class="card-text">
+                                    <li><a href="/contact/">Contact Us</a></li>
+                                    <li><a href="/faq/">FAQ</a></li>
+                                    <li><a href="http://mesirovlab.org">Mesirov Lab</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                    <div class="card bg-light mb-3">
-                        <div class="card-header">News/Releases</div>
-                        <div class="card-body">
-                            <ul class="card-text">
-                                <li><a href="/new-features/">New Features</a></li>
-                                <li><a href="/releases/">Release Notes</a></li>
-                                <li><a href="/blog/">Blog</a></li>
-                            </ul>
-                        </div>
                     </div>
-                    
-                    <div class="card bg-light mb-3">
-                        <div class="card-header">Help/Contact
-                        </div>
-                        <div class="card-body">
-                            <ul class="card-text">
-                                <li><a href="https://groups.google.com/group/genepattern-help">GenePattern
-                                        Help Forum</a></li>
-                                <li><a href="/faq/">FAQ</a></li>
-                                <li><a href="http://mesirovlab.org">Mesirov Lab</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card bg-light mb-3">
-                        <div class="card-header">Additional Information</div>
-                        <div class="card-body">
-                            <ul class="card-text">
-                                <li><a href="https://github.com/genepattern/genepattern-notebook/blob/master/Code_of_Conduct.md">Code of Conduct</a></li>
-                                <li><a href="/related-projects/">Related Projects</a></li>
-                                <li><a href="/publications/">Related Publications</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
+                </div
             </div>
         </div>
     </div>
@@ -237,4 +248,15 @@
         </div>
     </div>
 </section>
+
+{% block sidebar %}
+{% endblock sidebar %}
+
+{% block main-container %}
+{% endblock main-container %}
+{% endblock %}
+
+{% block footer_js %}
+<!-- Smooth scroll  -->
+<script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15/dist/smooth-scroll.polyfills.min.js"></script>
 {% endblock %}

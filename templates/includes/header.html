@@ -13,20 +13,36 @@
     </button>
     <div class="collapse navbar-collapse" id="navbar-dropdown">
         <ul class="navbar-nav" style="margin-left: 0px;">
-            <li class="nav-item">
-                <a class="nav-link" href="/quickstart/">Quickstart</a>
+            <li class="nav-item dropdown">
+                <a id="user-menu" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                    aria-haspopup="true" aria-expanded="false">User Guide
+                    <span class="caret"></span></a>
+                <div class="dropdown-menu" aria-labelledby="user-menu">
+                    <a class="dropdown-item" href="/quickstart">Quickstart</a>
+                    <a class="dropdown-item" href="/basic-features/">Basic Features</a>
+                    <a class="dropdown-item" href="/publish-and-sharing/">Publish and Share Notebooks</a>
+                    <a class="dropdown-item" href="/tutorial-videos/">Tutorial Videos</a>
+                    <a class="dropdown-item" href="/best-practices/">Best Practices</a>
+                    <a class="dropdown-item" href="/cheat-sheet/">Cheat Sheet</a>
+                </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="https://gpnotebook-website-docs.readthedocs.io/en/latest">Documentation</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/usecases/">Use Cases</a>
+            <li class="nav-item dropdown">
+                <a id="user-menu" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                    aria-haspopup="true" aria-expanded="false">Analysis
+                    <span class="caret"></span></a>
+                <div class="dropdown-menu" aria-labelledby="user-menu">
+                    <a class="dropdown-item" href="/single-cell/">Single-cell Analysis</a>
+                    <a class="dropdown-item" href="/rna-seq/">RNA-seq</a>
+                </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/blog/">Blog</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="https://groups.google.com/group/genepattern-help">Contact</a>
+                <a class="nav-link" href="/contact/">Contact</a>
             </li>
 
         </ul>
