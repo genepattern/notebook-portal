@@ -168,29 +168,6 @@ p.nav-link {
     }
 }
 
-.modal-header {
-    padding: 16px;
-    display: block;
-
-}
-.modal-title {
-    line-height: inherit;
-    font-size: 20px;
-    font-weight: 100;
-}
-
-.modal-footer {
-    padding: inherit;
-}
-
-.modal-footer button {
-    font-weight: 100;
-    border-radius: 0px;
-}
-.modal-footer button:hover {
-    background: transparent;
-}
-
 .gsc-search-button {
     background: #FEFEFE;
     border: none;
@@ -220,16 +197,23 @@ header .nav-link {
     padding: 0.1rem;
 }
 
-.btn {
-    background: #FEFEFE;
+#home .btn {
+    color: #FEFEFE;
     border: none;
-    color: #555599;
+    background: #205f89;
     border-radius: 100px;
-    display: inline;
+    display: inline-block;
     padding: 10px;
+    margin-top: 10px;
+    margin-left: 5px;
 }
 
-.btn:hover {
+#home .btn > a {
+    color: white;
+    font-weight: 200;
+}
+
+#home .btn:hover {
     background: #ed1c24
 }
 
@@ -505,18 +489,6 @@ h3 {
 
 h1.lead-big {
     font-size: 3em;
-}
-
-#gs-btn {
-    margin-top: 25px;
-    font-size: 15px;
-    padding: 10px;
-    background: rgb(11, 81, 128);
-    opacity: 0.9;;
-}
-#gs-btn:hover {
-    background: #ed1c24;
-    color:white;
 }
 
 .gray {

@@ -30,8 +30,9 @@
             </li>
 
         </ul>
-        <ul class="navbar-nav" style="margin-right: 15px;">
+        <ul id="navbar" class="navbar-nav" style="margin-right: 15px;">
             {% if user.is_authenticated %}
+                <login-register></login-register>
                 <li class="nav-item dropdown">
                     <a id="user-menu" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">{{ user.username }}
@@ -48,9 +49,7 @@
                     </a>
                 </li>
             {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="https://notebook.genepattern.org/hub/login" >Login/Register</a>
-                </li>
+                <login-register></login-register>
                 <li class="nav-item">
                     <a href="#modalSearch" data-toggle="modal" data-target="#modalSearch" class="nav-link"><i class="fa fa-search" aria-hidden="true"></i> <span class="hidden-sm hidden-md hidden-lg">Search</span>
                     </a>
@@ -66,8 +65,8 @@
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title">Search</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title">Search</h3>
             </div>
             <div class="modal-body">
                 <!-- Add the modal body here -->
@@ -92,3 +91,13 @@
 
     </div>
 </div>
+
+{% block footer_js %}
+    <script type="module">
+        // Import the application module
+        import * as GenePattern from "/static/js/app.js";
+
+        // Initialize the dashboard
+        GenePattern.navbar("#navbar");
+    </script>
+{% endblock %}
