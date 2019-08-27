@@ -231,7 +231,7 @@ header .nav-link {
     position: fixed;
     width: 90%;
     left: 5%;
-    top: 40px;
+    top: 60px;
     z-index: 9000;
     padding: 0;
 }

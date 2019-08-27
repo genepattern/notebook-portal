@@ -784,7 +784,65 @@ Vue.component('login-register', {
     delimiters: ['[[', ']]'],
     props: ['title'],
     methods: {
+        'toggle_forgot_password': function() {
+            // Hide non-reset elements
+            $('.password-row').slideUp();
+            $('.btn-forgot').slideUp();
+            $('.btn-login').slideUp();
+
+            // Change the title
+            $('.modal-title').text('Reset Password');
+
+            // Show reset password button
+            $('.btn-reset').removeClass('d-none');
+        },
+        'forgot_password': function() {
+            // Get the username
+            const username_or_email = document.getElementById('login_form').querySelector('input[name=username]').value;
+
+            // Gather the form data
+            const formData = {
+                'usernameOrEmail': username_or_email
+            };
+
+            // Submit the form
+            show_spinner();
+            $.ajax({
+                beforeSend: function(xhrObj){
+                    xhrObj.setRequestHeader("Content-Type","application/json");
+                    xhrObj.setRequestHeader("Accept","application/json");
+                },
+                type: 'PUT',
+                url: `${GENEPATTERN_SERVER}rest/v1/oauth2/forgot-password`,
+                crossDomain: true,
+                data: JSON.stringify(formData),
+                dataType: 'json',
+                success: function (data) {
+                    // Success!
+                    if (data && data.message === "A new password has been emailed to you.") {
+                        message("A new password has been emailed to you.", 'success');
+                    }
+
+                    // Error response!
+                    else {
+                        message(data.message, 'danger');
+                    }
+
+                    // Remove the spinner and modal
+                    close_modal();
+                    hide_spinner();
+                },
+                error: function(xhr) {
+                    close_modal();
+                    hide_spinner();
+                    message("Unable to reset password. Could not contact the GenePattern server or remote password reset unsupported.", 'danger');
+                }
+            });
+        },
+
         'login_dialog': function() {
+            const login_register = this;
+
             modal({
                 'title': 'Log in to GenePattern',
                 'body': `<form id="login_form">
@@ -794,7 +852,7 @@ Vue.component('login-register', {
                                      <input name="username" type="text" class="form-control" placeholder="Username" v-model="username" v-on:keyup.13="submit">
                                  </div>
                              </div>
-                             <div class="form-group row">
+                             <div class="password-row form-group row">
                                  <label for="password" class="col-sm-2 col-sm-3">Password</label>
                                  <div class="col-sm-9">
                                      <input name="password" type="password" class="form-control" placeholder="Password" v-model="password" v-on:keyup.13="submit">
@@ -803,17 +861,23 @@ Vue.component('login-register', {
                          </form>`,
                 'buttons': {
                     'Forgot Password': {
-                        'class': 'btn-outline-secondary',
+                        'class': 'btn-forgot btn-outline-secondary',
                         'click': function() {
-                            console.log('ok');
+                            login_register.toggle_forgot_password()
                         }
                     },
                     'Cancel': {},
                     'Login': {
-                        'class': 'btn-primary',
+                        'class': 'btn-login btn-primary',
                         'click': function() {
                             const app = $('#login_form').data("app");
                             app.submit();
+                        }
+                    },
+                    'Reset Password': {
+                        'class': 'btn-reset d-none btn-primary',
+                        'click': function() {
+                            login_register.forgot_password();
                         }
                     }
                 }
