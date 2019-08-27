@@ -182,6 +182,34 @@ export function system_message() {
         .then(msg => message(msg));
 }
 
+export function get_cookie(name) {
+    let cookie_value = null;
+    if (document.cookie && document.cookie !== '') {
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookie_value = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookie_value;
+}
+
+export function get_csrf() {
+    // Try getting the token from the form
+    const csrf_form = document.getElementById('csrf');
+    const csrf_input = csrf_form ? csrf_form.querySelector('input[name=csrfmiddlewaretoken]') : false;
+    let csrf_token = csrf_form && csrf_input ? csrf_input.value : false;
+
+    // If that fails, try the cookie
+    csrf_token = !csrf_token ? get_cookie('csrftoken') : csrf_token;
+
+    // Return the token
+    return csrf_token;
+}
 
 /*****************
  * Vue page apps *
@@ -363,6 +391,116 @@ export function analyses(selector) {
     return analyses_app;
 }
 
+export function login_form(selector) {
+    const login_app = new Vue({
+        el: selector,
+        delimiters: ['[[', ']]'],
+        data: {
+            username: '',
+            password: ''
+        },
+        watch: {
+            'username': () => login_app.validate_username(),
+            'password': () => login_app.validate_password()
+
+        },
+        methods: {
+            'show_spinner': function() {
+                const footer = $(selector).find(".modal-footer");
+                let spinner = footer.find('.spinner-border');
+
+                // Toggle visibility on if spinner exists
+                if (spinner.length) spinner.show();
+
+                // Otherwise, add the spinner
+                else footer.prepend(
+                    $(`<div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>`)
+                );
+            },
+            'hide_spinner': function() {
+                const spinner = $(selector).find(".modal-footer").find('.spinner-border');
+                if (spinner) spinner.hide();
+            },
+            'validate_password': function() {
+                const login_form = $(selector);
+                const password = login_form.find('input[name=password]');
+
+                if (password.val().trim() !== '') {
+                    password[0].setCustomValidity('');
+                    login_form.closest('.modal').find('.btn.btn-primary').attr("disabled", false);
+                    return true;
+                }
+                else {
+                    password[0].setCustomValidity("Password cannot be blank");
+                    login_form.closest('.modal').find('.btn.btn-primary').attr("disabled", true);
+                    return false;
+                }
+            },
+            'validate_username': function() {
+                const login_form = $(selector);
+                const username = login_form.find('input[name=username]');
+
+                if (username.val().trim() !== '') {
+                    username[0].setCustomValidity('');
+                    login_form.closest('.modal').find('.btn.btn-primary').attr("disabled", false);
+                    return true;
+                }
+                else {
+                    username[0].setCustomValidity("Username cannot be blank");
+                    login_form.closest('.modal').find('.btn.btn-primary').attr("disabled", true);
+                    return false;
+                }
+            },
+            'submit': function () {
+                // Gather the form data
+                const formData = {
+                    'username': this.username,
+                    'password': this.password
+                };
+
+                // Submit the form
+                this.show_spinner();
+                $.ajax({
+                    beforeSend: function(xhrObj){
+                        xhrObj.setRequestHeader("X-CSRFToken", get_csrf());
+                    },
+                    type: 'POST',
+                    url: `/rest/api-auth/login/`,
+                    crossDomain: true,
+                    data: formData,
+                    success: function (data) {
+                        close_modal();
+                        message("GenePattern login successful.", "success");
+
+                        // Reload the page
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        close_modal();
+                        login_app.hide_spinner();
+
+                        // Handle errors
+                        try {
+                            message(JSON.parse(xhr.responseText).error, 'danger');
+                        }
+                        catch (e) {
+                            console.error(xhr.responseText);
+                            message("Unable to log in. Please recheck your username and password.", 'danger');
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    // Store reference to app in the data
+    $(selector).data('app', login_app);
+
+    return login_app;
+}
+
 export function register_form(selector) {
     const register_app = new Vue({
         el: selector,
@@ -375,7 +513,8 @@ export function register_form(selector) {
         },
         watch: {
             'password_confirm': () => register_app.validate_password(),
-            'password': () => register_app.validate_password()
+            'password': () => register_app.validate_password(),
+            'email': () => register_app.validate_email()
         },
         methods: {
             'show_spinner': function() {
@@ -412,6 +551,21 @@ export function register_form(selector) {
                     return false;
                 }
             },
+            'validate_email': function() {
+                const registration_form = $(selector);
+                const email = registration_form.find("input[name='email']");
+
+                if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.val())) {
+                    email[0].setCustomValidity('');
+                    registration_form.closest('.modal').find('.btn.btn-primary').attr("disabled", false);
+                    return true;
+                }
+                else {
+                    email[0].setCustomValidity("Invalid email address");
+                    registration_form.closest('.modal').find('.btn.btn-primary').attr("disabled", true);
+                    return false;
+                }
+            },
             'submit': function () {
                 // Gather the form data
                 const formData = {
@@ -439,7 +593,7 @@ export function register_form(selector) {
                     },
                     error: function(xhr) {
                         close_modal();
-                        this.hide_spinner();
+                        register_app.hide_spinner();
 
                         // Handle errors
                         if (xhr.status === 404) {
@@ -640,17 +794,17 @@ Vue.component('login-register', {
         'login_dialog': function() {
             modal({
                 'title': 'Log in to GenePattern',
-                'body': `<form>
+                'body': `<form id="login_form">
                              <div class="form-group row">
                                  <label for="username" class="col-sm-2 col-sm-3">Username</label>
                                  <div class="col-sm-9">
-                                     <input name="username" type="text" class="form-control" placeholder="Username">
+                                     <input name="username" type="text" class="form-control" placeholder="Username" v-model="username" v-on:keyup.13="submit">
                                  </div>
                              </div>
                              <div class="form-group row">
                                  <label for="password" class="col-sm-2 col-sm-3">Password</label>
                                  <div class="col-sm-9">
-                                     <input name="password" type="password" class="form-control" placeholder="Password">
+                                     <input name="password" type="password" class="form-control" placeholder="Password" v-model="password" v-on:keyup.13="submit">
                                  </div>
                              </div>
                          </form>`,
@@ -665,11 +819,13 @@ Vue.component('login-register', {
                     'Login': {
                         'class': 'btn-primary',
                         'click': function() {
-                            console.log('ok');
+                            const app = $('#login_form').data("app");
+                            app.submit();
                         }
                     }
                 }
             });
+            login_form('#login_form');
         },
         'register_dialog': function() {
             modal({
@@ -678,25 +834,25 @@ Vue.component('login-register', {
                              <div class="form-group row">
                                  <label for="username" class="col-sm-2 col-sm-3">Username</label>
                                  <div class="col-sm-9">
-                                     <input name="username" type="text" class="form-control" placeholder="Username" v-model="username">
+                                     <input name="username" type="text" class="form-control" placeholder="Username" v-model="username" v-on:keyup.13="submit">
                                  </div>
                              </div>
                              <div class="form-group row">
                                  <label for="password" class="col-sm-2 col-sm-3">Password</label>
                                  <div class="col-sm-9">
-                                     <input name="password" type="password" class="form-control" placeholder="Password" v-model="password">
+                                     <input name="password" type="password" class="form-control" placeholder="Password" v-model="password" v-on:keyup.13="submit">
                                  </div>
                              </div>
                              <div class="form-group row">
                                  <label for="confirm" class="col-sm-2 col-sm-3">Password (again)</label>
                                  <div class="col-sm-9">
-                                     <input name="confirm" type="password" class="form-control" placeholder="Password (again)" v-model="password_confirm">
+                                     <input name="confirm" type="password" class="form-control" placeholder="Password (again)" v-model="password_confirm" v-on:keyup.13="submit">
                                  </div>
                              </div>
                              <div class="form-group row">
                                  <label for="email" class="col-sm-2 col-sm-3">Email</label>
                                  <div class="col-sm-9">
-                                     <input name="email" type="email" class="form-control" placeholder="Email Address" v-model="email">
+                                     <input name="email" type="email" class="form-control" placeholder="Email Address" v-model="email" v-on:keyup.13="submit">
                                  </div>
                              </div>
                          </form>`,

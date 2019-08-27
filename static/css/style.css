@@ -223,7 +223,11 @@ header .nav-link {
 }
 
 #messages {
-    padding: 0px;
+    position: fixed;
+    width: 90%;
+    left: 5%;
+    top: 40px;
+    z-index: 9000;
 }
 
 .about {

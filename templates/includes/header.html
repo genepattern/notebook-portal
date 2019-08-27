@@ -48,7 +48,6 @@
         </ul>
         <ul id="navbar" class="navbar-nav" style="margin-right: 15px;">
             {% if user.is_authenticated %}
-                <login-register></login-register>
                 <li class="nav-item dropdown">
                     <a id="user-menu" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">{{ user.username }}
@@ -74,8 +73,14 @@
         </ul>
     </div>
 </nav>
-<!-- Search Modal -->
 </header>
+
+<!-- CSRF Token embed -->
+<form id="csrf" class="d-none">
+    {% csrf_token %}
+</form>
+
+<!-- Search Modal -->
 <div id="modalSearch" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
