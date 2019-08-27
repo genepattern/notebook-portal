@@ -211,6 +211,67 @@ export function get_csrf() {
     return csrf_token;
 }
 
+export function show_spinner() {
+    const footer = $('.modal').find(".modal-footer");
+    let spinner = footer.find('.spinner-border');
+
+    // Toggle visibility on if spinner exists
+    if (spinner.length) spinner.show();
+
+    // Otherwise, add the spinner
+    else footer.prepend(
+        $(`<div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>`)
+    );
+}
+
+export function hide_spinner() {
+    const spinner = $('.modal').find(".modal-footer").find('.spinner-border');
+    if (spinner) spinner.hide();
+}
+
+export function login(username, password) {
+    // Gather the form data
+    const formData = {
+        'username': username,
+        'password': password
+    };
+
+    // Submit the form
+    show_spinner();
+
+    $.ajax({
+        beforeSend: function(xhrObj){
+            xhrObj.setRequestHeader("X-CSRFToken", get_csrf());
+        },
+        type: 'POST',
+        url: `/rest/api-auth/login/`,
+        crossDomain: true,
+        data: formData,
+        success: function (data) {
+            close_modal();
+            message("GenePattern login successful.", "success");
+
+            // Reload the page
+            location.reload();
+        },
+        error: function(xhr) {
+            close_modal();
+            hide_spinner();
+
+            // Handle errors
+            try {
+                message(JSON.parse(xhr.responseText).error, 'danger');
+            }
+            catch (e) {
+                console.error(xhr.responseText);
+                message("Unable to log in. Please recheck your username and password.", 'danger');
+            }
+        }
+    });
+}
+
 /*****************
  * Vue page apps *
  *****************/
@@ -405,24 +466,6 @@ export function login_form(selector) {
 
         },
         methods: {
-            'show_spinner': function() {
-                const footer = $(selector).find(".modal-footer");
-                let spinner = footer.find('.spinner-border');
-
-                // Toggle visibility on if spinner exists
-                if (spinner.length) spinner.show();
-
-                // Otherwise, add the spinner
-                else footer.prepend(
-                    $(`<div class="spinner-border" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>`)
-                );
-            },
-            'hide_spinner': function() {
-                const spinner = $(selector).find(".modal-footer").find('.spinner-border');
-                if (spinner) spinner.hide();
-            },
             'validate_password': function() {
                 const login_form = $(selector);
                 const password = login_form.find('input[name=password]');
@@ -454,43 +497,8 @@ export function login_form(selector) {
                 }
             },
             'submit': function () {
-                // Gather the form data
-                const formData = {
-                    'username': this.username,
-                    'password': this.password
-                };
-
-                // Submit the form
-                this.show_spinner();
-                $.ajax({
-                    beforeSend: function(xhrObj){
-                        xhrObj.setRequestHeader("X-CSRFToken", get_csrf());
-                    },
-                    type: 'POST',
-                    url: `/rest/api-auth/login/`,
-                    crossDomain: true,
-                    data: formData,
-                    success: function (data) {
-                        close_modal();
-                        message("GenePattern login successful.", "success");
-
-                        // Reload the page
-                        location.reload();
-                    },
-                    error: function(xhr) {
-                        close_modal();
-                        login_app.hide_spinner();
-
-                        // Handle errors
-                        try {
-                            message(JSON.parse(xhr.responseText).error, 'danger');
-                        }
-                        catch (e) {
-                            console.error(xhr.responseText);
-                            message("Unable to log in. Please recheck your username and password.", 'danger');
-                        }
-                    }
-                });
+                // Call the login endpoint
+                login(this.username, this.password)
             }
         }
     });
@@ -517,24 +525,6 @@ export function register_form(selector) {
             'email': () => register_app.validate_email()
         },
         methods: {
-            'show_spinner': function() {
-                const footer = $(selector).find(".modal-footer");
-                let spinner = footer.find('.spinner-border');
-
-                // Toggle visibility on if spinner exists
-                if (spinner.length) spinner.show();
-
-                // Otherwise, add the spinner
-                else footer.prepend(
-                    $(`<div class="spinner-border" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>`)
-                );
-            },
-            'hide_spinner': function() {
-                const spinner = $(selector).find(".modal-footer").find('.spinner-border');
-                if (spinner) spinner.hide();
-            },
             'validate_password': function() {
                 const registration_form = $(selector);
                 const password = registration_form.find('input[name=password]');
@@ -576,7 +566,7 @@ export function register_form(selector) {
                 };
 
                 // Submit the form
-                this.show_spinner();
+                show_spinner();
                 $.ajax({
                     beforeSend: function(xhrObj){
                         xhrObj.setRequestHeader("Content-Type","application/json");
@@ -589,11 +579,14 @@ export function register_form(selector) {
                     dataType: 'json',
                     success: function (data) {
                         close_modal();
-                        message("GenePattern registration successful.", "success");
+                        message("GenePattern registration successful. Signing in...", "success");
+
+                        // Call the login endpoint
+                        login(register_app.username, register_app.password);
                     },
                     error: function(xhr) {
                         close_modal();
-                        register_app.hide_spinner();
+                        hide_spinner();
 
                         // Handle errors
                         if (xhr.status === 404) {
