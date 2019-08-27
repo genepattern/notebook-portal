@@ -97,9 +97,11 @@
             <div id="main-pane" class="col-sm-9">
                 {% block main %}{% endblock %}
             </div>
+            <div class="col-sm-3 wrapper">
             {% block sidebar %}
                 {% include "includes/sidebar.html" %}
             {% endblock %}
+            </div>
         </div>
     </div>
     {% endblock main-container %}
