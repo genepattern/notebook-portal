@@ -350,10 +350,13 @@ header .nav-link {
     padding: 30px;
 }
 .wrapper {
-    background: rgba(71, 83, 105, 0.1);
+    /* background: rgba(71, 83, 105, 0.1); */
+    background: transparent;
+    padding: 0px;
 }
 #sidebar {
-    padding: 20px;
+    background: rgba(71, 83, 105, 0.1);
+    padding: 30px;
     padding-top: 30px;
 }
 .sidebar-header {
