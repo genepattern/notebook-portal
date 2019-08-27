@@ -48,15 +48,16 @@
         </ul>
         <ul id="navbar" class="navbar-nav" style="margin-right: 15px;">
             {% if user.is_authenticated %}
-                <login-register></login-register>
                 <li class="nav-item dropdown">
                     <a id="user-menu" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">{{ user.username }}
                         <span class="caret"></span></a>
                     <div class="dropdown-menu" aria-labelledby="user-menu">
-                        <a class="dropdown-item" href="/jobs/">Jobs</a>
-                        <a class="dropdown-item" href="/workspace/">Workspace</a>
-                        <a class="dropdown-item" href="/accounts/profile/">Profile</a>
+                        {% if user.is_staff %}
+                            <a class="dropdown-item" href="/jobs/">Jobs</a>
+                            <a class="dropdown-item" href="/workspace/">Workspace</a>
+                            {# <a class="dropdown-item" href="/accounts/profile/">Profile</a> #}
+                        {% endif %}
                         <a class="dropdown-item" href="/accounts/logout/">Logout</a>
                     </div>
                 </li>
@@ -71,8 +72,14 @@
         </ul>
     </div>
 </nav>
-<!-- Search Modal -->
 </header>
+
+<!-- CSRF Token embed -->
+<form id="csrf" class="d-none">
+    {% csrf_token %}
+</form>
+
+<!-- Search Modal -->
 <div id="modalSearch" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->

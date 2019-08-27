@@ -1,8 +1,9 @@
 {% load pages_tags mezzanine_tags i18n staticfiles static %}
 
-<nav id="sidebar" >
-    {% if user.is_authenticated %}
-        <!-- <a class="sidebar-link" href="/dashboard/">
+<nav id="sidebar">
+    {% if user.is_authenticated and user.is_staff %}
+        {# At the moment, only show these options to admin users #}
+        <a class="sidebar-link" href="/dashboard/">
             <i class="fas fa-tachometer-alt sidebar-icon"></i>
             <div class="sidebar-title">Dashboard</div>
         </a>
@@ -20,7 +21,7 @@
         <a class="sidebar-link" href="/jobs/">
             <i class="fas fa-hdd sidebar-icon"></i>
             <div class="sidebar-title">Jobs</div>
-        </a> -->
+        </a>
 
 {#        <a class="sidebar-link" href="/workspace/">#}
 {#            <i class="fas fa-book sidebar-icon"></i>#}

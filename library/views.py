@@ -2,7 +2,14 @@ import os
 from django.http import HttpResponse
 from django.template import loader
 from django.views.static import serve
+from django.contrib.auth import logout as logout_user
+from django.shortcuts import redirect
 import library.thumbnail as thumbnail
+
+
+def logout(request):
+    logout_user(request)
+    return redirect('/')
 
 
 def serve_thumbnail(request, id):

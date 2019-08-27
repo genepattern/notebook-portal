@@ -14,7 +14,7 @@ from django.conf.urls.static import static
 from mezzanine_api.views import PageViewSet, PostViewSet, CategoryViewSet, SiteViewSet
 from rest_framework import routers
 
-from library.views import dashboard, jobs, analyses, run_analysis, serve_thumbnail, library
+from library.views import dashboard, jobs, analyses, run_analysis, serve_thumbnail, library, logout
 from nbrepo import preview
 from nbrepo.preview import preview_image
 from nbrepo.sharing import SharingViewSet, CollaboratorViewSet
@@ -45,8 +45,9 @@ router.register(r'site', SiteViewSet, SiteViewSet.as_view({'get': 'retrieve'}))
 urlpatterns = i18n_patterns(
     # Admin Interface
     url(r"^admin/", include(admin.site.urls)),
-    # url(r'^contact/', include('contact.urls')),
-    # url(r'^library/', include('library.urls')),
+
+    # Authentication
+    url(r"^accounts/logout/", logout),
 
     # Django REST Framework
     # url(r'^rest/', include('rest_framework.urls', namespace='rest_framework')),

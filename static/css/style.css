@@ -228,7 +228,12 @@ header .nav-link {
 }
 
 #messages {
-    padding: 0px;
+    position: fixed;
+    width: 90%;
+    left: 5%;
+    top: 40px;
+    z-index: 9000;
+    padding: 0;
 }
 
 .about {
@@ -562,7 +567,6 @@ h1.lead-big {
 }
 #main-pane {
     padding: 30px;
-    padding-left: 50px;
 }
 
 
