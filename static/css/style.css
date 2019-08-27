@@ -232,7 +232,7 @@ header .nav-link {
 }
 
 .about {
-    background: rgba(255, 255, 255, .65);
+    background: rgba(255, 255, 255, .7);
     width: 100%;
     padding: 50px;
     margin-top: 25px;
@@ -475,14 +475,14 @@ header .nav-link {
 #page-title {
     text-align: center;
     padding-top: 50px;
-    font-weight: 600;
-    font-size: 40px;
+    font-weight: 500;
+    font-size: 50px;
     
 }
 #page-description {
     text-align: center;
-    font-weight: 100;
-    font-size: 18px;
+    font-weight: 300;
+    font-size: 22px;
     width: 70%;
     margin: auto;
     padding-bottom: 50px;
