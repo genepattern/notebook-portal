@@ -187,6 +187,15 @@ export function system_message() {
  * Vue page apps *
  *****************/
 
+export function navbar(selector) {
+    const navbar_app = new Vue({
+        el: selector,
+        delimiters: ['[[', ']]']
+    });
+
+    return navbar_app;
+}
+
 export function dashboard(selector) {
     // Display the system message
     system_message();
@@ -706,11 +715,19 @@ Vue.component('login-register', {
         }
     },
     mounted: function() {},
-    template: `<div class="login-register">
-                   <h1>[[ title ]]</h1>
-                   <div class="card login-card">
-                       <a class="btn btn-lg btn-primary" v-on:click="login_dialog">Login</a> 
-                       <a class="btn btn-lg btn-secondary" v-on:click="register_dialog">Register</a>
-                   </div>
-               </div>`
+    template: `<ul class="navbar-nav">
+                   <li class="nav-item">
+                       <a id="login_link" class="nav-link" href="#" v-on:click="login_dialog">Login</a>
+                   </li>
+                   <li class="nav-item">
+                       <a id="register_link" class="nav-link" href="#" v-on:click="register_dialog">Register</a>
+                   </li>
+               </ul>`
+    // template: `<div class="login-register">
+    //                <h1>[[ title ]]</h1>
+    //                <div class="card login-card">
+    //                    <a class="btn btn-lg btn-primary" v-on:click="login_dialog">Login</a>
+    //                    <a class="btn btn-lg btn-secondary" v-on:click="register_dialog">Register</a>
+    //                </div>
+    //            </div>`
 });

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "pages/page.html" %}
 {% load mezzanine_tags keyword_tags %}
 
 {% block meta_title %}Dashboard{% endblock %}
@@ -14,7 +14,7 @@
 
 {% block body_class %}no-cover no-sidebar{% endblock %}
 
-{% block content %}
+{% block main %}
     <div id="vue">
         <login-register title="Your Notebooks"></login-register>
         <notebook-carousel header="Tutorial Notebooks" v-bind:nblist="tutorial_notebooks"></notebook-carousel>
