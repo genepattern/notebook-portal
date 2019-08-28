@@ -110,6 +110,9 @@
     {% page_menu "includes/footer.html" %}
     {% include "includes/footer_scripts.html" %}
     <script type="module" src="{% static "js/main.js" %}"></script>
+    <script type="application/javascript">
+        window.is_authenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
+    </script>
     {% block footer_js %}{% endblock %}
 </body>
 </html>

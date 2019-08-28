@@ -9,6 +9,8 @@ let _pinned_tags = null;
 let _shared_notebooks = null;
 let _workspace_notebooks = null;
 let _genepattern_modules = null;
+let _genepattern_token = null;
+let _jupyterhub_token = null;
 
 /**
  * Retrieves the public notebooks from the cache, if possible, from the server if not
@@ -79,6 +81,7 @@ export function pinned_tags() {
             });
         });
 }
+
 /**
  * Retrieves the list of GenePattern modules from cache, if possible, from the server if not
  * @returns {Promise<any>}
@@ -90,7 +93,7 @@ export function genepattern_modules() {
         });
 
     else
-        return fetch(GENEPATTERN_SERVER + 'rest/v1/tasks/all.json/', {
+        return fetch(GENEPATTERN_SERVER + 'rest/v1/tasks/all.json', {
                 mode: 'cors',
                 credentials: 'include',
                 headers: {
@@ -198,6 +201,114 @@ export function get_cookie(name) {
     return cookie_value;
 }
 
+export function save_login_cookie(formData) {
+    document.cookie = "GenePattern=" + formData.username + "|" + encodeURIComponent(btoa(formData.password)) +
+        ";path=/;domain=" + window.location.hostname;
+}
+
+export function get_login_data() {
+    function username_from_cookie(cookie) {
+        // Handle the null case
+        if (!cookie) return null;
+        // Parse the cookie
+        const parts = cookie.split("|");
+        if (parts.length > 1) return parts[0];
+        // Cookie not in the expected format
+        else return null;
+    }
+
+    function password_from_cookie(cookie) {
+        // Handle the null case
+        if (!cookie) return null;
+        // Parse the cookie
+        const parts = cookie.split("|");
+        if (parts.length > 1) {
+            return atob(decodeURIComponent(parts[1]));
+        }
+        // Cookie not in the expected format
+        else return null;
+    }
+
+    const genepattern_cookie = get_cookie("GenePattern");
+    if (!genepattern_cookie) return null; // Return null if cookie is not set
+    else return {
+        "username": username_from_cookie(genepattern_cookie),
+        "password": password_from_cookie(genepattern_cookie)
+    }
+}
+
+/**
+ * Lazily retrieves a GenePattern authentication token and returns a promise
+ *
+ * @param suppress_errors
+ * @param force
+ * @returns {Promise<any>}
+ */
+export function get_genepattern_token(suppress_errors=false, force=false) {
+    // Return the token, if available and not forced
+    if (_genepattern_token && !force) return new Promise(function(resolve) {
+        resolve(_genepattern_token);
+    });
+
+    // See if the GenePattern credentials are available
+    const credentials = get_login_data();
+
+    // Lazily retrieve the token if the credentials are available
+    if (credentials) {
+        return fetch(GENEPATTERN_SERVER + "rest/v1/oauth2/token?grant_type=password&username=" +
+            encodeURIComponent(credentials.username) +
+            "&password=" + encodeURIComponent(credentials.password) +
+            "&client_id=GenePatternNotebookCatalog-" + encodeURIComponent(credentials.username), {
+                method: 'POST',
+                mode: 'cors',
+                credentials: 'include'
+            })
+            .then(response => response.json())
+            .then(function(response) {
+                _genepattern_token = response['access_token'];
+                return _genepattern_token;
+            });
+    }
+
+    // If not available, write error (unless suppressed) then throw it
+    else {
+        const error = "Attempted to retrieve GenePattern token when the credentials weren't available.";
+        if (!suppress_errors) throw error;
+        return new Promise(function(resolve) {
+            resolve(error);
+        });
+    }
+}
+
+export function login_to_genepattern(suppress_errors=false) {
+    // Get the GenePattern credentials, if available
+    const credentials = get_login_data();
+    if (!credentials && !suppress_errors) throw 'Attempted to login when GenePattern credentials not available';
+
+    // Create the form data object
+    const data = new URLSearchParams();
+    data.append('loginForm', 'loginForm');
+    data.append('loginForm:signIn', 'Sign+in');
+    data.append('javax.faces.ViewState', 'j_id1');
+    data.append('username', credentials.username);
+    data.append('password', credentials.password);
+
+    // Login to GenePattern server
+    return fetch(`${GENEPATTERN_SERVER}pages/login.jsf`, {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+            'origin': location.origin
+        },
+        body: data
+    });
+}
+
+export function get_jupyterhub_token(suppress_errors=false) {
+    // TODO: Implement
+}
+
 export function get_csrf() {
     // Try getting the token from the form
     const csrf_form = document.getElementById('csrf');
@@ -251,6 +362,7 @@ export function login(username, password) {
         data: formData,
         success: function (data) {
             close_modal();
+            save_login_cookie(formData);
             message("GenePattern login successful.", "success");
 
             // Reload the page
@@ -418,6 +530,7 @@ export function analyses(selector) {
         },
         computed: {},
         created() {
+            if (window.is_authenticated) GenePattern.login_to_genepattern();
             GenePattern.genepattern_modules().then(r => this.modules = r);
             GenePattern.module_categories().then(r => this.categories = r);
         },
