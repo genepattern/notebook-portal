@@ -566,7 +566,7 @@ h1.lead-big {
     box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.28);
 }
 #main-pane {
-    padding: 30px;
+    padding: 10px;
 }
 
 
@@ -651,7 +651,7 @@ ul.tags .nav-link {
 
 div.nb-card {
     display: inline-block;
-    width: 300px;
+    width: 275px;
     vertical-align: top;
     height: 212px;
     margin-bottom: 10px;
@@ -673,7 +673,7 @@ div.nb-card {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 290px;
+    width: 265px;
     display: block;
 }
 
@@ -757,13 +757,14 @@ div.nb-card {
 }
 
 .sidebar-icon {
-    font-size: 2em;
+    font-size: 1.8em;
     width: 100%;
     text-align: center;
 }
 
 .sidebar-title {
     text-align: center;
+    font-size: 0.8em;
 }
 
 .mod-search,

@@ -1,34 +1,6 @@
 {% load pages_tags mezzanine_tags i18n staticfiles static %}
 
 <nav id="sidebar">
-    {% if user.is_authenticated and user.is_staff %}
-        {# At the moment, only show these options to admin users #}
-        <a class="sidebar-link" href="/dashboard/">
-            <i class="fas fa-tachometer-alt sidebar-icon"></i>
-            <div class="sidebar-title">Dashboard</div>
-        </a>
-
-        <a class="sidebar-link" href="/library/">
-            <i class="fas fa-book-reader sidebar-icon"></i>
-            <div class="sidebar-title">Library</div>
-        </a>
-
-        <a class="sidebar-link" href="/analyses/">
-            <i class="fas fa-flask sidebar-icon"></i>
-            <div class="sidebar-title">Analyses</div>
-        </a>
-
-        <a class="sidebar-link" href="/jobs/">
-            <i class="fas fa-hdd sidebar-icon"></i>
-            <div class="sidebar-title">Jobs</div>
-        </a>
-
-{#        <a class="sidebar-link" href="/workspace/">#}
-{#            <i class="fas fa-book sidebar-icon"></i>#}
-{#            <div class="sidebar-title">Workspace</div>#}
-{#        </a>#}
-    {% endif %}
-
     <div class="sidebar-header">
         <h4>User Guide</h4>
     </div>
