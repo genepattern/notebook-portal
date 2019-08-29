@@ -374,7 +374,7 @@ export function hide_spinner() {
     if (spinner) spinner.hide();
 }
 
-export function login(username, password) {
+export function login(username, password, forward_to_workspace=true) {
     // Gather the form data
     const formData = {
         'username': username,
@@ -397,8 +397,11 @@ export function login(username, password) {
             save_login_cookie(formData);
             message("GenePattern login successful.", "success");
 
-            // Reload the page
-            location.reload();
+            // If forward is true, forward to the notebook workspace
+            if (forward_to_workspace) login_to_jupyterhub().then(response => location.href = PUBLIC_NOTEBOOK_SEVER);
+
+            // If not, reload the page
+            else location.reload();
         },
         error: function(xhr) {
             close_modal();
