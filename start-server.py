@@ -24,6 +24,6 @@ try:
                                   --name=notebook_library \
                                   -p {args.port}:8000 \
                                   -v {args.config}:/config \
-                                  genepattern/notebook-library:19.07'.split())
+                                  genepattern/notebook-library:19.08'.split())
 except KeyboardInterrupt:
     print('Shutting down Notebook Library')
