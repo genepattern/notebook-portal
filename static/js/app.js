@@ -1,5 +1,5 @@
 // Declare server constants
-export const PUBLIC_NOTEBOOK_SEVER = 'https://notebook.genepattern.org/services/sharing/';
+export const PUBLIC_NOTEBOOK_SEVER = 'https://notebook.genepattern.org/';
 export const GENEPATTERN_SERVER = 'https://cloud.genepattern.org/gp/';
 
 // Declare data cache
@@ -24,7 +24,7 @@ export function public_notebooks() {
         });
 
     else
-        return fetch(PUBLIC_NOTEBOOK_SEVER + 'notebooks/')
+        return fetch(PUBLIC_NOTEBOOK_SEVER + 'services/sharing/notebooks/')
             .then(response => response.json())
             .then(function(response) {
                 _public_notebooks = response;
@@ -280,6 +280,12 @@ export function get_genepattern_token(suppress_errors=false, force=false) {
     }
 }
 
+/**
+ * Send a login form request to the GenePattern server
+ *
+ * @param suppress_errors
+ * @returns {Promise<Response>}
+ */
 export function login_to_genepattern(suppress_errors=false) {
     // Get the GenePattern credentials, if available
     const credentials = get_login_data();
@@ -307,6 +313,32 @@ export function login_to_genepattern(suppress_errors=false) {
 
 export function get_jupyterhub_token(suppress_errors=false) {
     // TODO: Implement
+}
+
+export function login_to_jupyterhub(suppress_errors=false, forward_url=null) {
+    let login_url = PUBLIC_NOTEBOOK_SEVER + "hub/login?next=";
+    if (!!forward_url) login_url += encodeURIComponent(forward_url);
+    const credentials = get_login_data();
+    if (!credentials && !suppress_errors) throw 'Attempted to login when GenePattern credentials not available';
+
+    // Create the form data object
+    const data = new URLSearchParams();
+    data.append('username', credentials.username);
+    data.append('password', credentials.password);
+
+    // Login to GenePattern server
+    return fetch(login_url, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'origin': location.origin
+            },
+            body: data
+        })
+        .catch(error => new Promise(function(resolve) {
+            // Catch any CORS error from a 302 redirect, this is a known Jupyter issue
+            resolve('OK');
+        }));
 }
 
 export function get_csrf() {
@@ -420,6 +452,8 @@ export function dashboard(selector) {
             }
         },
         created() {
+            if (window.is_authenticated) GenePattern.login_to_genepattern({suppress_errors: true});
+            if (window.is_authenticated) GenePattern.login_to_jupyterhub({suppress_errors: true});
             GenePattern.public_notebooks().then(r => this.notebooks = r);
             GenePattern.genepattern_modules().then(r => this.modules = r);
         },
@@ -442,14 +476,10 @@ export function library(selector) {
         computed: {},
         created() {
             const app = this;
-
+            if (window.is_authenticated) GenePattern.login_to_jupyterhub({suppress_errors: true});
             GenePattern.public_notebooks().then(r => this.notebooks = r);
             GenePattern.notebook_tags().then(r => this.tags = r);
-            GenePattern.pinned_tags().then(r => this.pinned = r).then(function() {
-                // Display featured notebooks by default
-                app.search = "featured";
-                setTimeout(() => document.querySelector('.nb-search').value = '', 1);
-            });
+            GenePattern.pinned_tags().then(r => this.pinned = r);
         },
         methods: {},
         watch: {
@@ -772,7 +802,7 @@ Vue.component('notebook-tag', {
         this.$el.classList.add('tag');
     },
     template: `<ul class="nav-item" v-on:click="search_or_launch">  
-                   <a class="nav-link tag-tab" href="#">[[ tag.label ]]</a> 
+                   <a v-bind:class="{'nav-link': true, 'tag-tab': true, 'active':(tag.label=='featured')}" href="#">[[ tag.label ]]</a> 
                </ul>`
     // template: `<div class="nav-item tag-card" v-on:click="search_or_launch">
     //                 <div class="nav-link">
@@ -792,7 +822,7 @@ Vue.component('notebook-card', {
 
             // If this is a notebook
             else if (this.nb.quality)
-                window.open(`${PUBLIC_NOTEBOOK_SEVER}notebooks/${this.nb.id}/preview/`);
+                window.open(`${PUBLIC_NOTEBOOK_SEVER}services/sharing/notebooks/${this.nb.id}/preview/`);
         }
     },
     computed: {
@@ -802,9 +832,16 @@ Vue.component('notebook-card', {
 
             // Else, if this is a notebook
             else return `/thumbnail/${this.nb.id}/`;
+        },
+        is_featured() {
+            let featured = false;
+            this.nb.tags.forEach(tag => {
+                if (tag.label === 'featured') featured = true;
+            });
+            return featured;
         }
     },
-    template: `<div class="card nb-card" v-on:click="preview"> 
+    template: `<div v-bind:class="{'card': true, 'nb-card': true, 'd-none':!is_featured}" v-on:click="preview" > 
                     <img class="card-img-top" v-bind:src="img_src" alt="Notebook Thumbnail"> 
                     <div class="card-body"> 
                         <h8 class="card-title">[[ nb.name ]]</h8> 
