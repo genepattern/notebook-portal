@@ -576,7 +576,9 @@ h1.lead-big {
 .news-bulletin {
     background: rgba(0,0,0,.125)
 }
-
+.news-bulletin a {
+    color:white;
+}
 .info-block {
     background: white;
     box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.28);
