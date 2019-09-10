@@ -10,4 +10,4 @@ bin
 include
 lib
 pip-selfcheck.json
-static/images/thumbnails/*
+static/images/thumbnails/
