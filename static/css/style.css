@@ -5,7 +5,6 @@ Author: Forrest Kim, Thorin Tabor
 
 html {
     height: 100%;
-    color: #525252;
 }
 
 body {
@@ -16,7 +15,8 @@ body {
     background-attachment: fixed;
     background-size: cover;
     position: relative;
-    color: #525252;
+    /* color: #525252; */
+    color: black;
     margin: 0px;
     padding: 0px;
     margin-top: 50px;
@@ -59,9 +59,9 @@ iframe {
     padding: 20px;
     width: 100%;
 }
-p img {
+/* p img {
     width: 100% !important;
-} 
+}  */
 
 .col-md-6, .col-md-12, .col-md-5, .col-md-7, .col-md-8, .col-md-4, .col-md-3 {
     padding: 30px;
@@ -77,7 +77,31 @@ p img {
     font-weight: 100; 
 }
 
-.d-block {
+#slogan-center {
+    position: absolute;
+    left: 10%;
+    top: 40%;
+    padding: 30px;
+    width: 45%;
+    background: rgba(255, 255, 255, 0.95);
+    font-size: 25px;
+    font-weight: 400; 
+    letter-spacing: 0.5px;
+    color:black
+}
+#join-carousel {
+    position: absolute;
+    right: 10%;
+    top: 5%;
+    padding: 20px;
+    width: 50%;
+    background: rgba(255, 255, 255, 0.8);
+}
+#join-carousel h3 {
+    font-size: 25px;
+}
+#join-carousel ul li a {
+    font-size: 15px;
 }
 
 #video {
@@ -222,6 +246,7 @@ header .nav-link {
     padding: 10px;
     margin-top: 10px;
     margin-left: 5px;
+    width: 250px;
 }
 
 #home .btn > a {
@@ -247,7 +272,7 @@ header .nav-link {
     width: 100%;
     padding: 50px;
     margin-top: 25px;
-    padding-top: 50px;
+    padding-top: 20px;
 }
 
 .site-map {
@@ -339,18 +364,20 @@ header .nav-link {
     margin-left: 0px;
     margin-right: 0px;
 }
-.main-container {
+.main-container {    
     background: white;
-    box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.28);
     padding: 30px;
     border-radius: 25px;
     margin-bottom: 100px;
-    
+    box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.28);
+}
+#main-pane {
+    padding: 30px;
 }
 .container {
     margin: 0 auto;
     border-radius: 0px;
-    padding: 25px;
+    padding: px;
 }
 #main-row {
     padding: 30px;
@@ -364,6 +391,7 @@ header .nav-link {
     background: rgba(71, 83, 105, 0.1);
     padding: 30px;
     padding-top: 30px;
+    box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.28);
 }
 .sidebar-header {
     padding-top: 0px;
@@ -408,11 +436,12 @@ header .nav-link {
 
 .site-map .card-header {
     font-size: 22px;
-    font-weight: 100;
+    font-weight: 500;
     text-align: left;
     /* background: rgba(21, 114, 176,0.9); */
     background: rgb(60,88,136);
     color:white;
+    max-height: 55px;
 }
 
 .site-map.card-columns {
@@ -443,10 +472,27 @@ header .nav-link {
 .lead-default {
     margin-top: 100px;
 }
+.carousel-indicators li {
+    background-color: white;
+    height: 5px;
+    width: 50px;
+    margin-bottom: 0px;
+}
+
+.carousel-item {
+    margin-bottom: 100px;
+    height: 25vw;
+}
 
 .carousel-item img {
     padding: 0px;
     margin: auto;
+}
+i.fa.fa-angle-left, i.fa.fa-angle-right {
+    opacity: 1;
+    color:white;
+    font-size: 30px;
+
 }
 
 .lead-cover .col-md-6, .lead-cover .col-md-5, .lead-cover .col-md-7 {
@@ -457,11 +503,11 @@ header .nav-link {
 .lead-cover h1,
 .lead-cover h2,
 .lead-cover h3 {
-    color: #525252;
+    color: black;
 }
 
 .lead-cover a {
-    color: #525252;
+    color: black;
 }
 
 .lead-cover h1 {
@@ -491,6 +537,7 @@ header .nav-link {
     padding-top: 50px;
     font-weight: 500;
     font-size: 50px;
+    color:black;
     
 }
 #page-description {
@@ -571,9 +618,7 @@ h1.lead-big {
     top: -20px;
     box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.28);
 }
-#main-pane {
-    padding: 10px;
-}
+
 
 
 /* DASHBOARD */
