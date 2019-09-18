@@ -55,22 +55,6 @@
     <!-- Display the navigation header -->
     {% page_menu "includes/header.html" %}
 
-    <!-- Display the leading content -->
-    {% block lead %}
-        <div class="lead-cover">
-            <div class="container" style="padding:0px;">
-                <div class="row">
-                    <div class="col-md-12">
-                            <h1 id="page-title">{% block title %}{% endblock %}</h1>
-                            <h4 id="page-description">{% block description %}{% endblock %}</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endblock %}
-
-    
-
     <!-- Display alerts -->
     {% block alerts %}
         {% nevercache %}
@@ -85,6 +69,20 @@
                 {% endif %}
             </div>
         {% endnevercache %}
+    {% endblock %}
+
+    <!-- Display the leading content -->
+    {% block lead %}
+        <div class="lead-cover">
+            <div class="container" style="padding:0px;">
+                <div class="row">
+                    <div class="col-md-12">
+                            <h1 id="page-title">{% block title %}{% endblock %}</h1>
+                            <h4 id="page-description">{% block description %}{% endblock %}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endblock %}
 
     {% block index %}
