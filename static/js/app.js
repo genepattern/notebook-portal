@@ -769,7 +769,12 @@ Vue.component('module-category', {
         'search_or_launch': function() {
             // If this is a module
             if (this.category.lsid) {
-                window.open(`/analyses/${this.category.lsid}/`)
+                // Open the documentation
+                if (this.category.documentation) window.open("https://cloud.genepattern.org" + this.category.documentation);
+                else window.open("https://cloud.genepattern.org/gp/pages/index.jsf?lsid=" + this.category.lsid)
+
+                // Open the run analysis page
+                // window.open(`/analyses/${this.category.lsid}/`)
             }
 
             // If this is a category

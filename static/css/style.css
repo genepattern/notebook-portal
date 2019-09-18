@@ -372,7 +372,7 @@ header .nav-link {
     box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.28);
 }
 #main-pane {
-    padding: 30px;
+    padding: 10px 20px 30px 10px;
 }
 .container {
     margin: 0 auto;
@@ -848,6 +848,13 @@ div.nb-card {
 
 .mod-card > .card-body {
     padding: 10px;
+}
+
+.mod-card > .card-body > .card-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }
 
 .mod-card:hover {
