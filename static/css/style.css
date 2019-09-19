@@ -263,6 +263,7 @@ header .nav-link {
     width: 90%;
     padding: 0;
     margin-top: 65px;
+    box-shadow: 5px 5px 10px 0 rgba(0,0,0,0.28);
 }
 
 .about {
@@ -637,6 +638,10 @@ body.no-sidebar #main-pane {
     flex: 0 0 100%;
 }
 
+.nb-carousel > h1 {
+    margin-top: 20px;
+}
+
 .nb-carousel .spinner-border {
     margin-top: 81px;
     height: 50px;
@@ -648,6 +653,10 @@ body.no-sidebar #main-pane {
     position: relative;
     text-align: center;
     min-height: 212px;
+    /*background-color: #fff;*/
+    /*background-clip: border-box;*/
+    /*border: 1px solid rgba(0,0,0,.125);*/
+    /*border-radius: .25rem;*/
 }
 
 .nb-carousel-slider > .nb-carousel-button:first-child {
@@ -667,28 +676,46 @@ body.no-sidebar #main-pane {
     height: 212px;
     opacity: 0.7;
     cursor: pointer;
+    width: 40px;
 }
 
 .nb-carousel-button:hover {
     opacity: 1;
 }
 
-div.login-card {
+#top-nav ul.login-card {
+    background: none;
+    border: none;
+}
+
+#main-pane ul.login-card {
     height: 200px;
     text-align: center;
     display: block;
     margin-bottom: 10px;
 }
 
-div.login-card > a.btn {
-    width: 200px;
-    vertical-align: middle;
-    color: white;
-    margin-top: 75px;
+#main-pane ul.login-card > p.login-message {
+    margin-top: 45px;
 }
 
-div.login-card > a.btn:hover {
+#main-pane ul.login-card > li.nav-item {
+    width: 200px;
+    vertical-align: middle;
+    display: inline-block;
+    background-color: #6c757d;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#main-pane ul.login-card > li.nav-item > a {
+    padding-top: 8px;
     color: white;
+}
+
+#main-pane ul.login-card > li.nav-item:hover {
+    color: white;
+    background-color: #485058;
 }
 
 ul.tags,

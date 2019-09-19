@@ -315,7 +315,7 @@ export function get_jupyterhub_token(suppress_errors=false) {
     // TODO: Implement
 }
 
-export function login_to_jupyterhub(suppress_errors=false, forward_url=null) {
+export function login_to_jupyterhub(suppress_errors=false, forward_url='/user-redirect/api') {
     let login_url = PUBLIC_NOTEBOOK_SEVER + "hub/login?next=";
     if (!!forward_url) login_url += encodeURIComponent(forward_url);
     const credentials = get_login_data();
@@ -340,6 +340,7 @@ export function login_to_jupyterhub(suppress_errors=false, forward_url=null) {
             resolve('OK');
         }));
 }
+window.login_to_jupyterhub = login_to_jupyterhub;
 
 export function get_csrf() {
     // Try getting the token from the form
@@ -374,7 +375,7 @@ export function hide_spinner() {
     if (spinner) spinner.hide();
 }
 
-export function login(username, password, forward_to_workspace=true) {
+export function login(username, password, next="workspace") {
     // Gather the form data
     const formData = {
         'username': username,
@@ -397,8 +398,11 @@ export function login(username, password, forward_to_workspace=true) {
             save_login_cookie(formData);
             message("GenePattern login successful.", "success");
 
-            // If forward is true, forward to the notebook workspace
-            if (forward_to_workspace) login_to_jupyterhub().then(response => location.href = PUBLIC_NOTEBOOK_SEVER);
+            // If next is a function, execute if
+            if (typeof next === "function") next();
+
+            // If next is workspace, forward to the notebook workspace
+            else if (next === "workspace") login_to_jupyterhub().then(response => location.href = PUBLIC_NOTEBOOK_SEVER);
 
             // If not, reload the page
             else location.reload();
@@ -444,14 +448,14 @@ export function dashboard(selector) {
             modules: []
         },
         computed: {
-            tutorial_notebooks() {
-                const tutorials = [];
+            featured_notebooks() {
+                const featured = [];
                 this.notebooks.forEach(function(nb) {
                     nb.tags.forEach(function(tag) {
-                        if (tag.label === "tutorial") tutorials.push(nb);
+                        if (tag.label === "featured") featured.push(nb);
                     });
                 });
-                return tutorials;
+                return featured;
             }
         },
         created() {
@@ -643,8 +647,11 @@ export function login_form(selector) {
                 }
             },
             'submit': function () {
+                // Get next step, if any
+                const next = $(selector).data("next");
+
                 // Call the login endpoint
-                login(this.username, this.password)
+                login(this.username, this.password, next ? next : undefined)
             }
         }
     });
@@ -727,8 +734,11 @@ export function register_form(selector) {
                         close_modal();
                         message("GenePattern registration successful. Signing in...", "success");
 
+                        // Get next step, if any
+                        const next = $(selector).data("next");
+
                         // Call the login endpoint
-                        login(register_app.username, register_app.password);
+                        login(register_app.username, register_app.password, next ? next : undefined);
                     },
                     error: function(xhr) {
                         close_modal();
@@ -770,8 +780,8 @@ Vue.component('module-category', {
             // If this is a module
             if (this.category.lsid) {
                 // Open the documentation
-                if (this.category.documentation) window.open("https://cloud.genepattern.org" + this.category.documentation);
-                else window.open("https://cloud.genepattern.org/gp/pages/index.jsf?lsid=" + this.category.lsid)
+                if (this.category.documentation) window.open(GENEPATTERN_SERVER.substring(0, GENEPATTERN_SERVER.length - 4) + this.category.documentation);
+                else window.open(GENEPATTERN_SERVER + "pages/index.jsf?lsid=" + this.category.lsid)
 
                 // Open the run analysis page
                 // window.open(`/analyses/${this.category.lsid}/`)
@@ -821,7 +831,17 @@ Vue.component('notebook-tag', {
 
 Vue.component('notebook-card', {
     delimiters: ['[[', ']]'],
-    props: ['nb'],
+    props: {
+        'nb': {
+            type: Object,
+            required: true
+        },
+        'tag_filter': {
+            type: String,
+            required: false,
+            default: "featured"
+        }
+    },
     methods: {
         'preview': function() {
             // If this is a GenePattern module
@@ -841,15 +861,19 @@ Vue.component('notebook-card', {
             // Else, if this is a notebook
             else return `/thumbnail/${this.nb.id}/`;
         },
-        is_featured() {
-            let featured = false;
+        filter() {
+            // If tag_filter is blank, show all
+            if (this.tag_filter === '') return true;
+
+            // Filter by tag
+            let show = false;
             this.nb.tags.forEach(tag => {
-                if (tag.label === 'featured') featured = true;
+                if (tag.label === this.tag_filter) show = true;
             });
-            return featured;
+            return show;
         }
     },
-    template: `<div v-bind:class="{'card': true, 'nb-card': true, 'd-none':!is_featured}" v-on:click="preview" > 
+    template: `<div v-bind:class="{'card': true, 'nb-card': true, 'd-none':!filter}" v-on:click="preview" > 
                     <img class="card-img-top" v-bind:src="img_src" alt="Notebook Thumbnail"> 
                     <div class="card-body"> 
                         <h8 class="card-title">[[ nb.name ]]</h8> 
@@ -875,7 +899,17 @@ Vue.component('notebook-carousel', {
         'size': {
             type: Number,
             required: false,
-            default: 5
+            default: 3
+        },
+        'explore_link': {
+            type: String,
+            required: false,
+            default: "#"
+        },
+        'explore_text': {
+            type: String,
+            required: false,
+            default: "Explore All"
         }
     },
     data: function() {
@@ -900,28 +934,27 @@ Vue.component('notebook-carousel', {
     methods: {
         next_page() {
             if (this.page_number === this.page_count()-1) this.page_number = 0;
-            this.page_number++;
+            else this.page_number++;
         },
         prev_page() {
             if (this.page_number === 0) this.page_number = this.page_count()-1;
-            this.page_number--;
+            else this.page_number--;
         },
         page_count() {
-            let l = this.nblist.length,
-                s = this.size;
+            let l = this.nblist.length;
+            let s = this.size;
             return Math.ceil(l/s);
         }
     },
     computed: {
         paginated() {
-            const start = this.page_number * this.size,
-                  end = start + this.size;
-
-             return this.nblist.slice(start, end);
+            const start = this.page_number * this.size;
+            const end = start + this.size;
+            return this.nblist.slice(start, end)
         }
     },
     template: `<div class="nb-carousel">
-                   <div class="float-right show-all"><a href="#">[ Explore All ]</a></div>
+                   <div class="float-right show-all">[ <a v-bind:href="[[ explore_link ]]">[[ explore_text ]]</a> ]</div>
                    <h1>[[ header ]]</h1>
                    <div class="nb-carousel-slider">
                        <button class="nb-carousel-button" v-on:click="prev_page">
@@ -930,7 +963,7 @@ Vue.component('notebook-carousel', {
                        <div class="spinner-border" role="status">
                            <span class="sr-only">Loading...</span>
                        </div>
-                       <notebook-card v-for="nb in paginated" :nb="nb"></notebook-card>
+                       <notebook-card v-for="nb in paginated" :nb="nb" tag_filter=""></notebook-card>
                        <button class="nb-carousel-button" v-on:click="next_page">
                            <i class="fas fa-arrow-circle-right"></i>
                        </button>
@@ -940,7 +973,16 @@ Vue.component('notebook-carousel', {
 
 Vue.component('login-register', {
     delimiters: ['[[', ']]'],
-    props: ['title'],
+    props: {
+        'title': {
+            type: String,
+            required: false
+        },
+        'next': {
+            type: Object,
+            required: false
+        }
+    },
     methods: {
         'toggle_forgot_password': function() {
             // Hide non-reset elements
@@ -1040,7 +1082,8 @@ Vue.component('login-register', {
                     }
                 }
             });
-            login_form('#login_form');
+            const app = login_form('#login_form');          // Init the form app
+            $(app.$el).data('next', login_register.next);   // Attach the data
         },
         'register_dialog': function() {
             modal({
@@ -1083,22 +1126,22 @@ Vue.component('login-register', {
                 }
             });
             register_form('#register_form');
+
+            const app = register_form('#register_form');    // Init the form app
+            $(app.$el).data('next', this.next);             // Attach the data
         }
     },
     mounted: function() {},
-    template: `<ul class="navbar-nav">
-                   <li class="nav-item">
-                       <a id="login_link" class="nav-link" href="#" v-on:click="login_dialog">Login</a>
-                   </li>
-                   <li class="nav-item">
-                       <a id="register_link" class="nav-link" href="#" v-on:click="register_dialog">Register</a>
-                   </li>
-               </ul>`
-    // template: `<div class="login-register">
-    //                <h1>[[ title ]]</h1>
-    //                <div class="card login-card">
-    //                    <a class="btn btn-lg btn-primary" v-on:click="login_dialog">Login</a>
-    //                    <a class="btn btn-lg btn-secondary" v-on:click="register_dialog">Register</a>
-    //                </div>
-    //            </div>`
+    template: `<div class="login-register">
+                   <h1 v-if="title">[[ title ]]</h1>
+                   <ul class="navbar-nav card login-card">
+                       <p class="login-message" v-if="title">Log in to view your private or shared notebooks.</p>
+                       <li class="nav-item">
+                           <a class="nav-link login_link" href="#" v-on:click="login_dialog">Login</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link register_link" href="#" v-on:click="register_dialog">Register</a>
+                       </li>
+                   </ul>
+               </div>`
 });
