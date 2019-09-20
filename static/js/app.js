@@ -1,5 +1,5 @@
 // Declare server constants
-export const PUBLIC_NOTEBOOK_SEVER = 'https://notebook.genepattern.org/';
+export const PUBLIC_NOTEBOOK_SEVER = 'http://nbdev.genepattern.org/';
 export const GENEPATTERN_SERVER = 'https://cloud.genepattern.org/gp/';
 
 // Declare data cache
@@ -114,6 +114,28 @@ export function module_categories() {
             resolve(_genepattern_modules['all_categories']);
         });
     });
+}
+
+export function workspace_notebooks() {
+    if (_workspace_notebooks !== null)
+        return new Promise(function(resolve) {
+            resolve(_workspace_notebooks['content']);
+        });
+
+    else
+        return fetch(PUBLIC_NOTEBOOK_SEVER + 'user-redirect/api/contents', {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'include' ,
+            headers: {
+                'origin': location.origin
+            }
+        })
+        .then(response => response.json())
+        .then(function(response) {
+            _workspace_notebooks = response;
+            return response['content'];
+        });
 }
 
 export function modal({title='GenePattern Dialog', body='', buttons={'OK':{}}}) {
@@ -312,7 +334,11 @@ export function login_to_genepattern(suppress_errors=false) {
 }
 
 export function get_jupyterhub_token(suppress_errors=false) {
-    // TODO: Implement
+    // Return the token (login response), logging in first if necessary
+    if (!_jupyterhub_token) return login_to_jupyterhub(suppress_errors);
+    else return new Promise(function(resolve) {
+        resolve(_jupyterhub_token);
+    })
 }
 
 export function login_to_jupyterhub(suppress_errors=false, forward_url='/user-redirect/api') {
@@ -330,17 +356,25 @@ export function login_to_jupyterhub(suppress_errors=false, forward_url='/user-re
     return fetch(login_url, {
             method: 'POST',
             mode: 'cors',
+            credentials: 'include',
             headers: {
                 'origin': location.origin
             },
             body: data
+        })
+        .then(response => {
+            // Use the login response as the JupyterHub token
+            // JupyterHub has a separate token authentication method,  but we don't make use of it, instead
+            // favoring the JupyterHub's cookie-based credentials. If we later refactor to the formal token auth,
+            // just assign the token to this variable.
+            _jupyterhub_token = response;
+            return response;
         })
         .catch(error => new Promise(function(resolve) {
             // Catch any CORS error from a 302 redirect, this is a known Jupyter issue
             resolve('OK');
         }));
 }
-window.login_to_jupyterhub = login_to_jupyterhub;
 
 export function get_csrf() {
     // Try getting the token from the form
