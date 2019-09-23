@@ -1,0 +1,38 @@
+{% extends "pages/page.html" %}
+{% load mezzanine_tags keyword_tags staticfiles static %}
+
+{% block meta_title %}Notebook Workspace{% endblock %}
+{% block title %}Notebook Workspace{% endblock %}
+
+{% block extra_css %}
+    <style type="text/css">
+        #library_header {
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block body_class %}no-cover{% endblock %}
+
+{% block main %}
+    <div id="workspace">
+        <div id="workspace_header">
+            <h1>Notebook Workspace</h1>
+            <input type="search" placeholder="Search Files" class="form-control nb-search" v-model="search" />
+        </div>
+        <p>Search or browse your private notebooks and associated files below.</p>
+        <div class="workspace">
+            <workspace-notebook v-for="nb in workspace" :nb="nb"></workspace-notebook>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer_js %}
+    <script type="module">
+        // Import the application module
+        import * as GenePattern from "/static/js/app.js";
+
+        // Initialize notebook search/browse
+        const workspace = GenePattern.workspace("#workspace");
+    </script>
+{% endblock %}

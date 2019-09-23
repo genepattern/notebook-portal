@@ -36,8 +36,14 @@ def dashboard(request):
     return HttpResponse(template.render(context, request))
 
 
+def workspace(request):
+    # Display the workspace template
+    template = loader.get_template('pages/workspace.html')
+    return HttpResponse(template.render({}, request))
+
+
 def library(request):
-    # Display the run template
+    # Display the library template
     template = loader.get_template('pages/library.html')
     return HttpResponse(template.render({}, request))
 

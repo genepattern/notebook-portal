@@ -14,7 +14,7 @@ from django.conf.urls.static import static
 from mezzanine_api.views import PageViewSet, PostViewSet, CategoryViewSet, SiteViewSet
 from rest_framework import routers
 
-from library.views import dashboard, jobs, analyses, run_analysis, serve_thumbnail, library, logout
+from library.views import dashboard, jobs, analyses, run_analysis, serve_thumbnail, library, workspace, logout
 from nbrepo import preview
 from nbrepo.preview import preview_image
 from nbrepo.sharing import SharingViewSet, CollaboratorViewSet
@@ -69,6 +69,7 @@ urlpatterns = i18n_patterns(
     # Notebook Library
     url(r'^thumbnail/(?P<id>[0-9]+)/$', serve_thumbnail),
     url(r'^dashboard/$', dashboard),
+    url(r'^workspace/$', workspace),
     url(r'^library/$', library),
     url(r'^jobs/$', jobs),
     url(r'^analyses/$', analyses),

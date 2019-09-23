@@ -61,6 +61,11 @@ export function notebook_tags() {
         });
 }
 
+/**
+ * Returns the list of pinned notebook tags
+ *
+ * @returns {Promise<any>}
+ */
 export function pinned_tags() {
     if (_pinned_tags !== null)
         return new Promise(function(resolve) {
@@ -107,6 +112,11 @@ export function genepattern_modules() {
             });
 }
 
+/**
+ * Returns the list of all module categories
+ *
+ * @returns {Promise<any>}
+ */
 export function module_categories() {
     // Ensure that the modules have been retrieved
     return genepattern_modules().then(function() {
@@ -116,6 +126,32 @@ export function module_categories() {
     });
 }
 
+/**
+ * Returns the list of shared notebooks
+ *
+ * @returns {Promise<any>}
+ */
+export function shared_notebooks() {
+    // TODO: This list may need filtering
+    if (_shared_notebooks !== null)
+        return new Promise(function(resolve) {
+            resolve(_shared_notebooks['results']);
+        });
+
+    else
+        return fetch(PUBLIC_NOTEBOOK_SEVER + 'services/sharing/sharing/')
+            .then(response => response.json())
+            .then(function(response) {
+                _shared_notebooks = response;
+                return response['results'];
+            });
+}
+
+/**
+ * Returns the list of files in the top-level user directory
+ *
+ * @returns {Promise<any>}
+ */
 export function workspace_notebooks() {
     if (_workspace_notebooks !== null)
         return new Promise(function(resolve) {
@@ -502,6 +538,53 @@ export function dashboard(selector) {
     });
 
     return dashboard_app;
+}
+
+export function workspace(selector) {
+    const workspace_app = new Vue({
+        el: selector,
+        delimiters: ['[[', ']]'],
+        data: {
+            workspace: [],
+            search: ''
+        },
+        computed: {},
+        created() {
+            if (window.is_authenticated) GenePattern.login_to_jupyterhub({suppress_errors: true});
+            GenePattern.workspace_notebooks().then(r => this.workspace = r);
+        },
+        methods: {},
+        watch: {
+            'search': function(event) {
+                let search = this.search.trim().toLowerCase();
+
+                // // Set active tab
+                // const tabs = document.querySelector('.tags').querySelectorAll('.tag-tab');
+                // tabs.forEach(function(tab) {
+                //     // Matching tab
+                //     if (tab.textContent.toLowerCase() === search) tab.classList.add('active');
+                //
+                //     // Not matching tab
+                //     else tab.classList.remove('active');
+                // });
+                //
+                // // special case for "all notebooks"
+                // if (search === "all notebooks") search = "";
+                //
+                // // Display the matching notebooks
+                // const cards = document.querySelector(selector).querySelector('.notebooks').querySelectorAll('.nb-card');
+                // cards.forEach(function(card) {
+                //     // Matching notebook
+                //     if (card.textContent.toLowerCase().includes(search)) card.classList.remove('d-none');
+                //
+                //     // Not matching notebook
+                //     else card.classList.add('d-none');
+                // });
+            }
+        }
+    });
+
+    return workspace_app;
 }
 
 export function library(selector) {
@@ -1003,6 +1086,29 @@ Vue.component('notebook-carousel', {
                        </button>
                    </div>
                </div>`
+});
+
+Vue.component('workspace-notebook', {
+    delimiters: ['[[', ']]'],
+    props: {
+        'nb': {
+            type: Object,
+            required: true
+        }
+    },
+    methods: {
+        'open': function() {
+            window.open(`${PUBLIC_NOTEBOOK_SEVER}user-redirect/notebooks/${this.file.name}`);
+        }
+    },
+    computed: {},
+    template: `<div class="card" v-on:click="open" > 
+                    <img class="card-img-top" src="/static/images/banner.jpg" alt="File Icon" /> 
+                    <div class="card-body"> 
+                        <h8 class="card-title">[[ nb.name ]]</h8> 
+                        <p class="card-text">[[ nb.type ]]</p>                     
+                    </div> 
+                </div>`
 });
 
 Vue.component('login-register', {
