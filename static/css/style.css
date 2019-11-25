@@ -21,6 +21,7 @@ body {
     padding: 0px;
     margin-top: 50px;
     min-height: calc(100vh - 40px);
+    line-height: 1.5;
 }
 
 p, span {
@@ -67,7 +68,7 @@ iframe {
     width: 100% !important;
 }  */
 
-.col-md-6, .col-md-12, .col-md-5, .col-md-7, .col-md-8, .col-md-4, .col-md-3, .col-md-9 {
+.col-md-6, .col-md-5, .col-md-7, .col-md-8, .col-md-4, .col-md-3, .col-md-9 {
     padding: 30px;
     margin: 0px;
 }
@@ -299,8 +300,9 @@ header .nav-link {
     color: white;
     width: 100%;
     padding: 50px;
-    /* margin-top: 25px; */
     padding-top: 20px;
+    padding-bottom: 20px;
+    text-shadow: 3px 3px 15px black;
 }
 .about img {
     height: 50px;
@@ -315,34 +317,28 @@ header .nav-link {
 .about a:hover {
     opacity: 0.7;
 }
-
-.about hr {
+#front-link {
+    font-size: 18px;
+    text-shadow: 3px 3px 15px black;
 }
+.inside-img {
+    max-height: 500px;
+    max-width: 676px;
+}
+
 .inside {
     background: rgba(0,0,0,0.28);
     background: rgba(255, 255, 255, 1);
+    padding: 50px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: black;
 }
 .video {
     background: rgba(0,0,0,0.28);
     background: rgba(255, 255, 255, 0.85);
-}
-.inside {
-    padding: 50px;
-    color: black;
-}
-.site-map {
-    background: rgba(255,255,255,0);
-    width: 100%;
-    padding: 50px;
-    padding-bottom: 20px;
-}
-
-.news {
-    color: white;
-    padding: 50px; 
-    background: rgba(35, 56, 96, 0.5)
-}
-.news-title {
+    padding: 30px;
+    padding-top: 20px;
     padding-bottom: 20px;
 }
 
@@ -431,10 +427,7 @@ header .nav-link {
 }
 .container {
     margin: 0 auto;
-    border-radius: 0px;
-}
-.main-container {
-    /* margin-top: 100px; */
+    border-radius: 10px;
 }
 #main-row {
     padding: 30px;
@@ -553,7 +546,7 @@ i.fa.fa-angle-left, i.fa.fa-angle-right {
 }
 .lead-cover {
     padding-top: 0px;
-    padding-bottom: 20px;
+    padding-bottom: 0px;
 }
 
 .lead-cover .col-md-6, .lead-cover .col-md-5, .lead-cover .col-md-7 {
@@ -619,6 +612,9 @@ i.fa.fa-angle-left, i.fa.fa-angle-right {
 .index-logo {
     height: 1.2em;
     color:white;
+}
+#slogan-center a:hover {
+    color:rgba(255,255,255,0.7);
 }
 
 h1.lead-big {
