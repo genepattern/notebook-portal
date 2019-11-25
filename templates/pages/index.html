@@ -49,58 +49,20 @@
     <div class="lead-cover">
         <div class="container">
             <div class="row">
-                <div class="col-md-12" style="margin: auto; padding: 20px; padding-right: 30px;">
-                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="5000">
-                        <ol class="carousel-indicators">
-                            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                        </ol>
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="row">
-                                    <img src="/static/images/gpnb-example2.png" alt="First slide" width="80%" style="margin-right: 100px; overflow:hidden;">
-                                    <h3 id="slogan-center" >Integrating
-                                    <a href="http://genepattern.org" style="font-weight:600; "><img class="index-logo" src="/static/images/genepattern.png" /> GenePattern</a> Genomic Analyses with the <a href="https://jupyter.org" style="font-weight:600; "><img class="index-logo" src="/static/images/jupyter-gray.png" /> Jupyter</a> Notebook Environment</h3>
-                                    
-                                </div>
-                            </div>
-                            <div class="carousel-item ">
-                                <a href="/#directory">
-                                    <img class="d-block" src="/static/images/gp-in-jupyter-3.png" alt="First slide" width="65%" style="">
-                                </a>
-                            </div>
-                            <div class="carousel-item">
-                                <div id="join-carousel">
-                                    <h3>Join our Bioinformatics Community!</h3>
-                                    <ul>
-                                        <li><a href="/publish-and-sharing/">Share notebooks with peers and collaborators with the click of a button</a></li>
-                                        <li><a href="/#directory">Perform complex multiomic analyses without needing to write any code</a></li>
-                                        <li><a href="/library/">Access and contribute to our growing Notebook Library</a></li>
-                                    </ul>
-                                </div>
-                                <img class="d-block" src="/static/images/Mesirov_Lab_group1.jpg" alt="First slide" width="70%" style="margin-left:10%; overflow:hidden;">
-                            </div>
-                        </div>
-                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                            <span><i class="fa fa-angle-left" aria-hidden="true" ></i></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                            <span><i class="fa fa-angle-right" aria-hidden="true"></i></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </div>
+                <div class="col-md-12 text-center" style="margin-top: 10%;z-index: 1001;">
+                    <h1 id="slogan-center">Integrating <a href="http://genepattern.org" style="font-weight:600; box-shadow: 10px solid black;"><img class="index-logo" src="/static/images/genepattern.png" /> GenePattern</a> Genomic Analyses<br> with the <a href="https://jupyter.org" style="font-weight:600; "><img class="index-logo" src="/static/images/jupyter-white-empty.png" /> Jupyter</a> Notebook Environment</h1>
                 </div>
-                <div style="margin: auto;">
-                    {% if not user.is_authenticated %}
-                        <a href="#" class="btn" onclick="document.querySelector('.login_link').click();">Login</a>
-                    {% elif user.is_authenticated%}
-                        <a class="btn" style="background: grey;">Login</a>
-                    {% endif %}
-                    <a href="#" class="btn" onclick="document.querySelector('.register_link').click();">Register</a>
-                    <a href="http://notebook.genepattern.org" class="btn">Use GenePattern Notebook</a>
-                </div>
+            </div>
+            <div class="" style="margin: auto; text-align:center;">
+                <!-- {% if not user.is_authenticated %}
+                    <a href="#" class="btn" onclick="document.querySelector('.login_link').click();">Login</a>
+                {% elif user.is_authenticated%}
+                    <a class="btn" style="background: grey;">Login</a>
+                {% endif %}
+                <a href="#" class="btn" onclick="document.querySelector('.register_link').click();">Register</a> -->
+                <a href="http://notebook.genepattern.org" class="btn">Use GenePattern Notebook</a>
+                <br><br>
+                <a href="/library" id="front-link" class="w3-container"><i class="fas fa-chevron-right w3-animate-right" id="front-link-icon"></i> Check out our Notebook Library </i></a>
             </div>
         </div>
     </div>
@@ -121,27 +83,61 @@
     {% endnevercache %} 
 {% endblock %}
 
+{% block main %}{{ block.super }} 
+{% editable page.richtextpage.content %} 
+{{ page.richtextpage.content|safe }} 
+{% endeditable %} 
+{% endblock main %}
+
+<!-- <section class="inside">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="features">
+                <h4>Access to a wide range of genomic analyses within a Jupyter notebook</h4>
+                <ul>
+                    <li><a href="http://genepattern.org">GenePattern Project</a></li>
+                    <li><a href="https://jupyter.org">Jupyter Project</a></li>
+                </ul>
+                <h4>Support <i>in silico</i> research from inception through publication</h4>
+                <ul>
+                    <li>Visit our <a href="/library/">Public Notebook Library</a></li>
+                    <li>See our <a href="/related-publications">Related Publications</a></li>
+                </ul>
+                <h4>Shareable, executable notebook documents</h4>
+                <ul>
+                    <label for=""></label>
+                </ul>
+                <h4>No programming or installation required</h4>
+                <ul>
+                    <li>GPNB Workspace accessible on any web browser</li>
+                </ul>
+                Enable true zero-install usage of GenePattern Notebook
+            </div>
+        </div>
+        <div class="col-md-6 text-center" style="margin: auto;">
+            <h5>The GenePattern Notebook Workspace</h5>
+            <br>
+            <img src="/static/images/gpnb-inside.png" alt="" width="100%">
+            
+        </div>
+    </div>
+</section>
+
 <section id="about">
     <div class="about">
-        <div class="row">
-            <div class="col-md-8">
-                <h2>What is GenePattern Notebook?</h2>
-                <hr>
-                <p>The GenePattern Notebook environment integrates <a href="https://genepattern.org">GenePattern's</a> analysis platform with the <a href="https://jupyter.org">Jupyter Notebook</a> system, allowing researchers to create documents that interleave formatted text, graphics and other multimedia, executable code, and GenePattern analyses, creating a single "research narrative" that puts scientific discussion and analyses in the same place.
-                <h2>Features</h2>
-                <hr>
-                <ul>
-                    <li>Test</li>
-                </ul>
-            </p>
-                <div style="">
-                    <iframe src="https://www.youtube.com/embed/8npzyGLpUHU" width="75%" height="450px" frameborder="0" align="middle" style="margin: auto; padding: 0px;"></iframe>
-                </div>
-            </div>
-            <div class="col-md-4">
+        <div class="row text-center">
+            <div class="col-md-12">
                 <h2 style="padding-top: 0px;">In the Press</h2>
-                <hr>
-                <ul>
+                <div style="padding: 10px;">
+                    <a href="https://datascience.cancer.gov/news-events/blog/informatics-technology-cancer-research-program-drives-and-fosters-community-cancer"><img style="height:50px;width:200px; border-radius: 7px; " src="/static/images/nih-centerforbioinfo.png" alt=""></a>
+                    <a href="https://www.rna-seqblog.com/genepattern-notebook-for-analysis-and-exploration-of-single-cell-transcriptomic-data/"><img src="/static/images/rna-seqblog.jpg" style="border-radius: 7px; border: 2px solid #57B340"></a>
+                    <a href="https://ocg.cancer.gov/news-publications/e-newsletter-issue/issue-22#2744"><img
+                    src="/static/images/nci-ocg.png" style="height:50px;width:200px;"></a>
+                    <a href="https://blogs.nature.com/naturejobs/2017/09/15/techblog-jupyter-powers-bioinformatics-again"><img src="/static/images/naturejobs.png"></a>
+                    <a href="https://www.bio-itworld.com/2017/08/31/genepattern-notebook-environment-needs-only-web-browser-analyses.aspx"><img src="/static/images/bioit.png" ></a>
+                    <a href="https://www.genomeweb.com/informatics/broads-genepattern-now-has-notebook-aggregation-collaboration-features"><img src="/static/images/genomeweb.png"></a>
+                </div>
+                <ul class="list-unstyled">
                     <li><a href="https://ocg.cancer.gov/news-publications/e-newsletter-issue/issue-22#2744">"GenePattern Notebook: Integration of Electronic Notebooks with Bioinformatics Tools for Genomic Data Analysis"</a></li>
 
                     <li><a href="https://blogs.nature.com/naturejobs/2017/09/15/techblog-jupyter-powers-bioinformatics-again">"TechBlog:
@@ -151,128 +147,38 @@
                     <li><a href="https://www.genomeweb.com/informatics/broads-genepattern-now-has-notebook-aggregation-collaboration-features">"Broad's
                             GenePattern Now Has 'Notebook' Aggregation, Collaboration Features"</a></li>
                 </ul>
+                <br>
                 <h2>How to Cite</h2>
-                <hr>
-                <ul>
+                <ul class="list-unstyled"> 
                     <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5572818/">Reich et al. The GenePattern Notebook Environment. Cell Systems. 2017(5):149-51</a></li>
                 </ul>
-
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
-<section id="directory">
-    <div class="site-map">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- <div>
-                    <h2>Using GenePattern Notebook</h2>
-                    <hr>
-                </div> -->
-                <div class="row" id="using">
-                    <div class="col-lg-4">
-                        <div class="card bg-light">
-                            <div class="card-header">
-                                <img src=""> User Guide
-                            </div>
-                            <div class="card-body">
-                                <h5 style="font-weight: 400; margin:0px;">All Users</h5>
-                                <ul class="card-text">
-                                    <li><a href="/quickstart/">Quickstart</a></li>
-                                    <li><a href="/basic-features/">Basic Features</a></li>
-                                    <li><a href="/publish-and-sharing/">Publish and Share Notebooks</a></li>
-                                    <li><a href="/tutorial-videos/">Tutorial Videos</a></li>
-                                    <li><a href="/best-practices/">Best Practices</a></li>
-                                    <li><a href="/cheat-sheet/">Cheat Sheet</a></li>
-                                </ul>
-
-                                <h5 style="font-weight: 400; margin:0px;">Advanced Users</h5>
-                                <ul class="card-text">
-                                    <li><a href="https://github.com/genepattern?q=notebook">Fork us
-                                            on GitHub</a></li>
-                                    <li><a href="https://gpnotebook-website-docs.readthedocs.io/en/latest">Documentation</a></li>
-                                    <li><a href="https://gpnotebook-website-docs.readthedocs.io/en/latest/programmatic/">Programmatic Features</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="card bg-light mb-3">
-                            <div class="card-header" style="font-size: 20px;">Genomic Analyses and Workflows</div>
-                            <div class="card-body">
-                                <ul class="card-text">
-                                    <li><a href="/analyses/">Available GenePattern Analyses</a></li>
-                                    <li><a href="/library/">Library of Public GenePattern Notebooks</a></li>
-                                    <li>Featured Notebook Collections</li>
-                                    <ul>
-                                        <li><a href="/single-cell/">Single-cell Analysis</a></li>
-                                        <li><a href="/rna-seq/">RNA-seq</a></li>
-                                    </ul>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card bg-light mb-3">
-                            <div class="card-header">Additional Information</div>
-                            <div class="card-body">
-                                <ul class="card-text">
-                                    <li><a href="/related-projects/">Related Projects</a></li>
-                                    <li><a href="/publications/">Related Publications</a></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-lg-4">
-                        <div class="card bg-light mb-3">
-                            <div class="card-header">News/Releases</div>
-                            <div class="card-body">
-                                <ul class="card-text">
-                                    <li><a href="/new-features/">New Features</a></li>
-                                    <li><a href="https://gpnotebook-website-docs.readthedocs.io/en/latest/releases/">Release Notes</a></li>
-                                    <li><a href="/blog/">Blog</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="card bg-light mb-3">
-                            <div class="card-header">Help/Contact
-                            </div>
-                            <div class="card-body">
-                                <ul class="card-text">
-                                    <li><a href="/contact/">Contact Us</a></li>
-                                    <li><a href="https://gpnotebook-website-docs.readthedocs.io/en/latest/faq/">FAQ</a></li>
-                                    <li><a href="http://mesirovlab.org">Mesirov Lab</a></li>
-                                    <br>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div </div>
+<section class="video">
+    <div class="row" style="padding: 50px;">
+        <div class="col-md-8" style="">
+            <iframe src="https://www.youtube.com/embed/8npzyGLpUHU" height="600" frameborder="0" align="middle" style="margin: auto; padding: 0px;"></iframe>
+        </div>
+        <div class="col-md-4">
+            <a class="twitter-timeline" data-width="400" data-height="600" data-theme="light" href="https://twitter.com/GenePattern?ref_src=twsrc%5Etfw">Tweets by GenePattern</a>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
         </div>
     </div>
 </section>
 
+<!-- 
 <section id="news">
     <div class="news">
-        <!-- <h2>News Bulletin</h2>
-        <hr> -->
         <div class="row">
             <div class="col-md-8 news-bulletin">
-                {% block main %}{{ block.super }} 
-                {% editable page.richtextpage.content %} 
-                {{ page.richtextpage.content|safe }} 
-                {% endeditable %} 
-                {% endblock main %}
-            </div>
-            <div class="col-md-4" style="padding: 10px;">
-                <a class="twitter-timeline" data-width="400" data-height="600" data-theme="light" href="https://twitter.com/GenePattern?ref_src=twsrc%5Etfw">Tweets by GenePattern</a>
-                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 {% block sidebar %} 
 {% endblock sidebar %} 

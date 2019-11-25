@@ -47,6 +47,25 @@
     <!-- Search Bar -->
     <script async src="https://cse.google.com/cse.js?cx=014618441920599537683:ncj2utofxeo"></script>
 
+    <!-- Roboto Font-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+
+    <!-- Scroll -->
+    <script>
+    $(function () {
+        $(document).scroll(function () {
+            var $nav = $(".navbar-fixed-top");
+            $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
+        });
+    });
+    $(function () {
+        $(document).scroll(function () {
+            var $nav = $("header");
+            $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
+        });
+    });
+    </script>
+
     {% block extra_head %}{% endblock %}
 </head>
 
@@ -103,6 +122,9 @@
         </div>
     </div>
     {% endblock main-container %}
+
+    {% block library %}
+    {% endblock library %}
 
     <!-- Display the footer -->
     {% page_menu "includes/footer.html" %}
