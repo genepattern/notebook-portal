@@ -304,7 +304,7 @@ header .nav-link {
 }
 .about img {
     height: 50px;
-    padding: 10px
+    margin-right: 10px;
 }
 .about a {
     color: white;
