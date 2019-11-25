@@ -304,6 +304,7 @@ header .nav-link {
 }
 .about img {
     height: 50px;
+    padding: 10px
 }
 .about a {
     color: white;
@@ -549,7 +550,7 @@ i.fa.fa-angle-left, i.fa.fa-angle-right {
 }
 .lead-cover {
     padding-top: 0px;
-    padding-bottom: 30px;
+    padding-bottom: 20px;
 }
 
 .lead-cover .col-md-6, .lead-cover .col-md-5, .lead-cover .col-md-7 {
@@ -565,6 +566,10 @@ i.fa.fa-angle-left, i.fa.fa-angle-right {
 
 .lead-cover a {
     color: white;
+}
+#front-link:hover {
+    color: white;
+    opacity: 0.6;
 }
 
 .lead-cover h1 {
