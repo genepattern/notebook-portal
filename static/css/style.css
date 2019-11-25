@@ -306,6 +306,7 @@ header .nav-link {
     height: 50px;
     margin-right: 10px;
     border-radius: 10px;
+    line-height: 1.5;;
 }
 .about a {
     color: white;
