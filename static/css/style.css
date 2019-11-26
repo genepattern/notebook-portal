@@ -24,14 +24,72 @@ body {
     line-height: 1.5;
 }
 
-p, span {
-    font-size: 17px;
+p, span, li {
+    font-size: 1.3vw;
     font-weight: 400;
 }
-
 h1, h2, h3, h4, h5, h6 {
     font-weight:500;
 }
+h1 {
+    font-size: 4vw;
+}
+h2 {
+    font-size: 3vw;
+}
+h3 {
+    font-size: 2.5vw;
+}
+h4 {
+    font-size: 2.2vw;
+}
+h5 {
+    font-size: 2vw;
+}
+@media screen and (max-width: 1000px) { 
+    p, span, li {
+        font-size: 14px;
+    }
+    h1 {
+        font-size: 30px;
+    }
+    h2 {
+        font-size: 25px;
+    }
+    h3 {
+        font-size: 20px;
+    }
+    h4 {
+        font-size: 17px;
+    }
+    h5 {
+        font-size: 17px;
+    }
+}
+@media screen and (min-width: 1400px) {
+    #slogan-center {
+       font-size: 65px;
+    }
+    p, span, li {
+        font-size: 20px;
+    }
+    h1 {
+        font-size: 50px;
+    }
+    h2 {
+        font-size: 45px;
+    }
+    h3 {
+        font-size: 40px;
+    }
+    h4 {
+        font-size: 35px;
+    }
+    h5 {
+        font-size: 30px;
+    }
+  }
+
 
 td {
     font-size: 10px;
@@ -88,9 +146,16 @@ iframe {
     position: relative;
     color:white;
     text-shadow: 5px 5px 20px black;
-    font-size: 45px !important;
+    font-size: 3.75vw;
     line-height: 1.5;
+    font-weight: 100;
 }
+@media screen and (min-width: 1400px) {
+    #slogan-center {
+       font-size: 60px;
+    }
+  }
+
 #join-carousel {
     position: absolute;
     right: 10%;
@@ -156,6 +221,9 @@ header {
     -webkit-transition: all 0.5s;
     /* background: rgba(35, 56, 96, 0.9); */
 }
+.nav-link {
+    font-size: 12px;
+}
 .fixed-top.scrolled {
     padding:0px;
     transition: 0.1s;
@@ -201,7 +269,7 @@ header .dropdown-menu {
 }
 
 .navbar-nav li a, .navbar-nav li a span {
-    font-size: 14px;
+    font-size: 16px;
     padding-top: 5px;
 }
 p.nav-link {
@@ -223,7 +291,7 @@ p.nav-link {
 }
 
 .navbar-brand img {
-    height: 47px;
+    height: 60px;
 }
 
 #logo-dark {
@@ -299,9 +367,9 @@ header .nav-link {
     background: rgba(0,0,0,0.28);
     color: white;
     width: 100%;
-    padding: 50px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 70px;
+    padding-top: 40px;
+    padding-bottom: 40px;;
     text-shadow: 3px 3px 15px black;
 }
 .about img {
