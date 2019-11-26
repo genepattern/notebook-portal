@@ -46,6 +46,10 @@ h4 {
 h5 {
     font-size: 2vw;
 }
+h6 {
+    font-size: 1.8vw;
+    /* color: rgb(50,50,50); */
+}
 @media screen and (max-width: 1000px) { 
     p, span, li {
         font-size: 14px;
@@ -64,6 +68,9 @@ h5 {
     }
     h5 {
         font-size: 17px;
+    }
+    h6 {
+        font-size: 15px;
     }
 }
 @media screen and (min-width: 1400px) {
@@ -86,6 +93,9 @@ h5 {
         font-size: 35px;
     }
     h5 {
+        font-size: 30px;
+    }
+    h6 {
         font-size: 30px;
     }
   }
@@ -385,9 +395,11 @@ header .nav-link {
 .about a:hover {
     opacity: 0.7;
 }
+
 #front-link {
     font-size: 18px;
     text-shadow: 3px 3px 15px black;
+    line-height: 2;
 }
 .inside-img {
     max-height: 500px;
@@ -829,9 +841,10 @@ a.nav-link.login_link, a.nav-link.register_link {
     padding-right: 20px !important;
     background: #428bca;
     border-radius: 20px;
+    text-shadow: none !important;
 }
 a.nav-link.login_link:hover, a.nav-link.register_link:hover {
-    background: #ed1c24;
+    opacity: 0.8;
     color: white;
 }
 

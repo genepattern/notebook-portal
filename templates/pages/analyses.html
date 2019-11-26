@@ -20,20 +20,35 @@
     <script src="{% static "js/gp-widget.js" %}"></script>
 {% endblock %}
 
-{% block main %}
-    <div id="analyses">
-        <div id="analyses_header">
-            <h1>GenePattern Analyses</h1>
-            <input type="search" placeholder="Search Analyses" class="form-control mod-search" v-model="search" />
-        </div>
-        <div class="categories">
-            <module-category v-for="c in categories" :category="c"></module-category>
-        </div>
-        <div class="modules d-none">
-            <module-category v-for="m in modules" :category="m"></module-category>
+{% block analyses %}
+
+{% block main-content %} 
+    {% block content %} {% endblock content %} 
+{% endblock main-content %}
+
+    <div class="container main-container" style="margin-top: 150px;">
+        <div class="row">
+            <div id="analyses">
+                <div id="analyses_header">
+                    <h1>GenePattern Analyses</h1>
+                    <input type="search" placeholder="Search Analyses" class="form-control mod-search" v-model="search" />
+                </div>
+                <div class="categories">
+                    <module-category v-for="c in categories" :category="c"></module-category>
+                </div>
+                <div class="modules d-none">
+                    <module-category v-for="m in modules" :category="m"></module-category>
+                </div>
+            </div>
         </div>
     </div>
-{% endblock %}
+
+{% block sidebar %} 
+{% endblock sidebar %} 
+
+{% block main-container %} 
+{% endblock main-container %} 
+{% endblock %} 
 
 {% block footer_js %}
     <script type="module">
