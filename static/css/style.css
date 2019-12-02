@@ -214,14 +214,18 @@ footer {
     background: rgba(31, 60, 118,0.9);
     /* background: rgb(60,88,136); */
     opacity: 1;
-}
-footer {
     color: white;
     margin: 0px;
     position: absolute;
     padding: 0px;
     right: 0;
     left: 0;
+}
+footer li a {
+    font-size: 1.1vw;
+}
+footer h5 {
+    font-size: 1.5vw;
 }
 header {
     padding: 0;
@@ -231,12 +235,16 @@ header {
     -webkit-transition: all 0.5s;
     /* background: rgba(35, 56, 96, 0.9); */
 }
-.nav-link {
+/* .fixed-top .nav-link {
     font-size: 12px;
-}
+} */
 .fixed-top.scrolled {
     padding:0px;
     transition: 0.1s;
+}
+.navbar-toggler {
+    margin-right: 20px;
+    color: white;
 }
 
 header a,

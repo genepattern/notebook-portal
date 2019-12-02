@@ -111,14 +111,14 @@
     {% block main-container %}
     <div class="container main-container">
         <div class="row">
-            <div id="main-pane" class="col-sm-9">
+            <div id="main-pane" class="col-sm-12">
                 {% block main %}{% endblock %}
             </div>
-            <div class="col-sm-3 wrapper">
+            <!-- <div class="col-sm-3 wrapper">
             {% block sidebar %}
                 {% include "includes/sidebar.html" %}
             {% endblock %}
-            </div>
+            </div> -->
         </div>
     </div>
     {% endblock main-container %}
