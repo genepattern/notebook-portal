@@ -47,7 +47,7 @@
             </li>
             
         </ul>
-        <ul id="navbar" class="navbar-nav navbar-right" style="margin-left: auto; margin-right: 20px;">
+        <ul id="navbar" class="navbar-nav navbar-right" style="margin-left: auto; margin-right: 30px;">
             {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
                     <a id="user-menu" href="#" class="nav-link dropdown-toggle" style="padding:10px;" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -70,7 +70,7 @@
             {% endif %}
             <li class="nav-item">
                 <a href="#modalSearch" data-toggle="modal" data-target="#modalSearch" class="nav-link" style="padding: 10px;"><i class="fa fa-search"
-                        aria-hidden="true"></i> <span class="hidden-sm hidden-md hidden-lg">Search</span>
+                        aria-hidden="true"></i> <span class="hidden-sm hidden-md hidden-lg" id="search-text">Search</span>
                 </a>
             </li>
         </ul>
