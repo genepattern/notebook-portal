@@ -47,9 +47,24 @@
     <!-- Search Bar -->
     <script async src="https://cse.google.com/cse.js?cx=014618441920599537683:ncj2utofxeo"></script>
 
-    <!-- Smooth scroll  -->
-    <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15/dist/smooth-scroll.polyfills.min.js"></script>
+    <!-- Roboto Font-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 
+    <!-- Scroll -->
+    <script>
+    $(function () {
+        $(document).scroll(function () {
+            var $nav = $(".navbar-fixed-top");
+            $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
+        });
+    });
+    $(function () {
+        $(document).scroll(function () {
+            var $nav = $("header");
+            $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
+        });
+    });
+    </script>
 
     {% block extra_head %}{% endblock %}
 </head>
@@ -57,24 +72,7 @@
 <body id="{% block body_id %}body{% endblock %}" class="{% block body_class %}{% endblock %}">
 
     <!-- Display the navigation header -->
-    {% page_menu "blocks/header.html" %}
-
-    <!-- Display the leading content -->
-    {% block lead %}
-        <div class="lead-cover">
-            <div class="container" style="padding:0px;">
-                <div class="row">
-                    <div class="col-md-12">
-                            <h1 id="page-title">{% block title %}{% endblock %}</h1>
-                            <h4 id="page-description">{% block description %}{% endblock %}</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endblock %}
-
-    {% block index%}
-    {% endblock%}
+    {% page_menu "includes/header.html" %}
 
     <!-- Display alerts -->
     {% block alerts %}
@@ -92,112 +90,52 @@
         {% endnevercache %}
     {% endblock %}
 
-    <!-- {% block sidebar %}
-        {% if user.is_authenticated %}
-        <div class="sidebar" style="display: none;">
-            <a class="sidebar-link" href="/dashboard/">
-                <i class="fas fa-tachometer-alt sidebar-icon"></i>
-                <div class="sidebar-title">Dashboard</div>
-            </a>
-
-            <a class="sidebar-link" href="/library/">
-                <i class="fas fa-book-reader sidebar-icon"></i>
-                <div class="sidebar-title">Library</div>
-            </a>
-
-            <a class="sidebar-link" href="/analyses/">
-                <i class="fas fa-flask sidebar-icon"></i>
-                <div class="sidebar-title">Analyses</div>
-            </a>
-
-            <a class="sidebar-link" href="/jobs/">
-                <i class="fas fa-hdd sidebar-icon"></i>
-                <div class="sidebar-title">Jobs</div>
-            </a>
-
-            <a class="sidebar-link" href="/workspace/">
-                <i class="fas fa-book sidebar-icon"></i>
-                <div class="sidebar-title">Workspace</div>
-            </a>
-        </div>
-        {% endif %}
-    {% endblock %} -->
-
-    <!-- Display the main content -->
-    {% block main-content %}
-    <div class="container main-container" id="main-content">
-        <div class="row" id="main-row">
-            {% block content %}
-            <div class="wrapper col-sm-3">
-                <nav id="sidebar">
-                    <div class="sidebar-header">
-                        <h4>User Guide</h4>
+    <!-- Display the leading content -->
+    {% block lead %}
+        <div class="lead-cover">
+            <div class="container" style="padding:0px;">
+                <div class="row">
+                    <div class="col-md-12">
+                            <h1 id="page-title">{% block title %}{% endblock %}</h1>
+                            <h4 id="page-description">{% block description %}{% endblock %}</h4>
                     </div>
-                    <div class="sidebar-header" style="padding-top: 0px;font-weight:100;">
-                        <h5>All Users</h5>
-                    </div>
-                    <ul class="list-unstyled components">
-                        <li><a href="quickstart/">Quickstart</a></li>
-                        <li><a href="basic-features/">Basic Features</a></li>
-                        <li><a href="publish-and-sharing/">Publish and Share Notebooks</a></li>
-                        <li><a href="tutorial-videos/">Tutorial Videos</a></li>
-                        <li><a href="best-practices/">Best Practices</a></li>
-                        <li><a href="use-cases/">Use Cases</a></li>
-                        <li><a href="cheat-sheet/">Cheat Sheet</a></li>
-                    </ul>
-                    <div class="sidebar-header" style="padding-top: 0px;font-weight:100;">
-                        <h5>Advanced Users</h5>
-                    </div>
-                    <ul class="list-unstyled components">
-                        <li><a href="https://github.com/genepattern?utf8=%E2%9C%93&q=notebook&type=&language=">Fork us
-                                on GitHub</a></li>
-                        <li><a href="https://gpnotebook-website-docs.readthedocs.io/en/latest">Documentation</a></li>
-                        <li><a href="programmatic/">Programmatic Features</a></li>
-                    </ul>
-                    <div class="sidebar-header">
-                        <h4>Notebook Features</h4>
-                    </div>
-                    <ul class="list-unstyled components">
-                        <li><a href="notebook-library/">Public Notebook Library</a></li>
-                        <li><a href="genepattern-analyses/">Available GenePattern Analyses</a></li>
-                        <li><a href="ui-builder/">Python UI Builder</a></li>
-                    </ul>
-                    <div class="sidebar-header">
-                        <h4>News/Releases</h4>
-                    </div>
-                    <ul class="list-unstyled components">
-                        <li><a href="new-features/">New Features</a></li>
-                        <li><a href="releases/">Release Notes</a></li>
-                        <li><a href="blog/">Blog</a></li>
-                        <li><a href="publications/">Related Publications</a></li>
-                    </ul>
-                    <div class="sidebar-header">
-                        <h4>Help/Contact</h4>
-                    </div>
-                    <ul class="list-unstyled components">
-                        <li><a href="https://groups.google.com/group/genepattern-help">GenePattern
-                                Help Forum</a></li>
-                        <li><a href="faq/">FAQ</a></li>
-                        <li><a href="http://mesirovlab.org">Mesirov Lab</a></li>
-                    </ul>
-                </nav>
+                </div>
             </div>
-            <div class="col-sm-9" style="padding-top: 20px;padding-left:50px;">
-                {% block main %}{% endblock %}
-            </div>
-            {% endblock %}
         </div>
-    </div>
     {% endblock %}
 
-    <!-- Display the footer -->
-    {% page_menu "blocks/footer.html" %}
+    {% block index %}
+    {% endblock index %}
 
+    <!-- Display the main content -->
+    {% block main-container %}
+    <div class="container main-container">
+        <div class="row">
+            <div id="main-pane" class="col-sm-12">
+                {% block main %}{% endblock %}
+            </div>
+            <!-- <div class="col-sm-3 wrapper">
+            {% block sidebar %}
+                {% include "includes/sidebar.html" %}
+            {% endblock %}
+            </div> -->
+        </div>
+    </div>
+    {% endblock main-container %}
+
+    {% block library %}
+    {% endblock library %}
+
+    {% block analyses %}
+    {% endblock analyses %}
+
+    <!-- Display the footer -->
+    {% page_menu "includes/footer.html" %}
     {% include "includes/footer_scripts.html" %}
-    <script>
-        var scroll = new SmoothScroll('a[href*="#"]');
-    </script>
     <script type="module" src="{% static "js/main.js" %}"></script>
+    <script type="application/javascript">
+        window.is_authenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
+    </script>
     {% block footer_js %}{% endblock %}
 </body>
 </html>

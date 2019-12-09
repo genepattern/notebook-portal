@@ -69,7 +69,7 @@ USE_I18N = False
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 AUTHENTICATION_BACKENDS = (
-    # 'library.auth.GenePatternAuthenticationBackend',
+    'library.auth.GenePatternAuthenticationBackend',
     "mezzanine.core.auth_backends.MezzanineBackend",
     'guardian.backends.ObjectPermissionBackend',
 )
@@ -215,13 +215,6 @@ if DJANGO_VERSION < (1, 9):
 ################
 
 INSTALLED_APPS = (
-    #Mezzanine API
-    'mezzanine_api',
-    'rest_framework',
-    'django_filters',
-    'rest_framework_swagger',
-    'oauth2_provider',
-
     #Django
     "django.contrib.admin",
     "django.contrib.auth",
@@ -248,15 +241,19 @@ INSTALLED_APPS = (
     # Django Rest Framework
     'crispy_forms',
     'corsheaders',
-    #'django_filters',
-    #'rest_framework',
+    'django_filters',
+    'rest_framework',
     'rest_framework.authtoken',
     'guardian',
+
+    # Mezzanine API
+    'mezzanine_api',
+    'rest_framework_swagger',
+    'oauth2_provider',
 
     # Notebook Library
     "library",
     'nbrepo',
-    
 )
 
 
@@ -299,6 +296,8 @@ if DJANGO_VERSION < (1, 10):
 # at the moment we are using custom forks of them.
 PACKAGE_NAME_FILEBROWSER = "filebrowser_safe"
 PACKAGE_NAME_GRAPPELLI = "grappelli_safe"
+RICHTEXT_FILTER_LEVEL = 2
+
 
 #########################
 # OPTIONAL APPLICATIONS #
@@ -379,6 +378,8 @@ REST_FRAMEWORK = {
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
+CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
+LOGIN_REDIRECT_URL = '/'
 
 
 #######################

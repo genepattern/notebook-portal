@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.6
 
 import argparse
 import subprocess
@@ -24,6 +24,6 @@ try:
                                   --name=notebook_library \
                                   -p {args.port}:8000 \
                                   -v {args.config}:/config \
-                                  -v /var/run/docker.sock:/var/run/docker.sock genepattern/notebook-library:19.06.1'.split())
+                                  genepattern/notebook-library:19.08'.split())
 except KeyboardInterrupt:
     print('Shutting down Notebook Library')

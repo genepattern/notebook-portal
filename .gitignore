@@ -3,10 +3,11 @@ error.log
 image-drafts
 __pycache__/
 *.pptx
-.DS_Store
-static/.DS_Store
+*.DS_Store
+*static/.DS_Store
 *.xcf
 bin
 include
 lib
 pip-selfcheck.json
+static/images/thumbnails/

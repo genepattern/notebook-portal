@@ -2,7 +2,14 @@ import os
 from django.http import HttpResponse
 from django.template import loader
 from django.views.static import serve
+from django.contrib.auth import logout as logout_user
+from django.shortcuts import redirect
 import library.thumbnail as thumbnail
+
+
+def logout(request):
+    logout_user(request)
+    return redirect('/')
 
 
 def serve_thumbnail(request, id):
@@ -10,7 +17,7 @@ def serve_thumbnail(request, id):
     if not thumbnail.exists(id):
         thumbnail.generate(id)
 
-    path = thumbnail.path(id)
+    path = thumbnail.thumbnail_path(id)
 
     # Serve the file
     response = serve(request, os.path.basename(path), os.path.dirname(path))
@@ -29,9 +36,21 @@ def dashboard(request):
     return HttpResponse(template.render(context, request))
 
 
+def workspace(request):
+    # Display the workspace template
+    template = loader.get_template('pages/workspace.html')
+    return HttpResponse(template.render({}, request))
+
+
 def library(request):
-    # Display the run template
+    # Display the library template
     template = loader.get_template('pages/library.html')
+    return HttpResponse(template.render({}, request))
+
+
+def jobs(request):
+    # Display the jobs template
+    template = loader.get_template('pages/jobs.html')
     return HttpResponse(template.render({}, request))
 
 
@@ -45,18 +64,3 @@ def run_analysis(request, lsid):
     # Display the run template
     template = loader.get_template('pages/run_analysis.html')
     return HttpResponse(template.render({'lsid': lsid}, request))
-
-def guide(request):
-    # Display the guide template
-    template = loader.get_template('pages/guide.html')
-    return HttpResponse(template.render({}, request))
-
-def documentation(request):
-    # Display the doc template
-    template = loader.get_template('pages/documentation.html')
-    return HttpResponse(template.render({}, request))
-
-# def home(request):
-#     # Display the home template
-#     template = loader.get_template('pages/index.html')
-#     return HttpResponse(template.render({}, request))

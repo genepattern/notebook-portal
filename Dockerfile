@@ -26,8 +26,7 @@ RUN mkdir /config
 ##      Install miniconda                  ##
 #############################################
 
-RUN wget -q https://repo.continuum.io/miniconda/Miniconda3-4.5.11-Linux-x86_64.sh -O /tmp/miniconda.sh  && \
-    echo 'e1045ee415162f944b6aebfe560b8fee */tmp/miniconda.sh' | md5sum -c - && \
+RUN wget -q https://repo.continuum.io/miniconda/Miniconda3-4.6.14-Linux-x86_64.sh -O /tmp/miniconda.sh  && \
     bash /tmp/miniconda.sh -f -b -p /opt/conda && \
     /opt/conda/bin/conda install --yes -c conda-forge \
       python=3.6 requests pip pycurl \
@@ -68,6 +67,11 @@ RUN ln -s /config/settings.py /srv/notebook-library/library/settings.py
 RUN cp -r /srv/notebook-library/templates /config/
 RUN rm -r /srv/notebook-library/templates
 RUN ln -s /config/templates /srv/notebook-library/templates
+
+# Add the static files to the config dir
+RUN cp -r /srv/notebook-library/static /config/
+RUN rm -r /srv/notebook-library/static
+RUN ln -s /config/static /srv/notebook-library/static
 
 RUN /bin/bash -c "source activate webapp && \
     /srv/notebook-library/manage.py makemigrations"

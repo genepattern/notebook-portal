@@ -1,0 +1,127 @@
+{% load pages_tags mezzanine_tags i18n staticfiles static %}
+
+<header class="fixed-top">
+    <nav id="top-nav" class="navbar navbar-expand-lg navbar-dark navbar-fixed-top">
+
+    <a class="navbar-brand" href="/">
+        <img src="/static/images/logo6.png" alt="GenePattern Notebook" id="logo-dark"/>
+        <!-- <img src="/static/images/logo3.png" alt="GenePattern Notebook" id="logo-light"/> -->
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-dropdown" aria-controls="navbar-dropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar-dropdown">
+        <ul class="navbar-nav" style="margin-left: 0px;">
+            <li class="nav-item dropdown">
+                <a id="user-menu" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                    aria-haspopup="true" aria-expanded="false">User Guide
+                    <span class="caret"></span></a>
+                <div class="dropdown-menu" aria-labelledby="user-menu">
+                    <a class="dropdown-item" href="/quickstart">Quickstart</a>
+                    <a class="dropdown-item" href="/basic-features/">Basic Features</a>
+                    <a class="dropdown-item" href="/publish-and-sharing/">Publish and Share Notebooks</a>
+                    <a class="dropdown-item" href="/tutorial-videos/">Tutorial Videos</a>
+                    <a class="dropdown-item" href="/best-practices/">Best Practices</a>
+                    <a class="dropdown-item" href="/cheat-sheet/">Cheat Sheet</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" target="_blank" href="https://gpnotebook-website-docs.readthedocs.io/en/latest">Documentation</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a id="user-menu" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                    aria-haspopup="true" aria-expanded="false">Analysis
+                    <span class="caret"></span></a>
+                <div class="dropdown-menu" aria-labelledby="user-menu">
+                    <a class="dropdown-item" href="/library/">Available Notebooks</a>
+                    <a class="dropdown-item" href="/single-cell/">Single-cell Analysis</a>
+                    <a class="dropdown-item" href="/rna-seq/">RNA-seq</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/blog/">Blog</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/contact/">Contact</a>
+            </li>
+            
+        </ul>
+        <ul id="navbar" class="navbar-nav navbar-right" style="margin-left: auto; margin-right: 30px;">
+            {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a id="user-menu" href="#" class="nav-link dropdown-toggle" style="padding:10px;" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">{{ user.username }}
+                        <span class="caret"></span></a>
+                    <div class="dropdown-menu" aria-labelledby="user-menu">
+                        {% if user.is_staff %}
+                            <a class="dropdown-item" href="/dashboard/"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                            <a class="dropdown-item" href="/library/"><i class="fas fa-book-reader"></i> Library</a>
+                            <a class="dropdown-item" href="/analyses/"><i class="fas fa-flask"></i> Analyses</a>
+                            <a class="dropdown-item" href="/jobs/"><i class="fas fa-hdd"></i> Jobs</a>
+                            <a class="dropdown-item" href="/workspace/"><i class="fas fa-book"></i> Workspace</a>
+                            {# <a class="dropdown-item" href="/accounts/profile/">Profile</a> #}
+                        {% endif %}
+                        <a class="dropdown-item" href="/accounts/logout/"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </li>
+            {% else %}
+                <login-register></login-register>
+            {% endif %}
+            <li class="nav-item">
+                <a href="#modalSearch" data-toggle="modal" data-target="#modalSearch" class="nav-link" style="padding: 10px;"><i class="fa fa-search"
+                        aria-hidden="true"></i> <span class="hidden-sm hidden-md hidden-lg" id="search-text">Search</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+</header>
+
+<!-- CSRF Token embed -->
+<form id="csrf" class="d-none">
+    {% csrf_token %}
+</form>
+
+<!-- Search Modal -->
+<div id="modalSearch" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Search</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Add the modal body here -->
+                <script>
+                    (function () {
+                        var cx = '014618441920599537683:ncj2utofxeo';
+                        var gcse = document.createElement('script');
+                        gcse.type = 'text/javascript';
+                        gcse.async = true;
+                        gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+                            '//cse.google.com/cse.js?cx=' + cx;
+                        var s = document.getElementsByTagName('script')[0];
+                        s.parentNode.insertBefore(gcse, s);
+                    })();
+                </script>
+                <gcse:search></gcse:search>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% block footer_js %}
+    <script type="module">
+        // Import the application module
+        import * as GenePattern from "/static/js/app.js";
+
+        // Initialize the dashboard
+        GenePattern.navbar("#navbar");
+    </script>
+{% endblock %}
