@@ -1,7 +1,7 @@
 {% load pages_tags mezzanine_tags i18n staticfiles static %}
 
 <header class="fixed-top">
-    <nav id="top-nav" class="navbar navbar-expand-lg navbar-dark container ">
+    <nav id="top-nav" class="navbar navbar-expand-lg navbar-dark navbar-fixed-top">
 
     <a class="navbar-brand" href="/">
         <img src="/static/images/logo6.png" alt="GenePattern Notebook" id="logo-dark"/>
@@ -27,7 +27,7 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="https://gpnotebook-website-docs.readthedocs.io/en/latest">Documentation</a>
+                <a class="nav-link" target="_blank" href="https://gpnotebook-website-docs.readthedocs.io/en/latest">Documentation</a>
             </li>
             <li class="nav-item dropdown">
                 <a id="user-menu" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
@@ -47,10 +47,10 @@
             </li>
             
         </ul>
-        <ul id="navbar" class="navbar-nav" style="margin-right: 15px;">
+        <ul id="navbar" class="navbar-nav navbar-right" style="margin-left: auto; margin-right: 30px;">
             {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
-                    <a id="user-menu" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                    <a id="user-menu" href="#" class="nav-link dropdown-toggle" style="padding:10px;" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">{{ user.username }}
                         <span class="caret"></span></a>
                     <div class="dropdown-menu" aria-labelledby="user-menu">
@@ -69,8 +69,8 @@
                 <login-register></login-register>
             {% endif %}
             <li class="nav-item">
-                <a href="#modalSearch" data-toggle="modal" data-target="#modalSearch" class="nav-link"><i class="fa fa-search"
-                        aria-hidden="true"></i> <span class="hidden-sm hidden-md hidden-lg">Search</span>
+                <a href="#modalSearch" data-toggle="modal" data-target="#modalSearch" class="nav-link" style="padding: 10px;"><i class="fa fa-search"
+                        aria-hidden="true"></i> <span class="hidden-sm hidden-md hidden-lg" id="search-text">Search</span>
                 </a>
             </li>
         </ul>
