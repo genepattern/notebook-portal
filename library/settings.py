@@ -253,7 +253,7 @@ INSTALLED_APPS = (
 
     # Notebook Library
     "library",
-    'nbrepo',
+    'portal',
 )
 
 
@@ -368,7 +368,6 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'library.auth.GenePatternAuthentication',
-        #'nbrepo.auth.JupyterHubAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
@@ -381,23 +380,12 @@ CORS_ORIGIN_ALLOW_ALL = True
 CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
 LOGIN_REDIRECT_URL = '/'
 
-
 #######################
-# NOTEBOOK REPOSITORY #
+# PORTAL SETTINGS     #
 #######################
 
-SITE_TITLE = "GenePattern Notebook Repository"
 BASE_GENEPATTERN_URL = 'https://cloud.genepattern.org/gp'
-BASE_REPO_PATH = '/Users/tabor/repository'
-BASE_USER_PATH = '/Users/tabor/Notebooks'
-BASE_SHARE_PATH = '/Users/tabor/Notebooks/shared'
-CAN_SET_PROTECTED_TAGS = ['beholdsa', 'tabor', 'admin']
-JUPYTERHUB = False
 BASE_HUB_URL = "https://notebook.genepattern.org"
-SCREENSHOT_USER = "xxx"
-SCREENSHOT_PASSWORD = "xxx"
-DEFAULT_NB_DIR = '/Users/tabor/data/defaults'
-AUTOSCALE_SCRIPT = '/Users/tabor/data/autoscale.py'
 
 #####################
 # REST API SETTINGS #

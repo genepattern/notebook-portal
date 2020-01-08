@@ -14,25 +14,13 @@ from django.conf.urls.static import static
 from mezzanine_api.views import PageViewSet, PostViewSet, CategoryViewSet, SiteViewSet
 from rest_framework import routers
 
+import portal.urls
 from library.views import dashboard, jobs, analyses, run_analysis, serve_thumbnail, library, workspace, logout
-from nbrepo import preview
-from nbrepo.preview import preview_image
-from nbrepo.sharing import SharingViewSet, CollaboratorViewSet
-from nbrepo.views import UserViewSet, GroupViewSet, WebtourViewSet, CommentViewSet, NotebookViewSet, TagViewSet, notebook_usage, launch_counter, download, copy, \
-    webtour_seen, obtain_auth_token
 
 admin.autodiscover()
 
 # Routers provide an easy way of automatically determining the URL conf.
-router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'groups', GroupViewSet)
-router.register(r'webtours', WebtourViewSet)
-router.register(r'comments', CommentViewSet)
-router.register(r'notebooks', NotebookViewSet)
-router.register(r'tags', TagViewSet)
-router.register(r'sharing', SharingViewSet)
-router.register(r'collaborators', CollaboratorViewSet)
+router = portal.urls.router
 router.register(r'pages', PageViewSet)
 router.register(r'posts', PostViewSet)
 router.register(r'categories', CategoryViewSet)
@@ -52,19 +40,10 @@ urlpatterns = i18n_patterns(
     # Django REST Framework
     # url(r'^rest/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^rest/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^rest/api-token-auth/', obtain_auth_token),
     url(r'^rest/', include(router.urls)),
 
-    # Notebook Repository
-    url(r'^rest/notebooks/stats/$', notebook_usage),
-    url(r'^rest/notebooks/(?P<pk>[0-9]+)/launched/$', launch_counter),
-    url(r'^rest/notebooks/(?P<pk>[0-9]+)/copy/(?P<api_path>.*)$', copy),
-    url(r'^rest/notebooks/(?P<pk>[0-9]+)/download/$', download),
-    # url(r'^rest/notebooks/(?P<pk>[0-9]+)/preview/$', preview),
-    url(r'^rest/notebooks/(?P<pk>[0-9]+)/preview/image/$', preview_image),
-
-    # Webtour endpoints
-    url(r'^rest/webtours/(?P<user>.*)/$', webtour_seen),
+    # Notebook Portal
+    url(r'^rest/', include(portal.urls.router.urls)),
 
     # Notebook Library
     url(r'^thumbnail/(?P<id>[0-9]+)/$', serve_thumbnail),
