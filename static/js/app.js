@@ -683,17 +683,18 @@ export function analyses(selector) {
             search: ''
         },
         computed: {},
-        created() {
-            if (window.is_authenticated) GenePattern.login_to_genepattern();
-            GenePattern.genepattern_modules().then(r => this.modules = r);
-            GenePattern.module_categories().then(r => this.categories = r);
-        },
-        watch: {
-            'search': function(event) {
+        methods: {
+            'load_hash': function() {
+                this.search = decodeURIComponent(window.location.hash.substr(1));
+                this.filter();
+            },
+
+            'filter': function() {
                 const search = this.search.trim().toLowerCase();
 
                 // If search is blank display module categories
                 if (search === '') {
+                    window.location.hash = ''; // Remove the hash, if any
                     document.querySelector(selector).querySelector('.categories').classList.remove('d-none');
                     document.querySelector(selector).querySelector('.modules').classList.add('d-none');
                 }
@@ -712,6 +713,25 @@ export function analyses(selector) {
                         else card.classList.add('d-none');
                     });
                 }
+            }
+        },
+        created() {
+            if (window.is_authenticated) GenePattern.login_to_genepattern();
+            GenePattern.genepattern_modules().then(r => this.modules = r);
+            GenePattern.module_categories().then(r => this.categories = r);
+
+            // Handle back button changes
+            window.addEventListener("hashchange", () => {
+                this.load_hash();
+            });
+        },
+        watch: {
+            'search': function(event) {
+                this.filter();
+            },
+            'modules': function (event) {
+                // Load category of hash, if it exists
+                setTimeout(this.load_hash, 100);
             }
         }
     });
@@ -893,9 +913,16 @@ Vue.component('module-category', {
     delimiters: ['[[', ']]'],
     props: ['category'],
     methods: {
+        'update_hash': function(hash) {
+            window.location.hash = '#' + encodeURIComponent(hash);
+        },
+
         'search_or_launch': function() {
             // If this is a module
             if (this.category.lsid) {
+                // Update the hash for back button support
+                // this.update_hash(this.category.lsid);
+
                 // Open the documentation
                 if (this.category.documentation) window.open(GENEPATTERN_SERVER.substring(0, GENEPATTERN_SERVER.length - 4) + this.category.documentation);
                 else window.open(GENEPATTERN_SERVER + "pages/index.jsf?lsid=" + this.category.lsid)
@@ -906,6 +933,9 @@ Vue.component('module-category', {
 
             // If this is a category
             else {
+                // Update the hash for back button support
+                this.update_hash(this.category.name);
+
                 document.querySelector('.mod-search').value = this.category.name;
                 this.$root.search = this.category.name;
             }
