@@ -80,14 +80,7 @@ RUN /bin/bash -c "source activate webapp && \
 RUN /bin/bash -c "source activate webapp && \
     /srv/notebook-library/manage.py collectstatic --noinput"
 
-#############################################
-##      Create the start script            ##
-#############################################
-
-RUN echo "#!/bin/bash" >> /srv/notebook-library/start-server.sh
-RUN echo "source activate webapp" >> /srv/notebook-library/start-server.sh
-RUN echo "/srv/notebook-library/manage.py runserver 0.0.0.0:8000" >> /srv/notebook-library/start-server.sh
-RUN chmod +x /srv/notebook-library/start-server.sh
+COPY ./start-server.sh /srv/notebook-library/start-server.sh
 
 #############################################
 ##      Start the webapp                   ##
