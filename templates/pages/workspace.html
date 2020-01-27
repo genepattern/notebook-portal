@@ -6,8 +6,8 @@
 
 {% block extra_css %}
     <style type="text/css">
-        #library_header {
-            margin-bottom: 20px;
+        #workspace {
+            width: 100%;
         }
     </style>
 {% endblock %}
@@ -15,14 +15,28 @@
 {% block body_class %}no-cover{% endblock %}
 
 {% block main %}
-    <div id="workspace">
-        <div id="workspace_header">
-            <h1>Notebook Workspace</h1>
-            <input type="search" placeholder="Search Files" class="form-control nb-search" v-model="search" />
-        </div>
-        <p>Search or browse your private notebooks and associated files below.</p>
-        <div class="workspace">
-            <workspace-notebook v-for="nb in workspace" :nb="nb"></workspace-notebook>
+{% endblock %}
+
+{% block main-content %}
+    {% block content %} {% endblock content %}
+{% endblock main-content %}
+
+{% block main-container %}
+{% endblock main-container %}
+
+{% block library %}
+    <div class="container main-container no-negative-header">
+        <div class="row">
+            <div id="workspace">
+                <div class="page-header">
+                    <h1>Notebook Workspace</h1>
+                    <input type="search" placeholder="Search Projects" class="form-control nb-search" v-model="search" />
+                </div>
+                <p>Search or browse your private notebooks and associated files below.</p>
+                <div class="workspace">
+                    <workspace-notebook v-for="nb in workspace" :nb="nb"></workspace-notebook>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

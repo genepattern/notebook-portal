@@ -7,9 +7,6 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static "css/gpnb-extension.css" %}">
     <style type="text/css">
-        #analyses_header {
-            margin-bottom: 20px;
-        }
     </style>
 {% endblock %}
 
@@ -26,10 +23,10 @@
     {% block content %} {% endblock content %} 
 {% endblock main-content %}
 
-    <div class="container main-container" style="margin-top: 150px;">
+    <div class="container main-container no-negative-header">
         <div class="row">
             <div id="analyses">
-                <div id="analyses_header">
+                <div class="page-header">
                     <h1>GenePattern Analyses</h1>
                     <input type="search" placeholder="Search Analyses" class="form-control mod-search" v-model="search" />
                 </div>

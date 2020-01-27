@@ -108,12 +108,12 @@ h6 {
 .main-container {
     padding: 0px;
     border-radius: 0px;
-    width: 90%;
+    /*width: 90%;*/
     margin-bottom: 20px !important;
 }
 
 .container {
-    max-width: 100%;
+    /*max-width: 100%;*/
     border-radius: 0px;
 }
 
@@ -1024,7 +1024,7 @@ div.nb-card {
 .mod-search,
 .nb-search {
     width: 25%;
-    right: 75px;
+    right: 0;
     position: absolute;
     top: 10px;
 }
@@ -1109,3 +1109,11 @@ div.nb-card {
         text-align: right;
     }
  } */
+
+div.no-negative-header {
+    margin-top: 150px;
+}
+
+.page-header {
+    position: relative
+}
