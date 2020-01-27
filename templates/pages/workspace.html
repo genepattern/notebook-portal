@@ -9,6 +9,13 @@
         #workspace {
             width: 100%;
         }
+
+    .expand-header {
+        margin-bottom: 20px;
+        font-size: 14pt;
+        margin-left: 12px;
+        cursor: pointer;
+    }
     </style>
 {% endblock %}
 
@@ -32,9 +39,18 @@
                     <h1>Notebook Workspace</h1>
                     <input type="search" placeholder="Search Projects" class="form-control nb-search" v-model="search" />
                 </div>
-                <p>Search or browse your private notebooks and associated files below.</p>
+                <p>Launch, create or share notebook projects.</p>
                 <div class="workspace">
-                    <workspace-notebook v-for="nb in workspace" :nb="nb"></workspace-notebook>
+                    <notebook-project v-for="p in projects" :project="p"></notebook-project>
+                    <div class="card nb-card nb-card-new" @click="create_project_dialog">
+                        <div class="card-img-top" style="background: rgba(0, 0, 0, 0.05);">
+                            <i class="fa fa-plus-circle card-icon"></i>
+                        </div>
+                        <div class="card-body">
+                            <h8 class="card-title">New Project</h8>
+                            <p class="card-text">Create a New Notebook Project</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

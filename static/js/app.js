@@ -1,5 +1,5 @@
 // Declare server constants
-export const PUBLIC_NOTEBOOK_SEVER = 'https://notebook.genepattern.org/';
+export const PUBLIC_NOTEBOOK_SEVER = 'http://nbdev.genepattern.org/';
 export const GENEPATTERN_SERVER = 'https://cloud.genepattern.org/gp/';
 
 // Declare data cache
@@ -7,10 +7,72 @@ let _public_notebooks = null;
 let _notebook_tags = null;
 let _pinned_tags = null;
 let _shared_notebooks = null;
-let _workspace_notebooks = null;
+let _notebook_projects = null;
 let _genepattern_modules = null;
 let _genepattern_token = null;
 let _jupyterhub_token = null;
+
+
+/**
+ * Returns a list of the user's notebook projects
+ *
+ * @returns {Promise<any>}
+ */
+export function notebook_projects() {
+    if (_notebook_projects !== null)
+        return new Promise(function(resolve) {
+            resolve(_notebook_projects);
+        });
+
+    else
+        return fetch('/rest/projects/')
+            .then(response => response.json())
+            .then(function(response) {
+                _notebook_projects = response;
+                return response;
+            });
+}
+
+/**
+ * Deletes a notebook project with the specified URL
+ *
+ * @param url
+ */
+export function delete_project(url) {
+    return fetch(url, {
+        'method': 'DELETE',
+        'headers': {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRFToken': get_csrf()
+        }})
+        .then(function(response) {
+            return response;
+        });
+}
+
+/**
+ * Creates a new notebook project with the given form data
+ *
+ * @param data
+ */
+export function create_project(data) {
+    // TODO: Fix handling of tags
+    data.tags = [];
+
+    return fetch('/rest/projects/', {
+            'method': 'POST',
+            'headers': {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken': get_csrf()
+            },
+            'body': JSON.stringify(data) })
+        .then(response => response.json())
+        .then(function(response) {
+            return response;
+        });
+}
 
 /**
  * Retrieves the public notebooks from the cache, if possible, from the server if not
@@ -545,15 +607,76 @@ export function workspace(selector) {
         el: selector,
         delimiters: ['[[', ']]'],
         data: {
-            workspace: [],
+            projects: [],
             search: ''
         },
         computed: {},
         created() {
             if (window.is_authenticated) GenePattern.login_to_jupyterhub({suppress_errors: true});
-            GenePattern.workspace_notebooks().then(r => this.workspace = r);
+            GenePattern.notebook_projects().then(r => this.projects = r);
         },
-        methods: {},
+        methods: {
+            'create_project_dialog': function() {
+                modal({
+                    title: 'Create a New Notebook Project',
+                    body: `<form id="new-project-form" class="modal-form">
+                               <div class="form-group row">
+                                   <label for="name" class="col-sm-3">Project Name*</label> 
+                                   <input name="name" type="text" class="form-control col-sm-9" />
+                               </div>
+                               <div class="form-group row">
+                                   <label for="image" class="col-sm-3">Environment*</label> 
+                                   <select name="image" class="form-control col-sm-9">
+                                       <option value="genepattern/notebook-python37">Python 3.7</option>
+                                       <option value="genepattern/notebook-r36">R 3.6</option>
+                                   </select>
+                               </div>
+                               <h5 class="expand-header" data-toggle="collapse" data-target="#new-project-optional"><i class="fa fa-plus" /> Optional Information</h5>
+                               <div id="new-project-optional" class="collapse">
+                                   <div class="form-group row">
+                                       <label for="description" class="col-sm-3">Description</label> 
+                                       <input name="description" type="text" class="form-control col-sm-9" />
+                                   </div>
+                                   <div class="form-group row">
+                                       <label for="authors" class="col-sm-3">Authors</label> 
+                                       <input name="authors" type="text" class="form-control col-sm-9" />
+                                   </div>
+                                   <div class="form-group row">
+                                       <label for="quality" class="col-sm-3">Quality</label> 
+                                       <select name="quality" class="form-control col-sm-9">
+                                           <option value="development">Development</option>
+                                           <option value="beta">Beta</option>
+                                           <option value="release">Release</option>
+                                       </select>
+                                   </div>
+                               </div>
+                               <input name="path" type="hidden" value="/" />
+                               <input name="tags" type="hidden" value="[]" />
+                           </form>`,
+                    buttons: {
+                        'Cancel': {},
+                        'Create': {
+                            'class': 'btn btn-primary',
+                            'click': function() {
+                                var data = {};
+                                $("#new-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
+                                create_project(data).then(() => {
+                                    // TODO: Open JupyterHub to the new project
+                                    location.reload();
+                                })
+
+                            }
+                        }
+                    }
+                });
+
+                $('.expand-header').click(() => {
+                    const icon = $('.expand-header > i');
+                    if (icon.hasClass('fa-plus')) icon.removeClass('fa-plus').addClass('fa-minus');
+                    else icon.removeClass('fa-minus').addClass('fa-plus');
+                })
+            }
+        },
         watch: {
             'search': function(event) {
                 let search = this.search.trim().toLowerCase();
@@ -1118,25 +1241,46 @@ Vue.component('notebook-carousel', {
                </div>`
 });
 
-Vue.component('workspace-notebook', {
+Vue.component('notebook-project', {
     delimiters: ['[[', ']]'],
     props: {
-        'nb': {
+        'project': {
             type: Object,
             required: true
         }
     },
     methods: {
-        'open': function() {
+        'handle_click': function(event) {
+            if (event.target.classList.contains('delete-button')) this.confirm_delete();
+            else this.launch_project();
+        },
+        'confirm_delete': function() {
+            modal({
+                title: 'Confirm Deletion',
+                body: `Are you sure that you want to delete ${this.project.name}?`,
+                buttons: {'Cancel': {}, 'DELETE': {
+                    'class': 'btn btn-danger',
+                        'click': () => {
+                            delete_project(this.project.url).then(() => {
+                                this.$el.remove();
+                                $('.modal').modal('hide');
+                            });
+                        }
+                }}
+            });
+        },
+        'launch_project': function() {
+            console.log('LAUNCH');
             window.open(`${PUBLIC_NOTEBOOK_SEVER}user-redirect/notebooks/${this.file.name}`);
         }
     },
     computed: {},
-    template: `<div class="card" v-on:click="open" > 
-                    <img class="card-img-top" src="/static/images/banner.jpg" alt="File Icon" /> 
+    template: `<div class="card nb-card" @click="handle_click"> 
+                    <i class="fa fa-trash-alt delete-button" title="Delete Project" />
+                    <img class="card-img-top" src="/static/images/banner2.jpg" alt="Project Icon" /> 
                     <div class="card-body"> 
-                        <h8 class="card-title">[[ nb.name ]]</h8> 
-                        <p class="card-text">[[ nb.type ]]</p>                     
+                        <h8 class="card-title">[[ project.name ]]</h8> 
+                        <p class="card-text">[[ project.description ]]</p>                     
                     </div> 
                 </div>`
 });

@@ -323,7 +323,7 @@ p.nav-link {
 
 @media (min-width: 576px) {
     .modal-dialog { 
-        max-width:60%; 
+        /*max-width:60%; */
     }
 }
 
@@ -1116,4 +1116,34 @@ div.no-negative-header {
 
 .page-header {
     position: relative
+}
+
+div.nb-card-new {
+    border: lightgray 2px dashed;
+    box-shadow: none;
+}
+
+.delete-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+}
+
+.delete-button:hover {
+    opacity: 0.7;
+}
+
+.card-icon {
+    display: block;
+    opacity: 20%;
+    line-height: 100%;
+    font-size: 70px;
+    text-align: center;
+    padding-top: 15px;
+}
+
+.modal-form input[type=text],
+.modal-form select {
+    max-width: 100%;
 }
