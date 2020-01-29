@@ -672,10 +672,12 @@ export function workspace(selector) {
                             'click': function() {
                                 var data = {};
                                 $("#new-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
+                                show_spinner();
                                 create_project(data).then(() => {
+                                    hide_spinner();
                                     close_modal();
-                                    const encoded_user =jupyterhub_encode(workspace_app.user);
-                                    const encoded_server =jupyterhub_encode(data.name);
+                                    const encoded_user = jupyterhub_encode(workspace_app.user);
+                                    const encoded_server = jupyterhub_encode(data.name);
                                     setTimeout(() => window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${encoded_server}/tree`), 1000);
                                     GenePattern.notebook_projects(true).then(r => workspace_app.projects = r);
                                 })
