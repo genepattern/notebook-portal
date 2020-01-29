@@ -18,7 +18,9 @@ let _jupyterhub_token = null;
  *
  * @returns {Promise<any>}
  */
-export function notebook_projects() {
+export function notebook_projects(force_update=false) {
+    if (force_update) _notebook_projects = null;
+
     if (_notebook_projects !== null)
         return new Promise(function(resolve) {
             resolve(_notebook_projects);
@@ -607,6 +609,7 @@ export function workspace(selector) {
         el: selector,
         delimiters: ['[[', ']]'],
         data: {
+            user: null,
             projects: [],
             search: ''
         },
@@ -614,6 +617,7 @@ export function workspace(selector) {
         created() {
             if (window.is_authenticated) GenePattern.login_to_jupyterhub({suppress_errors: true});
             GenePattern.notebook_projects().then(r => this.projects = r);
+            this.user = get_login_data().username;
         },
         methods: {
             'create_project_dialog': function() {
@@ -661,8 +665,9 @@ export function workspace(selector) {
                                 var data = {};
                                 $("#new-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
                                 create_project(data).then(() => {
-                                    // TODO: Open JupyterHub to the new project
-                                    location.reload();
+                                    close_modal();
+                                    setTimeout(() => window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${workspace_app.user}/${data.name}/tree`), 1000);
+                                    GenePattern.notebook_projects(true).then(r => workspace_app.projects = r);
                                 })
 
                             }
@@ -1263,15 +1268,15 @@ Vue.component('notebook-project', {
                         'click': () => {
                             delete_project(this.project.url).then(() => {
                                 this.$el.remove();
-                                $('.modal').modal('hide');
+                                close_modal()
                             });
                         }
                 }}
             });
         },
         'launch_project': function() {
-            console.log('LAUNCH');
-            window.open(`${PUBLIC_NOTEBOOK_SEVER}user-redirect/notebooks/${this.file.name}`);
+            const credentials = get_login_data();
+            window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${credentials.username}/${this.project.name}/`);
         }
     },
     computed: {},

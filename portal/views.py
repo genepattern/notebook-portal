@@ -1,6 +1,9 @@
+import json
+
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets, permissions
 
+from portal.hub import spawn_server, delete_server
 from portal.models import Project, ProjectAccess, PublishedProject, Tag
 from portal.serializers import UserSerializer, GroupSerializer, ProjectSerializer, ProjectAccessSerializer, PublishedProjectSerializer, TagSerializer
 
@@ -39,6 +42,15 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def create(self, request, *args, **kwargs):
+        spawn_server(user=request.user, server_name=request.data['name'], image=request.data['image'])
+        return super(ProjectViewSet, self).create(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        delete_server(user=request.user, server_name=instance.name)
+        return super(ProjectViewSet, self).destroy(request, *args, **kwargs)
 
 
 class ProjectAccessViewSet(viewsets.ModelViewSet):
