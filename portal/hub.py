@@ -25,7 +25,7 @@ def create_user(user):
     response = requests.post(f'{settings.BASE_HUB_URL}/hub/api/users/{user}',
                              headers={'Authorization': f'token {settings.HUB_TOKEN}'})
     if response.status_code == 201 or response.status_code == 200: return True
-    else: return False
+    else: raise RuntimeError(response.text)
 
 
 def spawn_server(user, server_name, image):
@@ -37,7 +37,7 @@ def spawn_server(user, server_name, image):
 
     if response.status_code == 201 or response.status_code == 200: return True
     elif response.status_code == 400 and 'already running' in response.text: return True
-    else: return False
+    else: raise RuntimeError(response.text)
 
 
 def delete_server(user, server_name):
@@ -48,5 +48,4 @@ def delete_server(user, server_name):
                              data=json.dumps({"remove": True}))
 
     if response.status_code == 204 or response.status_code == 200: return True
-    elif response.status_code == 400 and 'already running' in response.text: return True
-    else: return False
+    else: raise RuntimeError(response.text)
