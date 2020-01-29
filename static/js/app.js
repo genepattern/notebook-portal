@@ -12,6 +12,14 @@ let _genepattern_modules = null;
 let _genepattern_token = null;
 let _jupyterhub_token = null;
 
+export function jupyterhub_encode(raw_name) {
+    return encodeURIComponent(raw_name)
+        .replace(/\./g, '%2e')
+        .replace(/-/g, '%2d')
+        .replace(/~/g, '%7e')
+        .replace(/_/g, '%5f')
+        .replace(/%/g, '-')
+}
 
 /**
  * Returns a list of the user's notebook projects
@@ -666,7 +674,9 @@ export function workspace(selector) {
                                 $("#new-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
                                 create_project(data).then(() => {
                                     close_modal();
-                                    setTimeout(() => window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${workspace_app.user}/${data.name}/tree`), 1000);
+                                    const encoded_user =jupyterhub_encode(workspace_app.user);
+                                    const encoded_server =jupyterhub_encode(data.name);
+                                    setTimeout(() => window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${encoded_server}/tree`), 1000);
                                     GenePattern.notebook_projects(true).then(r => workspace_app.projects = r);
                                 })
 
@@ -1276,7 +1286,9 @@ Vue.component('notebook-project', {
         },
         'launch_project': function() {
             const credentials = get_login_data();
-            window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${credentials.username}/${this.project.name}/`);
+            const encoded_user = jupyterhub_encode(credentials.username);
+            const encoded_server = jupyterhub_encode(this.project.name);
+            window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${encoded_server}/`);
         }
     },
     computed: {},
