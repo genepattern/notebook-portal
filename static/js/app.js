@@ -70,6 +70,9 @@ export function create_project(data) {
     // TODO: Fix handling of tags
     data.tags = [];
 
+    // Set dir_name
+    data.dir_name = jupyterhub_encode(data.name);
+
     return fetch('/rest/projects/', {
             'method': 'POST',
             'headers': {
@@ -78,7 +81,53 @@ export function create_project(data) {
               'X-CSRFToken': get_csrf()
             },
             'body': JSON.stringify(data) })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok)
+                throw Error(response.statusText);
+            else return response.json()
+        })
+        .then(function(response) {
+            return response;
+        });
+}
+
+export function launch_project(url) {
+    return fetch(`${url}launch/`, {
+            'method': 'POST',
+            'headers': {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken': get_csrf()
+            }})
+        .then(response => {
+            if (!response.ok)
+                throw Error(response.statusText);
+            else return response;
+        })
+}
+
+export function edit_project(project, data) {
+    Object.keys(data).forEach(key => {
+        const value = data[key];
+        project[key] = value;
+    });
+
+    // TODO: Fix handling of tags
+    project.tags = [];
+
+    return fetch(`${project.url}`, {
+            'method': 'PUT',
+            'headers': {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken': get_csrf()
+            },
+            'body': JSON.stringify(project) })
+        .then(response => {
+            if (!response.ok)
+                throw Error(response.statusText);
+            else return response.json()
+        })
         .then(function(response) {
             return response;
         });
@@ -631,7 +680,7 @@ export function workspace(selector) {
             'create_project_dialog': function() {
                 modal({
                     title: 'Create a New Notebook Project',
-                    body: `<form id="new-project-form" class="modal-form">
+                    body: `<form class="modal-form new-project-form">
                                <div class="form-group row">
                                    <label for="name" class="col-sm-3">Project Name*</label> 
                                    <input name="name" type="text" class="form-control col-sm-9" />
@@ -643,8 +692,8 @@ export function workspace(selector) {
                                        <option value="genepattern/notebook-r36">R 3.6</option>
                                    </select>
                                </div>
-                               <h5 class="expand-header" data-toggle="collapse" data-target="#new-project-optional"><i class="fa fa-plus" /> Optional Information</h5>
-                               <div id="new-project-optional" class="collapse">
+                               <h5 class="expand-header" data-toggle="collapse" data-target=".new-project-optional"><i class="fa fa-plus" /> Optional Information</h5>
+                               <div class="collapse new-project-optional">
                                    <div class="form-group row">
                                        <label for="description" class="col-sm-3">Description</label> 
                                        <input name="description" type="text" class="form-control col-sm-9" />
@@ -671,7 +720,7 @@ export function workspace(selector) {
                             'class': 'btn btn-primary',
                             'click': function() {
                                 var data = {};
-                                $("#new-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
+                                $(".new-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
                                 show_spinner();
                                 create_project(data).then(() => {
                                     hide_spinner();
@@ -680,6 +729,12 @@ export function workspace(selector) {
                                     const encoded_server = jupyterhub_encode(data.name);
                                     setTimeout(() => window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${encoded_server}/tree`), 1000);
                                     GenePattern.notebook_projects(true).then(r => workspace_app.projects = r);
+                                }).catch(error => {
+                                    close_modal();
+                                    hide_spinner();
+
+                                    // Handle errors
+                                    message(error, 'danger');
                                 })
 
                             }
@@ -1268,8 +1323,82 @@ Vue.component('notebook-project', {
     },
     methods: {
         'handle_click': function(event) {
-            if (event.target.classList.contains('delete-button')) this.confirm_delete();
+            if (event.target.classList.contains('delete-project')) this.confirm_delete();
+            else if (event.target.classList.contains('edit-project')) this.edit_dialog();
+            else if (event.target.classList.contains('share-project')) this.share_dialog();
+            else if (event.target.classList.contains('publish-project')) this.publish_dialog();
+            else if (event.target.classList.contains('dropdown-toggle') || event.target.classList.contains('fa-cog')) return false;
             else this.launch_project();
+        },
+        'edit_dialog': function() {
+            const app = this.$parent;
+            const project = this.project;
+            modal({
+                title: `Edit ${this.project.name}`,
+                body: `<form class="modal-form edit-project-form">
+                           <div class="form-group row">
+                               <label for="name" class="col-sm-3">Project Name*</label> 
+                               <input name="name" type="text" class="form-control col-sm-9" value="${this.project.name}"/>
+                           </div>
+                           <div class="form-group row">
+                               <label for="image" class="col-sm-3">Environment*</label> 
+                               <select name="image" class="form-control col-sm-9">
+                                   <option value="genepattern/notebook-python37">Python 3.7</option>
+                                   <option value="genepattern/notebook-r36">R 3.6</option>
+                               </select>
+                           </div>
+                           <div class="form-group row">
+                               <label for="description" class="col-sm-3">Description</label> 
+                               <input name="description" type="text" class="form-control col-sm-9" value="${this.project.description}"/>
+                           </div>
+                           <div class="form-group row">
+                               <label for="authors" class="col-sm-3">Authors</label> 
+                               <input name="authors" type="text" class="form-control col-sm-9" value="${this.project.authors}" />
+                           </div>
+                           <div class="form-group row">
+                               <label for="quality" class="col-sm-3">Quality</label> 
+                               <select name="quality" class="form-control col-sm-9">
+                                   <option value="development">Development</option>
+                                   <option value="beta">Beta</option>
+                                   <option value="release">Release</option>
+                               </select>
+                           </div>
+                           <input name="path" type="hidden" value="${this.project.path}" />
+                           <input name="tags" type="hidden" value="${this.project.tags}" />
+                       </form>`,
+                buttons: {
+                    'Cancel': {},
+                    'Edit': {
+                        'class': 'btn btn-primary',
+                        'click': function() {
+                            const data = {};
+                            $(".edit-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
+                            show_spinner();
+                            edit_project(project, data).then(() => {
+                                hide_spinner();
+                                close_modal();
+                                GenePattern.notebook_projects(true).then(r => app.projects = r);
+                            }).catch(error => {
+                                close_modal();
+                                hide_spinner();
+
+                                // Handle errors
+                                message(error, 'danger');
+                            })
+
+                        }
+                    }
+                }
+            });
+
+            $('.edit-project-form select[name=image]').val(this.project.image);
+            $('.edit-project-form select[name=quality]').val(this.project.quality);
+        },
+        'share_dialog': function() {
+            // TODO: Implement
+        },
+        'publish_dialog': function() {
+            // TODO: Implement
         },
         'confirm_delete': function() {
             modal({
@@ -1289,13 +1418,22 @@ Vue.component('notebook-project', {
         'launch_project': function() {
             const credentials = get_login_data();
             const encoded_user = jupyterhub_encode(credentials.username);
-            const encoded_server = jupyterhub_encode(this.project.name);
-            window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${encoded_server}/`);
+            launch_project(this.project.url).then(() => window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${this.project.dir_name}/`));
         }
     },
     computed: {},
     template: `<div class="card nb-card" @click="handle_click"> 
-                    <i class="fa fa-trash-alt delete-button" title="Delete Project" />
+                    <div class="dropdown project-gear-menu">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-cog" title="Options" />
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item edit-project" href="#">Edit</a>
+                            <a class="dropdown-item publish-project" href="#">Publish</a>
+                            <a class="dropdown-item share-project" href="#">Share</a>
+                            <a class="dropdown-item delete-project" href="#">Delete</a>
+                        </div>
+                    </div>
                     <img class="card-img-top" src="/static/images/banner2.jpg" alt="Project Icon" /> 
                     <div class="card-body"> 
                         <h8 class="card-title">[[ project.name ]]</h8> 

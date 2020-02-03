@@ -1,9 +1,11 @@
 import json
 
 from django.contrib.auth.models import User, Group
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
-from portal.hub import spawn_server, delete_server
+from portal.hub import spawn_server, delete_server, stop_server, encode_name
 from portal.models import Project, ProjectAccess, PublishedProject, Tag
 from portal.serializers import UserSerializer, GroupSerializer, ProjectSerializer, ProjectAccessSerializer, PublishedProjectSerializer, TagSerializer
 
@@ -44,13 +46,25 @@ class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def create(self, request, *args, **kwargs):
-        spawn_server(user=request.user, server_name=request.data['name'], image=request.data['image'])
-        return super(ProjectViewSet, self).create(request, *args, **kwargs)
+        dir_name = encode_name(request.data['name'])  # Set the name of the directory to mount
+        spawn_server(user=request.user, server_name=dir_name, image=request.data['image'])
+        return super(ProjectViewSet, self).create(request, *args, dir_name=dir_name, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        stop_server(user=request.user, server_name=instance.dir_name)
+        return super(ProjectViewSet, self).update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        delete_server(user=request.user, server_name=instance.name)
+        delete_server(user=request.user, server_name=instance.dir_name)
         return super(ProjectViewSet, self).destroy(request, *args, **kwargs)
+
+    @action(detail=True, methods=['post'])
+    def launch(self, request, pk=None):
+        instance = self.get_object()
+        spawn_server(user=request.user, server_name=instance.dir_name, image=instance.image)
+        return Response(data=None, status=status.HTTP_204_NO_CONTENT)
 
 
 class ProjectAccessViewSet(viewsets.ModelViewSet):

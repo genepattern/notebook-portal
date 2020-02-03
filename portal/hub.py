@@ -30,7 +30,7 @@ def create_user(user):
 
 def spawn_server(user, server_name, image):
     user = encode_name(str(user))
-    server_name = encode_name(str(server_name))
+    # server_name = encode_name(str(server_name))
     response = requests.post(f'{settings.BASE_HUB_URL}/hub/api/users/{user}/servers/{server_name}',
                              headers={'Authorization': f'token {settings.HUB_TOKEN}'},
                              data=json.dumps({'image': image}))
@@ -40,12 +40,20 @@ def spawn_server(user, server_name, image):
     else: raise RuntimeError(response.text)
 
 
-def delete_server(user, server_name):
+def stop_server(user, server_name, remove_server=False):
     user = encode_name(str(user))
-    server_name = encode_name(str(server_name))
+    # server_name = encode_name(str(server_name))
     response = requests.delete(f'{settings.BASE_HUB_URL}/hub/api/users/{user}/servers/{server_name}',
                              headers={'Authorization': f'token {settings.HUB_TOKEN}'},
-                             data=json.dumps({"remove": True}))
+                             data=json.dumps({"remove": remove_server}))
 
     if response.status_code == 204 or response.status_code == 200: return True
     else: raise RuntimeError(response.text)
+
+
+def delete_server(user, server_name):
+    try:
+        stop_server(user, server_name, remove_server=True)
+    except RuntimeError as response:
+        if '404' in repr(response): pass
+        else: raise response

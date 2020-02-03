@@ -27,7 +27,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('url', 'name', 'image', 'path', 'default', 'tags', 'description', 'authors', 'quality')
+        fields = ('url', 'name', 'image', 'path', 'dir_name', 'default', 'tags', 'description', 'authors', 'quality')
 
 
 class ProjectAccessSerializer(serializers.HyperlinkedModelSerializer):

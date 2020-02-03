@@ -1123,15 +1123,26 @@ div.nb-card-new {
     box-shadow: none;
 }
 
-.delete-button {
+.project-gear-menu {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 0;
+    right: 0;
+    color: white;
+    border: transparent solid 1px;
+    border-radius: 3px;
+}
+
+.project-gear-menu > button {
     color: white;
 }
 
-.delete-button:hover {
-    opacity: 0.7;
+.project-gear-menu > button:hover {
+    color: white;
+}
+
+.project-gear-menu:hover {
+    border: rgba(255, 255, 255, 0.7) solid 1px;
+    z-index: 2;
 }
 
 .card-icon {

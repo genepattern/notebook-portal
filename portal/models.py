@@ -15,6 +15,7 @@ class Project(models.Model):
     image = models.CharField(max_length=64)
 
     path = models.CharField(max_length=256)
+    dir_name = models.CharField(max_length=256)
     default = models.CharField(max_length=128, blank=True)
     tags = models.ManyToManyField(Tag, related_name='projects', blank=True)
 
