@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from portal.hub import spawn_server, delete_server, stop_server, encode_name
 from portal.models import Project, ProjectAccess, PublishedProject, Tag
 from portal.serializers import UserSerializer, GroupSerializer, ProjectSerializer, ProjectAccessSerializer, PublishedProjectSerializer, TagSerializer
+from portal.utils import create_tags
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -47,11 +48,13 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         dir_name = encode_name(request.data['name'])  # Set the name of the directory to mount
+        create_tags(request.data['tags'])             # Lazily create tags for the notebook
         spawn_server(user=request.user, server_name=dir_name, image=request.data['image'])
         return super(ProjectViewSet, self).create(request, *args, dir_name=dir_name, **kwargs)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
+        create_tags(request.data['tags'])  # Lazily create tags for the notebook
         stop_server(user=request.user, server_name=instance.dir_name)
         return super(ProjectViewSet, self).update(request, *args, **kwargs)
 

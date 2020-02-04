@@ -1,5 +1,7 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
+from portal.models import Tag
+
 
 class IsOwnerOrReadOnly(BasePermission):
     """
@@ -12,3 +14,13 @@ class IsOwnerOrReadOnly(BasePermission):
             request.user and
             request.user.is_authenticated
         )
+
+
+def create_tags(tag_list):
+    if tag_list is None or len(tag_list) == 0: return;
+    for label in tag_list:
+        label = label.lower()
+        try:
+            Tag.objects.get(label=label)
+        except Tag.DoesNotExist:
+            Tag(label=label, protected=False, pinned=False).save()

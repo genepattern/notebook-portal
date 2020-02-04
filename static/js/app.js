@@ -67,8 +67,8 @@ export function delete_project(url) {
  * @param data
  */
 export function create_project(data) {
-    // TODO: Fix handling of tags
-    data.tags = [];
+    // Transform tags to an array
+    data.tags = data.tags.toLowerCase().split(',');
 
     // Set dir_name
     data.dir_name = jupyterhub_encode(data.name);
@@ -107,13 +107,14 @@ export function launch_project(url) {
 }
 
 export function edit_project(project, data) {
+    // Transform tags to an array
+    data.tags = data.tags.toLowerCase().split(',');
+
+    // Merge edits into original object
     Object.keys(data).forEach(key => {
         const value = data[key];
         project[key] = value;
     });
-
-    // TODO: Fix handling of tags
-    project.tags = [];
 
     return fetch(`${project.url}`, {
             'method': 'PUT',
@@ -710,9 +711,14 @@ export function workspace(selector) {
                                            <option value="release">Release</option>
                                        </select>
                                    </div>
+                                   <div class="form-group row">
+                                       <label for="tags" class="col-sm-3">Tags</label> 
+                                       <div class="col-sm-9" style="padding: 0;">
+                                           <input name="tags" type="text" class="form-control" />
+                                       </div>
+                                   </div>
                                </div>
                                <input name="path" type="hidden" value="/" />
-                               <input name="tags" type="hidden" value="[]" />
                            </form>`,
                     buttons: {
                         'Cancel': {},
@@ -742,6 +748,13 @@ export function workspace(selector) {
                     }
                 });
 
+                // Init tag-it
+                $("input[name=tags]").tagit({
+                    singleField: true,
+                    caseSensitive: false
+                });
+
+                // Init expand/collapse extra info header
                 $('.expand-header').click(() => {
                     const icon = $('.expand-header > i');
                     if (icon.hasClass('fa-plus')) icon.removeClass('fa-plus').addClass('fa-minus');
@@ -752,29 +765,15 @@ export function workspace(selector) {
         watch: {
             'search': function(event) {
                 let search = this.search.trim().toLowerCase();
+                // Display the matching projects
+                const cards = document.querySelector('.workspace').querySelectorAll('.nb-card');
+                cards.forEach(function(card) {
+                    // Matching notebook
+                    if (card.textContent.toLowerCase().includes(search)) card.classList.remove('d-none');
 
-                // // Set active tab
-                // const tabs = document.querySelector('.tags').querySelectorAll('.tag-tab');
-                // tabs.forEach(function(tab) {
-                //     // Matching tab
-                //     if (tab.textContent.toLowerCase() === search) tab.classList.add('active');
-                //
-                //     // Not matching tab
-                //     else tab.classList.remove('active');
-                // });
-                //
-                // // special case for "all notebooks"
-                // if (search === "all notebooks") search = "";
-                //
-                // // Display the matching notebooks
-                // const cards = document.querySelector(selector).querySelector('.notebooks').querySelectorAll('.nb-card');
-                // cards.forEach(function(card) {
-                //     // Matching notebook
-                //     if (card.textContent.toLowerCase().includes(search)) card.classList.remove('d-none');
-                //
-                //     // Not matching notebook
-                //     else card.classList.add('d-none');
-                // });
+                    // Not matching notebook
+                    else card.classList.add('d-none');
+                });
             }
         }
     });
@@ -1363,8 +1362,13 @@ Vue.component('notebook-project', {
                                    <option value="release">Release</option>
                                </select>
                            </div>
+                           <div class="form-group row">
+                               <label for="tags" class="col-sm-3">Tags</label> 
+                               <div class="col-sm-9" style="padding: 0;">
+                                   <input name="tags" type="text" class="form-control" value="${this.project.tags}" />
+                               </div>
+                           </div>
                            <input name="path" type="hidden" value="${this.project.path}" />
-                           <input name="tags" type="hidden" value="${this.project.tags}" />
                        </form>`,
                 buttons: {
                     'Cancel': {},
@@ -1391,6 +1395,13 @@ Vue.component('notebook-project', {
                 }
             });
 
+            // Init tag-it
+            $("input[name=tags]").tagit({
+                singleField: true,
+                caseSensitive: false
+            });
+
+            // Init selects
             $('.edit-project-form select[name=image]').val(this.project.image);
             $('.edit-project-form select[name=quality]').val(this.project.quality);
         },
@@ -1418,7 +1429,19 @@ Vue.component('notebook-project', {
         'launch_project': function() {
             const credentials = get_login_data();
             const encoded_user = jupyterhub_encode(credentials.username);
-            launch_project(this.project.url).then(() => window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${this.project.dir_name}/`));
+            modal({
+                'title': `Launching ${this.project.name}`,
+                'body': 'Please wait...',
+                'buttons': {}
+            });
+            show_spinner();
+            launch_project(this.project.url).then(() => {
+                window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${this.project.dir_name}/`);
+                setTimeout(() => {
+                    hide_spinner();
+                    close_modal();
+                }, 500);
+            });
         }
     },
     computed: {},
@@ -1437,7 +1460,8 @@ Vue.component('notebook-project', {
                     <img class="card-img-top" src="/static/images/banner2.jpg" alt="Project Icon" /> 
                     <div class="card-body"> 
                         <h8 class="card-title">[[ project.name ]]</h8> 
-                        <p class="card-text">[[ project.description ]]</p>                     
+                        <p class="card-text">[[ project.description ]]</p>  
+                        <div class="card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in project.tags">[[ tag ]] </span></div>                   
                     </div> 
                 </div>`
 });

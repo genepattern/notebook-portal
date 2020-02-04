@@ -6,6 +6,10 @@
 
 {% block extra_css %}
     <style type="text/css">
+        .main-container {
+            min-height: calc(100vh - 300px);
+            min-width: 90%;
+        }
         #workspace {
             width: 100%;
         }
@@ -17,6 +21,11 @@
         cursor: pointer;
     }
     </style>
+{% endblock %}
+
+{% block extra_head %}
+    <!-- Include Tag-It -->
+    <script src="{% static "js/tag-it.js" %}"></script>
 {% endblock %}
 
 {% block body_class %}no-cover{% endblock %}
