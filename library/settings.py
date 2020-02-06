@@ -296,7 +296,8 @@ if DJANGO_VERSION < (1, 10):
 # at the moment we are using custom forks of them.
 PACKAGE_NAME_FILEBROWSER = "filebrowser_safe"
 PACKAGE_NAME_GRAPPELLI = "grappelli_safe"
-RICHTEXT_FILTER_LEVEL = 2
+RICHTEXT_FILTER_LEVEL = 3
+
 
 
 #########################

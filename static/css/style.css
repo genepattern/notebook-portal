@@ -130,7 +130,6 @@ a:hover {
 iframe {
     border: none;
     padding: 20px;
-    width: 100%;
 }
 /* p img {
     width: 100% !important;
@@ -259,13 +258,9 @@ header .navbar-dark .navbar-nav .nav-link {
     color: white;
     text-shadow: 1px 1px 3px black;
 }
-footer {
+/* footer {
     text-shadow: 0.5px 0.5px 10px black;
-}
-header.scrolled .navbar-dark .navbar-nav .nav-link  {
-    /* color: black; */
-}
-
+} */
 
 footer a:hover {
     color:white;
@@ -513,7 +508,7 @@ header .nav-link {
 }
 .main-container {    
     background: white;
-    padding: 30px;
+    padding: 50px;
     border-radius: 25px;
     margin-bottom: 100px;
     box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.28);
@@ -706,7 +701,7 @@ i.fa.fa-angle-left, i.fa.fa-angle-right {
     text-shadow: 3px 3px 10px black;
 }
 .index-logo {
-    height: 1.2em;
+    height: 1.4em;
     color:white;
 }
 #slogan-center a:hover {
@@ -1091,6 +1086,7 @@ div.nb-card {
         padding-right: 3px;
         padding-left: 3px;
     }
+
 }
 
 @media (max-width: 970px) {
