@@ -1086,9 +1086,7 @@ div.nb-card {
         padding-right: 3px;
         padding-left: 3px;
     }
-    iframe {
-        width: 100%;
-    }
+
 }
 
 @media (max-width: 970px) {
