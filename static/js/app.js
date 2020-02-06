@@ -68,7 +68,8 @@ export function delete_project(url) {
  */
 export function create_project(data) {
     // Transform tags to an array
-    data.tags = data.tags.toLowerCase().split(',');
+    if (data.tags.trim() === "") data.tags = [];
+    else data.tags = data.tags.trim().toLowerCase().split(',');
 
     // Set dir_name
     data.dir_name = jupyterhub_encode(data.name);
@@ -108,7 +109,8 @@ export function launch_project(url) {
 
 export function edit_project(project, data) {
     // Transform tags to an array
-    data.tags = data.tags.toLowerCase().split(',');
+    if (data.tags.trim() === "") data.tags = [];
+    else data.tags = data.tags.trim().toLowerCase().split(',');
 
     // Merge edits into original object
     Object.keys(data).forEach(key => {
@@ -1409,7 +1411,77 @@ Vue.component('notebook-project', {
             // TODO: Implement
         },
         'publish_dialog': function() {
-            // TODO: Implement
+            const app = this.$parent;
+            const project = this.project;
+            modal({
+                title: `Publish "${this.project.name}" to Notebook Library`,
+                body: `<form class="modal-form publish-project-form">
+                           <div class="alert alert-info">
+                               This will make a copy of the project available to anyone. A published notebook project does 
+                               not update automatically when you save it again in the future. To update the published copy 
+                               you will have to click publish again after making any changes and saving.</div>
+                           <div class="form-group row">
+                               <label for="name" class="col-sm-3">Project Name*</label> 
+                               <input name="name" type="text" class="form-control col-sm-9" value="${this.project.name}"/>
+                           </div>
+                           <input name="image" type="hidden" value="${this.project.image}" />
+                           <div class="form-group row">
+                               <label for="description" class="col-sm-3">Description</label> 
+                               <input name="description" type="text" class="form-control col-sm-9" value="${this.project.description}"/>
+                           </div>
+                           <div class="form-group row">
+                               <label for="authors" class="col-sm-3">Authors</label> 
+                               <input name="authors" type="text" class="form-control col-sm-9" value="${this.project.authors}" />
+                           </div>
+                           <div class="form-group row">
+                               <label for="quality" class="col-sm-3">Quality</label> 
+                               <select name="quality" class="form-control col-sm-9">
+                                   <option value="development">Development</option>
+                                   <option value="beta">Beta</option>
+                                   <option value="release">Release</option>
+                               </select>
+                           </div>
+                           <div class="form-group row">
+                               <label for="tags" class="col-sm-3">Tags</label> 
+                               <div class="col-sm-9" style="padding: 0;">
+                                   <input name="tags" type="text" class="form-control" value="${this.project.tags}" />
+                               </div>
+                           </div>
+                           <input name="path" type="hidden" value="${this.project.path}" />
+                       </form>`,
+                buttons: {
+                    'Cancel': {},
+                    'Publish': {
+                        'class': 'btn btn-primary',
+                        'click': function() {
+                            const data = {};
+                            $(".publish-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
+                            show_spinner();
+                            publish_project(data).then(() => {
+                                hide_spinner();
+                                close_modal();
+                                GenePattern.notebook_projects(true).then(r => app.projects = r);
+                            }).catch(error => {
+                                close_modal();
+                                hide_spinner();
+
+                                // Handle errors
+                                message(error, 'danger');
+                            })
+
+                        }
+                    }
+                }
+            });
+
+            // Init tag-it
+            $("input[name=tags]").tagit({
+                singleField: true,
+                caseSensitive: false
+            });
+
+            // Init selects
+            $('.publish-project-form select[name=quality]').val(this.project.quality);
         },
         'confirm_delete': function() {
             modal({
