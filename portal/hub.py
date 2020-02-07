@@ -57,3 +57,12 @@ def delete_server(user, server_name):
     except RuntimeError as response:
         if '404' in repr(response): pass
         else: raise response
+
+
+def zip_project(id, user, server_name):
+    user = urllib.parse.quote(encode_name(str(user)))
+    server = urllib.parse.quote(server_name)
+    response = requests.post(f'{settings.BASE_HUB_URL}/services/library/?id={id}&user={user}&server={server}')
+
+    if response.status_code == 201 or response.status_code == 200: return True
+    else: raise RuntimeError(response.text)

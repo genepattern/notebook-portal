@@ -40,10 +40,10 @@ class ProjectAccessSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class PublishedProjectSerializer(serializers.HyperlinkedModelSerializer):
-    tags = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=Tag.objects.all())
-    owners = serializers.SlugRelatedField(many=True, read_only=False, queryset=User.objects.all(), slug_field='username', allow_null=True)
-    groups = serializers.SlugRelatedField(many=True, read_only=False, queryset=Group.objects.all(), slug_field='name', allow_null=True)
+    # tags = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=Tag.objects.all())
+    # owners = serializers.SlugRelatedField(many=True, read_only=False, queryset=User.objects.all(), slug_field='username', allow_null=True)
+    # groups = serializers.SlugRelatedField(many=True, read_only=False, queryset=Group.objects.all(), slug_field='name', allow_null=True)
 
     class Meta:
         model = PublishedProject
-        fields = ('url', 'name', 'image', 'path', 'default', 'description', 'authors', 'quality', 'published', 'updated', 'owners', 'groups', 'tags')
+        fields = ('url', 'name', 'image', 'source', 'path', 'default', 'description', 'authors', 'quality', 'published', 'updated')

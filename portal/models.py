@@ -41,20 +41,17 @@ class ProjectAccess(models.Model):
 class PublishedProject(models.Model):
     name = models.CharField(max_length=256)
     image = models.CharField(max_length=64)
+    source = models.OneToOneField(Project, null=True)
 
     path = models.CharField(max_length=256)
     default = models.CharField(max_length=128, blank=True)
 
-    description = models.TextField()
-    authors = models.CharField(max_length=256)
-    quality = models.CharField(max_length=32)
+    description = models.TextField(blank=True)
+    authors = models.CharField(max_length=256, blank=True)
+    quality = models.CharField(max_length=32, blank=True)
 
     published = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now=True)
     copied = models.IntegerField(default=1)
-
-    owners = models.ManyToManyField(User, related_name='published')
-    groups = models.ManyToManyField(Group, related_name='published', blank=True)
-    tags = models.ManyToManyField(Tag, related_name='published', blank=True)
 
     def __str__(self): return self.name
