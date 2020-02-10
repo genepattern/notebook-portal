@@ -159,6 +159,42 @@ export function publish_project(project, data) {
     });
 }
 
+export function update_published_project(project, data) {
+    // Update the source project
+    edit_project(project, data).catch(e => {throw Error(e)});
+
+    // Create the new published project
+    return fetch(`${project.published}`, {
+        'method': 'PUT',
+        'headers': {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRFToken': get_csrf()
+        },
+        'body': JSON.stringify(data) })
+    .then(response => {
+        if (!response.ok)
+            throw Error(response.statusText);
+        else return response.json()
+    })
+    .then(function(response) {
+        return response;
+    });
+}
+
+export function unpublish_project(url) {
+    return fetch(url, {
+        'method': 'DELETE',
+        'headers': {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRFToken': get_csrf()
+        }})
+        .then(function(response) {
+            return response;
+        });
+}
+
 /**
  * Retrieves the public notebooks from the cache, if possible, from the server if not
  *
@@ -1479,16 +1515,33 @@ Vue.component('notebook-project', {
                        </form>`,
                 buttons: {
                     'Cancel': {},
-                    'Publish': {
-                        'class': 'btn btn-primary',
+                    'Unpublish': {
+                        'class': 'btn btn-danger unpublish-button',
+                        'click': function() {
+                            close_modal();
+                            modal({
+                                title: 'Confirm Unpublication',
+                                body: `Are you sure that you want to unpublish ${project.name}?`,
+                                buttons: {'Cancel': {}, 'UNPUBLISH': {
+                                    'class': 'btn btn-danger',
+                                        'click': () => {
+                                            show_spinner();
+                                            unpublish_project(project.published).then(() => {
+                                                location.reload();
+                                            });
+                                        }
+                                }}
+                            });
+                        }
+                    },
+                    'Update': {
+                        'class': 'btn btn-primary update-button',
                         'click': function() {
                             const data = {};
                             $(".publish-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
                             show_spinner();
-                            publish_project(project, data).then(() => {
-                                hide_spinner();
-                                close_modal();
-                                GenePattern.notebook_projects(true).then(r => app.projects = r);
+                            update_published_project(project, data).then(() => {
+                                location.reload();
                             }).catch(error => {
                                 close_modal();
                                 hide_spinner();
@@ -1496,11 +1549,31 @@ Vue.component('notebook-project', {
                                 // Handle errors
                                 message(error, 'danger');
                             })
+                        }
+                    },
+                    'Publish': {
+                        'class': 'btn btn-primary publish-button',
+                        'click': function() {
+                            const data = {};
+                            $(".publish-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
+                            show_spinner();
+                            publish_project(project, data).then(() => {
+                                location.reload();
+                            }).catch(error => {
+                                close_modal();
+                                hide_spinner();
 
+                                // Handle errors
+                                message(error, 'danger');
+                            })
                         }
                     }
                 }
             });
+
+            // Hide unwanted buttons
+            if (project.published !== null) $('.publish-button').addClass('d-none');
+            else $('.unpublish-button, .update-button').addClass('d-none');
 
             // Init tag-it
             $("input[name=tags]").tagit({
