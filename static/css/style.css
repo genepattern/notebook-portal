@@ -1203,6 +1203,13 @@ div.nb-card-new {
     box-shadow: none;
 }
 
+.published-icon {
+    position: absolute;
+    top: 12px;
+    right: 60px;
+    color: white;
+}
+
 .project-gear-menu {
     position: absolute;
     top: 0;

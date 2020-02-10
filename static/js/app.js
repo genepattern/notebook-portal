@@ -136,6 +136,29 @@ export function edit_project(project, data) {
         });
 }
 
+export function publish_project(project, data) {
+    // Update the source project
+    edit_project(project, data).catch(e => {throw Error(e)});
+
+    // Create the new published project
+    return fetch('/rest/notebooks/', {
+        'method': 'POST',
+        'headers': {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRFToken': get_csrf()
+        },
+        'body': JSON.stringify(data) })
+    .then(response => {
+        if (!response.ok)
+            throw Error(response.statusText);
+        else return response.json()
+    })
+    .then(function(response) {
+        return response;
+    });
+}
+
 /**
  * Retrieves the public notebooks from the cache, if possible, from the server if not
  *
@@ -1322,6 +1345,10 @@ Vue.component('notebook-project', {
             required: true
         }
     },
+    mounted() {
+        if (this.project.published === null)
+            this.$el.querySelector('.published-icon').classList.add('d-none');
+    },
     methods: {
         'handle_click': function(event) {
             if (event.target.classList.contains('delete-project')) this.confirm_delete();
@@ -1447,6 +1474,7 @@ Vue.component('notebook-project', {
                                    <input name="tags" type="text" class="form-control" value="${this.project.tags}" />
                                </div>
                            </div>
+                           <input name="source" type="hidden" value="${this.project.url}" />
                            <input name="path" type="hidden" value="${this.project.path}" />
                        </form>`,
                 buttons: {
@@ -1457,7 +1485,7 @@ Vue.component('notebook-project', {
                             const data = {};
                             $(".publish-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
                             show_spinner();
-                            publish_project(data).then(() => {
+                            publish_project(project, data).then(() => {
                                 hide_spinner();
                                 close_modal();
                                 GenePattern.notebook_projects(true).then(r => app.projects = r);
@@ -1518,6 +1546,7 @@ Vue.component('notebook-project', {
     },
     computed: {},
     template: `<div class="card nb-card" @click="handle_click"> 
+                    <i class="fas fa-newspaper published-icon" title="Published"></i>
                     <div class="dropdown project-gear-menu">
                         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-cog" title="Options" />

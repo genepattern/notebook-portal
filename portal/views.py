@@ -5,7 +5,8 @@ from rest_framework.response import Response
 
 from portal.hub import spawn_server, delete_server, stop_server, encode_name, zip_project
 from portal.models import Project, ProjectAccess, PublishedProject, Tag
-from portal.serializers import UserSerializer, GroupSerializer, ProjectSerializer, ProjectAccessSerializer, PublishedProjectSerializer, TagSerializer
+from portal.serializers import UserSerializer, GroupSerializer, ProjectSerializer, ProjectAccessSerializer, \
+    PublishedProjectSerializer, TagSerializer, PublishedProjectGetSerializer, ProjectGetSerializer
 from portal.utils import create_tags, create_access, model_from_url
 
 
@@ -41,8 +42,11 @@ class ProjectViewSet(viewsets.ModelViewSet):
     API endpoint that allows projects to be viewed or edited.
     """
     queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET': return ProjectGetSerializer
+        else: return ProjectSerializer
 
     def list(self, request, *args, **kwargs):
         if request.user.is_staff: queryset = Project.objects.all()
@@ -92,14 +96,15 @@ class PublishedProjectViewSet(viewsets.ModelViewSet):
     API endpoint that allows published projects to be viewed or edited.
     """
     queryset = PublishedProject.objects.all()
-    serializer_class = PublishedProjectSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET': return PublishedProjectGetSerializer
+        else: return PublishedProjectSerializer
 
     def create(self, request, *args, **kwargs):
         project = model_from_url(Project, request.data['source'])
         dir_name = encode_name(project.dir_name)      # Set the name of the directory to zip
         id = f"{request.user}-{dir_name}"
-        # create_tags(request.data['tags'])             # Lazily create tags for the notebook
-        # TODO: Update original project
         zip_project(id=id, user=request.user, server_name=dir_name)
         return super(PublishedProjectViewSet, self).create(request, *args, **kwargs)

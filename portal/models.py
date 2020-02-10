@@ -35,13 +35,13 @@ class ProjectAccess(models.Model):
     class Meta:
         unique_together = ('user', 'group', 'project')
 
-    def __str__(self): return str(self.user) + ' | ' + str(self.group) + ' | ' + str(self.project)
+    def __str__(self): return str(self.user)  # + ' | ' + str(self.group) + ' | ' + str(self.project)
 
 
 class PublishedProject(models.Model):
     name = models.CharField(max_length=256)
     image = models.CharField(max_length=64)
-    source = models.OneToOneField(Project, null=True)
+    source = models.OneToOneField(Project, related_name='published', null=True)
 
     path = models.CharField(max_length=256)
     default = models.CharField(max_length=128, blank=True)
