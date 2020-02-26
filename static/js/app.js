@@ -1,5 +1,5 @@
 // Declare server constants
-export const PUBLIC_NOTEBOOK_SEVER = 'http://nbdev.genepattern.org/';
+export const PUBLIC_NOTEBOOK_SEVER = 'http://notebook.genepattern.org/';
 export const GENEPATTERN_SERVER = 'https://cloud.genepattern.org/gp/';
 
 // Declare data cache
@@ -65,11 +65,12 @@ export function delete_project(url) {
  * Creates a new notebook project with the given form data
  *
  * @param data
+ * @param copy
  */
 export function create_project(data) {
     // Transform tags to an array
-    if (data.tags.trim() === "") data.tags = [];
-    else data.tags = data.tags.trim().toLowerCase().split(',');
+    if (typeof data.tags === 'string' && data.tags.trim() === "") data.tags = [];
+    else if (typeof data.tags === 'string') data.tags = data.tags.trim().toLowerCase().split(',');
 
     // Set dir_name
     data.dir_name = jupyterhub_encode(data.name);
@@ -195,23 +196,53 @@ export function unpublish_project(url) {
         });
 }
 
+export function launch_public_project(nb) {
+    return fetch(`${nb.url}launch/`, {
+            'method': 'POST',
+            'headers': {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken': get_csrf()
+            }})
+        .then(response => {
+            if (!response.ok)
+                throw Error(response.statusText);
+            else return response;
+        })
+}
+
 /**
  * Retrieves the public notebooks from the cache, if possible, from the server if not
  *
  * @returns {Promise<any>}
  */
+// export function public_notebooks() {
+//     if (_public_notebooks !== null)
+//         return new Promise(function(resolve) {
+//             resolve(_public_notebooks['results']);
+//         });
+//
+//     else
+//         return fetch(PUBLIC_NOTEBOOK_SEVER + 'services/sharing/notebooks/')
+//             .then(response => response.json())
+//             .then(function(response) {
+//                 _public_notebooks = response;
+//                 return response['results'];
+//             });
+// }
+// TODO: Uncomment and remove above function upon release
 export function public_notebooks() {
     if (_public_notebooks !== null)
         return new Promise(function(resolve) {
-            resolve(_public_notebooks['results']);
+            resolve(_public_notebooks);
         });
 
     else
-        return fetch(PUBLIC_NOTEBOOK_SEVER + 'services/sharing/notebooks/')
+        return fetch('/rest/notebooks/')
             .then(response => response.json())
             .then(function(response) {
                 _public_notebooks = response;
-                return response['results'];
+                return response;
             });
 }
 
@@ -795,7 +826,8 @@ export function workspace(selector) {
                                     const encoded_user = jupyterhub_encode(workspace_app.user);
                                     const encoded_server = jupyterhub_encode(data.name);
                                     setTimeout(() => window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${encoded_server}/tree`), 1000);
-                                    GenePattern.notebook_projects(true).then(r => workspace_app.projects = r);
+                                    // GenePattern.notebook_projects(true).then(r => workspace_app.projects = r);
+                                    location.reload();
                                 }).catch(error => {
                                     close_modal();
                                     hide_spinner();
@@ -1242,6 +1274,10 @@ Vue.component('notebook-card', {
             type: String,
             required: false,
             default: "featured"
+        },
+        'tags': {
+            type: Array,
+            default: []
         }
     },
     methods: {
@@ -1250,17 +1286,40 @@ Vue.component('notebook-card', {
             if (this.nb.lsid)
                 window.open(`/analyses/${this.nb.lsid}/`);
 
-            // If this is a notebook
+            // This is a new-style public notebook
+            else if (this.nb.source) this.launch_project();
+
+            // If this is an old-style public notebook
             else if (this.nb.quality)
                 window.open(`${PUBLIC_NOTEBOOK_SEVER}services/sharing/notebooks/${this.nb.id}/preview/`);
+        },
+        'launch_project': function() {
+            const credentials = get_login_data();
+            const encoded_user = jupyterhub_encode(credentials.username);
+            modal({
+                'title': `Launching ${this.nb.name}`,
+                'body': 'Please wait...',
+                'buttons': {}
+            });
+            show_spinner();
+            launch_public_project(this.nb).then(() => {
+                window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${this.nb.source.dir_name}/`);
+                setTimeout(() => {
+                    hide_spinner();
+                    close_modal();
+                }, 500);
+            });
         }
     },
     computed: {
         img_src() {
             // If this is a GenePattern module
-            if (this.nb.lsid) return "/static/images/banner.jpg";
+            if (this.nb.lsid) return "/static/images/banner2.jpg";
 
-            // Else, if this is a notebook
+            // This is a new-style public notebook
+            else if (this.nb.source) return "/static/images/banner2.jpg";
+
+            // Else, this is an old style public notebook
             else return `/thumbnail/${this.nb.id}/`;
         },
         filter() {
@@ -1275,12 +1334,18 @@ Vue.component('notebook-card', {
             return show;
         }
     },
+    mounted: function() {
+        this.nb.tags.forEach(tag => {
+            if (typeof tag === 'string') this.tags.push(tag);
+            else this.tags.push(tag.label);
+        });
+    },
     template: `<div v-bind:class="{'card': true, 'nb-card': true, 'd-none':!filter}" v-on:click="preview" > 
                     <img class="card-img-top" v-bind:src="img_src" alt="Notebook Thumbnail"> 
                     <div class="card-body"> 
                         <h8 class="card-title">[[ nb.name ]]</h8> 
                         <p class="card-text">[[ nb.description ]]</p> 
-                        <div class="card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in nb.tags">[[ tag.label ]] </span></div>
+                        <div class="card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in tags">[[ tag ]] </span></div>
                     </div> 
                 </div>`
 });

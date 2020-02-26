@@ -11,3 +11,4 @@ include
 lib
 pip-selfcheck.json
 static/images/thumbnails/
+portal/migrations/*
