@@ -40,3 +40,8 @@ def model_from_url(cls, url):
     source_path = urlparse(url).path
     resolved_func, unused_args, resolved_kwargs = resolve(source_path)
     return cls.objects.get(pk=resolved_kwargs['pk'])
+
+
+def get_copy_path(data):
+    # TODO: Implement
+    return True

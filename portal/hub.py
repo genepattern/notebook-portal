@@ -28,12 +28,17 @@ def create_user(user):
     else: raise RuntimeError(response.text)
 
 
-def spawn_server(user, server_name, image):
+def spawn_server(user, server_name, image, copy=False):
     user = encode_name(str(user))
     # server_name = encode_name(str(server_name))
+
+    data = {'image': image}
+    if copy:
+        data['project_copy'] = '/data/repository/tabor-Hello2.zip'
+
     response = requests.post(f'{settings.BASE_HUB_URL}/hub/api/users/{user}/servers/{server_name}',
                              headers={'Authorization': f'token {settings.HUB_TOKEN}'},
-                             data=json.dumps({'image': image}))
+                             data=json.dumps(data))
 
     if response.status_code == 201 or response.status_code == 200: return True
     elif response.status_code == 400 and 'already running' in response.text: return True
@@ -62,7 +67,16 @@ def delete_server(user, server_name):
 def zip_project(id, user, server_name):
     user = urllib.parse.quote(encode_name(str(user)))
     server = urllib.parse.quote(server_name)
-    response = requests.get(f'{settings.BASE_HUB_URL}/services/library/?id={id}&user={user}&server={server}')
+    response = requests.post(f'{settings.BASE_HUB_URL}/services/library/?id={id}&user={user}&server={server}',
+                             data=json.dumps({"id": id, "user": user, "server": server}))
 
+    if response.status_code == 201 or response.status_code == 200: return True
+    else: raise RuntimeError(response.text)
+
+
+def unzip_project(copy, user, server_name):
+    user = urllib.parse.quote(encode_name(str(user)))
+    server = urllib.parse.quote(server_name)
+    response = requests.get(f'{settings.BASE_HUB_URL}/services/library/?copy={copy}&user={user}&server={server}')
     if response.status_code == 201 or response.status_code == 200: return True
     else: raise RuntimeError(response.text)
