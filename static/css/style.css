@@ -121,6 +121,10 @@ a.editable-link {
     left: 0px !important;
 }
 
+.table td, .table th {
+    border-top: none;
+}
+
 a {
     color: #3C6DC1;
 }
