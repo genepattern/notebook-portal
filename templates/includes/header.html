@@ -54,12 +54,15 @@
                        aria-expanded="false">{{ user.username }}
                         <span class="caret"></span></a>
                     <div class="dropdown-menu" aria-labelledby="user-menu">
+                        <a class="dropdown-item" href="/workspace/"><i class="fas fa-book"></i> Workspace</a>
+                        <a class="dropdown-item" href="/library/"><i class="fas fa-book-reader"></i> Library</a>
+                        <a class="dropdown-item" href="/analyses/"><i class="fas fa-flask"></i> Analyses</a>
                         {% if user.is_staff %}
                             <a class="dropdown-item" href="/dashboard/"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                            <a class="dropdown-item" href="/library/"><i class="fas fa-book-reader"></i> Library</a>
-                            <a class="dropdown-item" href="/analyses/"><i class="fas fa-flask"></i> Analyses</a>
+
+
                             <a class="dropdown-item" href="/jobs/"><i class="fas fa-hdd"></i> Jobs</a>
-                            <a class="dropdown-item" href="/workspace/"><i class="fas fa-book"></i> Workspace</a>
+
                             {# <a class="dropdown-item" href="/accounts/profile/">Profile</a> #}
                         {% endif %}
                         <a class="dropdown-item" href="/accounts/logout/"><i class="fas fa-sign-out-alt"></i> Logout</a>

@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
@@ -35,6 +37,7 @@ class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filterset_fields = '__all__'
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -43,14 +46,16 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     queryset = Project.objects.all()
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filterset_fields = '__all__'
 
     def get_serializer_class(self):
         if self.request.method == 'GET': return ProjectGetSerializer
         else: return ProjectSerializer
 
     def list(self, request, *args, **kwargs):
-        if request.user.is_staff: queryset = Project.objects.all()
-        else: queryset = Project.objects.filter(access__user=request.user)
+        #if request.user.is_staff: queryset = Project.objects.all()
+        #else: queryset = Project.objects.filter(access__user=request.user)
+        queryset = Project.objects.filter(access__user=request.user)
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
@@ -89,6 +94,7 @@ class ProjectAccessViewSet(viewsets.ModelViewSet):
     queryset = ProjectAccess.objects.all()
     serializer_class = ProjectAccessSerializer
     permission_classes = (permissions.IsAdminUser,)
+    filterset_fields = '__all__'
 
 
 class PublishedProjectViewSet(viewsets.ModelViewSet):
@@ -97,6 +103,7 @@ class PublishedProjectViewSet(viewsets.ModelViewSet):
     """
     queryset = PublishedProject.objects.all()
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filterset_fields = '__all__'
 
     def get_serializer_class(self):
         if self.request.method == 'GET': return PublishedProjectGetSerializer
@@ -104,14 +111,21 @@ class PublishedProjectViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         project = model_from_url(Project, request.data['source'])
-        dir_name = encode_name(project.dir_name)      # Set the name of the directory to zip
-        id = f"{request.user}-{dir_name}"
-        zip_project(id=id, user=request.user, server_name=dir_name)
+        zip_project(id=project.id, user=request.user, server_name=project.dir_name)
         return super(PublishedProjectViewSet, self).create(request, *args, **kwargs)
 
     @action(detail=True, methods=['post'])
     def launch(self, request, pk=None):
         instance = self.get_object()
-        unzip_project(copy='tabor-Crown', user=request.user, server_name=instance.source.dir_name)
-        spawn_server(user=request.user, server_name=instance.source.dir_name, image=instance.image)
-        return Response(data=None, status=status.HTTP_204_NO_CONTENT)
+        unzip_project(copy=str(instance.source.id), user=request.user, server_name=instance.source.dir_name)
+        url = spawn_server(user=request.user, server_name=instance.source.dir_name, image=instance.image)
+
+        project = Project(name=instance.name, image=instance.image, path='/', dir_name=instance.source.dir_name,
+                              default=instance.default, description=instance.description, authors=instance.authors,
+                              quality=instance.quality, tags=[])
+        project.save()
+        # for tag in instance.source.tags.all():
+        #     project.tags.add(tag)
+        create_access(request.user, project)  # Grant the user access to the project
+
+        return Response(data={'url': url}, status=status.HTTP_201_CREATED)

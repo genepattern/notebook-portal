@@ -374,7 +374,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
     # 'PAGE_SIZE': 1000,
-    #'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoObjectPermissionsFilter',),
+    'DEFAULT_FILTER_BACKENDS': (# 'rest_framework.filters.DjangoObjectPermissionsFilter',
+                                #'rest_framework.filters.DjangoFilterBackend'),
+                                'django_filters.rest_framework.DjangoFilterBackend'),
 }
 
 CORS_ORIGIN_ALLOW_ALL = True

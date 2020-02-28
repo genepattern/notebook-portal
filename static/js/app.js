@@ -1,5 +1,5 @@
 // Declare server constants
-export const PUBLIC_NOTEBOOK_SEVER = 'http://notebook.genepattern.org/';
+export const PUBLIC_NOTEBOOK_SEVER = 'http://nbdev.genepattern.org/';
 export const GENEPATTERN_SERVER = 'https://cloud.genepattern.org/gp/';
 
 // Declare data cache
@@ -139,25 +139,27 @@ export function edit_project(project, data) {
 
 export function publish_project(project, data) {
     // Update the source project
-    edit_project(project, data).catch(e => {throw Error(e)});
-
-    // Create the new published project
-    return fetch('/rest/notebooks/', {
-        'method': 'POST',
-        'headers': {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'X-CSRFToken': get_csrf()
-        },
-        'body': JSON.stringify(data) })
-    .then(response => {
-        if (!response.ok)
-            throw Error(response.statusText);
-        else return response.json()
-    })
-    .then(function(response) {
-        return response;
-    });
+    return edit_project(project, data)
+        .then(() => {
+            // Create the new published project
+            return fetch('/rest/notebooks/', {
+                'method': 'POST',
+                'headers': {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': get_csrf()
+                },
+                'body': JSON.stringify(data) })
+            .then(response => {
+                if (!response.ok)
+                    throw Error(response.statusText);
+                else return response.json()
+            })
+            .then(function(response) {
+                return response;
+            });
+        })
+        .catch(e => {throw Error(e)});
 }
 
 export function update_published_project(project, data) {
@@ -209,6 +211,9 @@ export function launch_public_project(nb) {
                 throw Error(response.statusText);
             else return response;
         })
+        .catch((e) => {
+            throw Error(e);
+        });
 }
 
 /**
@@ -258,21 +263,12 @@ export function notebook_tags() {
         });
 
     else
-        return public_notebooks().then(function(all_notebooks) {
-            // Build the map of tags
-            const tag_map = {};
-            all_notebooks.forEach(function(nb) {
-                nb.tags.forEach(function(tag) {
-                    tag_map[tag.label] = tag;
-                });
+        return fetch('/rest/tags/')
+            .then(response => response.json())
+            .then(function(response) {
+                _notebook_tags = response;
+                return response;
             });
-
-            // Assign and return
-            _notebook_tags = Object.values(tag_map);
-            return new Promise(function(resolve) {
-                resolve(_notebook_tags);
-            });
-        });
 }
 
 /**
@@ -686,7 +682,7 @@ export function login(username, password, next="workspace") {
             if (typeof next === "function") next();
 
             // If next is workspace, forward to the notebook workspace
-            else if (next === "workspace") login_to_jupyterhub().then(response => location.href = PUBLIC_NOTEBOOK_SEVER);
+            else if (next === "workspace") login_to_jupyterhub().then(response => location.href = '/workspace/');
 
             // If not, reload the page
             else location.reload();
@@ -890,7 +886,12 @@ export function library(selector) {
             if (window.is_authenticated) GenePattern.login_to_jupyterhub({suppress_errors: true});
             GenePattern.public_notebooks().then(r => this.notebooks = r);
             GenePattern.notebook_tags().then(r => this.tags = r);
-            GenePattern.pinned_tags().then(r => this.pinned = r);
+            GenePattern.pinned_tags().then(r => this.pinned = r).then(() => {
+                GenePattern.public_notebooks().then(() => { // Ensure that both notebook & tag calls have fully loaded
+                    app.search = 'featured';
+                    setTimeout(() => {document.querySelector('#library input.nb-search').value = '';}, 10);
+                });
+            });
         },
         methods: {},
         watch: {
@@ -1256,11 +1257,6 @@ Vue.component('notebook-tag', {
     template: `<ul class="nav-item" v-on:click="search_or_launch">  
                    <a v-bind:class="{'nav-link': true, 'tag-tab': true, 'active':(tag.label=='featured')}" href="#">[[ tag.label ]]</a> 
                </ul>`
-    // template: `<div class="nav-item tag-card" v-on:click="search_or_launch">
-    //                 <div class="nav-link">
-    //                     <h8>[[ tag.label ]]</h8>
-    //                 </div>
-    //             </div>`
 });
 
 Vue.component('notebook-card', {
@@ -1294,20 +1290,24 @@ Vue.component('notebook-card', {
                 window.open(`${PUBLIC_NOTEBOOK_SEVER}services/sharing/notebooks/${this.nb.id}/preview/`);
         },
         'launch_project': function() {
+            const nb = this.nb;
             const credentials = get_login_data();
             const encoded_user = jupyterhub_encode(credentials.username);
             modal({
-                'title': `Launching ${this.nb.name}`,
+                'title': `Launching ${nb.name}`,
                 'body': 'Please wait...',
                 'buttons': {}
             });
             show_spinner();
-            launch_public_project(this.nb).then(() => {
-                window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${this.nb.source.dir_name}/`);
-                setTimeout(() => {
-                    hide_spinner();
-                    close_modal();
-                }, 500);
+            launch_public_project(nb).then((response) => {
+                response.json().then(data => {
+                    console.log(data);
+                    window.open(data.url);
+                    setTimeout(() => {
+                        hide_spinner();
+                        close_modal();
+                    }, 500);
+                });
             });
         }
     },
@@ -1335,10 +1335,7 @@ Vue.component('notebook-card', {
         }
     },
     mounted: function() {
-        this.nb.tags.forEach(tag => {
-            if (typeof tag === 'string') this.tags.push(tag);
-            else this.tags.push(tag.label);
-        });
+        this.tags = this.nb.tags;
     },
     template: `<div v-bind:class="{'card': true, 'nb-card': true, 'd-none':!filter}" v-on:click="preview" > 
                     <img class="card-img-top" v-bind:src="img_src" alt="Notebook Thumbnail"> 
