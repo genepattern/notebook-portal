@@ -216,33 +216,17 @@ export function launch_public_project(nb) {
  *
  * @returns {Promise<any>}
  */
-// export function public_notebooks() {
-//     if (_public_notebooks !== null)
-//         return new Promise(function(resolve) {
-//             resolve(_public_notebooks['results']);
-//         });
-//
-//     else
-//         return fetch(PUBLIC_NOTEBOOK_SEVER + 'services/sharing/notebooks/')
-//             .then(response => response.json())
-//             .then(function(response) {
-//                 _public_notebooks = response;
-//                 return response['results'];
-//             });
-// }
-// TODO: Uncomment and remove above function upon release
 export function public_notebooks() {
     if (_public_notebooks !== null)
         return new Promise(function(resolve) {
-            resolve(_public_notebooks);
+            resolve(_public_notebooks['results']);
         });
-
     else
-        return fetch('/rest/notebooks/')
+        return fetch(PUBLIC_NOTEBOOK_SEVER + 'services/sharing/notebooks/')
             .then(response => response.json())
             .then(function(response) {
                 _public_notebooks = response;
-                return response;
+                return response['results'];
             });
 }
 
