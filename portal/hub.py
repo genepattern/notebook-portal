@@ -75,8 +75,6 @@ def zip_project(id, user, server_name):
 def unzip_project(copy, user, server_name):
     user = urllib.parse.quote(encode_name(str(user)))
     server = urllib.parse.quote(server_name)
-    print(f'{settings.BASE_HUB_URL}/services/library/?copy={copy}&user={user}&server={server}')
     response = requests.get(f'{settings.BASE_HUB_URL}/services/library/?copy={copy}&user={user}&server={server}')
-    print(response)
-    if response.status_code == 201 or response.status_code == 200: return True
+    if response.status_code == 201 or response.status_code == 200: return response.text
     else: raise RuntimeError(response.text)

@@ -1308,6 +1308,10 @@ Vue.component('notebook-card', {
                         close_modal();
                     }, 500);
                 });
+            }).catch(e => {
+                message(e, 'danger');
+                hide_spinner();
+                close_modal();
             });
         }
     },

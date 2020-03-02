@@ -117,15 +117,15 @@ class PublishedProjectViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def launch(self, request, pk=None):
         instance = self.get_object()
-        unzip_project(copy=str(instance.source.id), user=request.user, server_name=instance.source.dir_name)
-        url = spawn_server(user=request.user, server_name=instance.source.dir_name, image=instance.image)
-
-        project = Project(name=instance.name, image=instance.image, path='/', dir_name=instance.source.dir_name,
+        dir_name = unzip_project(copy=str(instance.source.id), user=request.user, server_name=instance.source.dir_name)
+        url = spawn_server(user=request.user, server_name=dir_name, image=instance.image)
+        project = Project(name=instance.name, image=instance.image, path='/', dir_name=dir_name,
                               default=instance.default, description=instance.description, authors=instance.authors,
-                              quality=instance.quality, tags=[])
+                              quality=instance.quality)
         project.save()
-        # for tag in instance.source.tags.all():
-        #     project.tags.add(tag)
+        for tag in instance.source.tags.all():
+            project.tags.add(tag)
+        project.save()
         create_access(request.user, project)  # Grant the user access to the project
 
         return Response(data={'url': url}, status=status.HTTP_201_CREATED)

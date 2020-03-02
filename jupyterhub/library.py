@@ -17,21 +17,38 @@ class ZipHandler(tornado.web.RequestHandler):
 
     def get(self):
         copy = self.get_argument("copy", strip=True),
-        username = self.get_argument("user", strip=True)[0],
-        servername = self.get_argument("server", strip=True)[0],
-        ZipHandler._copy_notebook_project(copy[0], username, servername)
+        username = self.get_argument("user", strip=True),
+        servername = self.get_argument("server", strip=True),
+        unique_name = ZipHandler._copy_notebook_project(f'{copy[0]}', f'{username[0]}', f'{servername[0]}')
+        self.write(unique_name)
 
     @staticmethod
     def _copy_notebook_project(project_copy, mount_username, server_name):
-        dir_path = f'/data/users/{mount_username}/{server_name}'
-
-        # Create directory if it doesn't exist
-        if not os.path.exists(dir_path):
-            os.makedirs(dir_path)
-            os.chmod(dir_path, 0o777)
-
+        # Set a unique server name
+        unique_name = ZipHandler._ensure_new_directory(mount_username, server_name)
+        dir_path = f'/data/users/{mount_username}/{unique_name}'
+        print(dir_path)
         with ZipFile(f'/data/repository/{project_copy}.zip', 'r') as zip:
             zip.extractall(path=dir_path)
+        for root, dirs, files in os.walk(dir_path):
+            for f in dirs:
+                os.chmod(os.path.join(root, f), 0o777)
+            for f in files:
+                os.chmod(os.path.join(root, f), 0o777)
+        return unique_name
+
+    @staticmethod
+    def _ensure_new_directory(mount_username, server_name, count=0):
+        if not count: unique_name = server_name
+        else: unique_name = f'{server_name}{count}'
+        dir_path = f'/data/users/{mount_username}/{unique_name}'
+
+        if os.path.exists(dir_path):
+            return ZipHandler._ensure_new_directory(mount_username, f'{server_name}', count + 1)
+        else:
+            os.makedirs(dir_path)
+            os.chmod(dir_path, 0o777)
+            return unique_name
 
 
 def make_app():
