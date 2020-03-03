@@ -29,9 +29,18 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
         model = Project
         fields = ('url', 'name', 'image', 'path', 'dir_name', 'default', 'tags', 'description', 'authors', 'quality')
 
+class ProjectAccessMinimalSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.SlugRelatedField(many=False, read_only=False, queryset=User.objects.all(), slug_field='username', allow_null=True)
+    group = serializers.SlugRelatedField(many=False, read_only=False, queryset=Group.objects.all(), slug_field='name', allow_null=True)
+
+    class Meta:
+        model = ProjectAccess
+        fields = ('user', 'group', 'owner')
+
 
 class ProjectGetSerializer(serializers.HyperlinkedModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=Tag.objects.all())
+    access = ProjectAccessMinimalSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project

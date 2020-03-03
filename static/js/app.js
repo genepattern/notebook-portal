@@ -137,6 +137,40 @@ export function edit_project(project, data) {
         });
 }
 
+export function share_project(project, data) {
+    // Transform shares to an array
+    if (data.shares.trim() === "") data.shares = [];
+    else data.shares = data.shares.trim().split(',');
+
+    // Create new access list
+    const old_access_map = {};
+    const new_access_list = [];
+    project.access.forEach(a => old_access_map[a.user] = a);
+    data.shares.forEach(share => {
+        const old_obj = old_access_map['share'];
+        if (!!old_obj) new_access_list.push(old_obj);
+        else new_access_list.push({
+            'user': share,
+            'group': null,
+            'owner': false
+        });
+    });
+
+    return fetch(`${project.url}share/`, {
+            'method': 'PUT',
+            'headers': {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken': get_csrf()
+            },
+            'body': JSON.stringify(new_access_list) })
+        .then(response => {
+            if (!response.ok)
+                throw Error(response.statusText);
+            else return response.json()
+        })
+}
+
 export function publish_project(project, data) {
     // Update the source project
     return edit_project(project, data)
@@ -1452,6 +1486,16 @@ Vue.component('notebook-project', {
             this.$el.querySelector('.published-icon').classList.add('d-none');
     },
     methods: {
+        'share_list': function() {
+            const list = [];
+            if (!this.project.access) return list; // Protect against null
+            const current_user = get_login_data().username;
+            this.project.access.forEach(access => {
+                if (current_user === access.user) return;
+                else list.push(access.user);
+            });
+            return list;
+        },
         'handle_click': function(event) {
             if (event.target.classList.contains('delete-project')) this.confirm_delete();
             else if (event.target.classList.contains('edit-project')) this.edit_dialog();
@@ -1537,10 +1581,54 @@ Vue.component('notebook-project', {
             $('.edit-project-form select[name=quality]').val(this.project.quality);
         },
         'share_dialog': function() {
-            // TODO: Implement
+            const project = this.project;
+            modal({
+                title: `Share "${this.project.name}" With Others`,
+                body: `<form class="modal-form share-project-form">
+                           <div class="alert alert-info">
+                               Enter the username or registered email address of those you want to share the notebook with below.
+                           </div>
+                           </div>
+                           <div class="form-group row">
+                               <label for="tags" class="col-sm-3">Shared With</label> 
+                               <div class="col-sm-9" style="padding: 0;">
+                                   <input name="shares" type="text" class="form-control" value="${this.share_list()}" />
+                               </div>
+                           </div>
+                           <input name="url" type="hidden" value="${this.project.url}" />
+                       </form>`,
+                buttons: {
+                    'Cancel': {},
+                    'Share': {
+                        'class': 'btn btn-primary share-button',
+                        'click': function() {
+                            const data = {};
+                            $(".share-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
+                            show_spinner();
+                            share_project(project, data).then((messages) => {
+                                close_modal();
+                                hide_spinner();
+                                if (messages.length) messages.forEach(m => message(m, 'warning'));
+                                else location.reload();
+                            }).catch(error => {
+                                close_modal();
+                                hide_spinner();
+
+                                // Handle errors
+                                message(error, 'danger');
+                            })
+                        }
+                    }
+                }
+            });
+
+            // Init tag-it
+            $("input[name=shares]").tagit({
+                singleField: true,
+                caseSensitive: true
+            });
         },
         'publish_dialog': function() {
-            const app = this.$parent;
             const project = this.project;
             modal({
                 title: `Publish "${this.project.name}" to Notebook Library`,

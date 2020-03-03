@@ -9,7 +9,7 @@ from portal.hub import spawn_server, delete_server, stop_server, encode_name, zi
 from portal.models import Project, ProjectAccess, PublishedProject, Tag
 from portal.serializers import UserSerializer, GroupSerializer, ProjectSerializer, ProjectAccessSerializer, \
     PublishedProjectSerializer, TagSerializer, PublishedProjectGetSerializer, ProjectGetSerializer
-from portal.utils import create_tags, create_access, model_from_url, get_copy_path
+from .utils import create_tags, create_access, model_from_url, get_copy_path, is_email
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -85,6 +85,51 @@ class ProjectViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         spawn_server(user=request.user, server_name=instance.dir_name, image=instance.image)
         return Response(data=None, status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=['put'])
+    def share(self, request, pk=None):
+        instance = self.get_object()
+        messages = []
+
+        # Summarize the list of users with existing access
+        existing_access = []
+        for access in instance.access.all():
+            if access.user: existing_access.append(access.user.username)
+
+        # Create new ProjectAccess objects as requested
+        new_access = []
+        for access in request.data:
+            new_access.append(access['user'])
+            if access['user'] not in existing_access:
+                # Get the user, if available, and add it to the access list
+                try:
+                    user = User.objects.get(username=access['user'])
+                    ProjectAccess(project=instance, user=user, group=None, owner=False).save()
+
+                # Otherwise, check to see if this is an email
+                except User.DoesNotExist:
+                    if is_email(access['user']):
+                        # TODO: Send email
+                        pass
+                # Otherwise, report error
+                    else:
+                        messages.append(f'User {access["user"]} could not be found')
+        instance.save()
+
+        # Remove old ProjectAccess objects as requested
+        to_remove = [a for a in existing_access if a not in new_access]
+        for username in to_remove:
+            user = User.objects.get(username=username)
+            if user != request.user:
+                pa = ProjectAccess.objects.get(user=user, project=instance)
+                ProjectAccess.delete(pa)
+
+        print(instance.access.all())
+        print(messages)
+        print(existing_access)
+        print(new_access)
+        print(to_remove)
+        return Response(data=messages, status=status.HTTP_202_ACCEPTED)
 
 
 class ProjectAccessViewSet(viewsets.ModelViewSet):

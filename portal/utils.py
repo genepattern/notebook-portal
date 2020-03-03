@@ -1,3 +1,4 @@
+import re
 from urllib.parse import urlparse
 
 from django.contrib.auth.models import User
@@ -40,6 +41,13 @@ def model_from_url(cls, url):
     source_path = urlparse(url).path
     resolved_func, unused_args, resolved_kwargs = resolve(source_path)
     return cls.objects.get(pk=resolved_kwargs['pk'])
+
+
+def is_email(email):
+    if len(email) > 7:
+        if re.match("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", email.lower()) is not None:
+            return True
+    return False
 
 
 def get_copy_path(data):
