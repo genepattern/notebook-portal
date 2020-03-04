@@ -20,6 +20,14 @@
         margin-left: 12px;
         cursor: pointer;
     }
+
+    .shared-with-me {
+        margin-top: 20px;
+    }
+
+    .lead {
+        margin-top: 20px;
+    }
     </style>
 {% endblock %}
 
@@ -48,17 +56,25 @@
                     <h1>Notebook Workspaces</h1>
                     <input type="search" placeholder="Search Projects" class="form-control nb-search" v-model="search" />
                 </div>
-                <p>Launch, create or share notebook projects.</p>
+                <p>Launch, create or share notebook workspaces.</p>
                 <div class="workspace">
-                    <notebook-project v-for="p in projects" :project="p"></notebook-project>
-                    <div class="card nb-card nb-card-new" @click="create_project_dialog">
-                        <div class="card-img-top" style="background: rgba(0, 0, 0, 0.05);">
-                            <i class="fa fa-plus-circle card-icon"></i>
+                    <div class="my-workspaces">
+                        <notebook-project v-for="p in projects" :project="p" filter="owner"></notebook-project>
+                        <div class="card nb-card nb-card-new" @click="create_project_dialog">
+                            <div class="card-img-top" style="background: rgba(0, 0, 0, 0.05);">
+                                <i class="fa fa-plus-circle card-icon"></i>
+                            </div>
+                            <div class="card-body">
+                                <h8 class="card-title">New Project</h8>
+                                <p class="card-text">Create a New Notebook Project</p>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <h8 class="card-title">New Project</h8>
-                            <p class="card-text">Create a New Notebook Project</p>
-                        </div>
+                    </div>
+                    <div class="shared-with-me">
+                        <h3>Shared With Me</h3>
+                        <p>Notebook workspaces that others have shared with you.</p>
+                        <notebook-project v-for="p in projects" :project="p" filter="!owner" v-if="projects.length > 0"></notebook-project>
+                        <p v-if="projects.length === 0" class="lead text-muted">No one has shared any notebook workspaces with you.</p>
                     </div>
                 </div>
             </div>

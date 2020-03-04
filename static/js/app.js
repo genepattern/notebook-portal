@@ -1479,13 +1479,55 @@ Vue.component('notebook-project', {
         'project': {
             type: Object,
             required: true
+        },
+        'filter': {
+            type: String,
+            required: false,
+            default: null
+        },
+        'owner': {
+            type: Boolean,
+            required: false
+        },
+        'shared': {
+            type: Boolean,
+            required: false
         }
     },
     mounted() {
-        if (this.project.published === null)
+        this.owner = this.is_owner(); // Set owner status
+        this.shared = this.is_shared(); // Set owner status
+        if (!this.is_published())  // Hide published icon if not published
             this.$el.querySelector('.published-icon').classList.add('d-none');
+        if (!this.shared)  // Hide shared icon if not published
+            this.$el.querySelector('.shared-icon').classList.add('d-none');
+        if (this.shared && !this.owner) {// Hide edit sharing if shared and not owner
+            this.$el.querySelector('.dropdown-item.share-project').classList.add('d-none');
+            this.$el.querySelector('.dropdown-item.publish-project').classList.add('d-none');
+        }
+        this.apply_filter();
     },
     methods: {
+        'apply_filter': function () {
+            if (this.filter === 'owner' && !this.owner) this.$el.remove();
+            if (this.filter === '!owner' && this.owner) this.$el.remove();
+            window.test_style = this.$el.style;
+        },
+        'is_published': function () {
+            return !!this.project.published;
+        },
+        'is_shared': function () {
+            if (!!this.project.access) return this.project.access.length > 1;
+            else return false;
+        },
+        'is_owner': function() {
+            const username = get_login_data().username;
+            let owner = true;
+            this.project.access.forEach(access => {
+                if (access.user === username) owner = access.owner;
+            });
+            return owner;
+        },
         'share_list': function() {
             const list = [];
             if (!this.project.access) return list; // Protect against null
@@ -1773,7 +1815,10 @@ Vue.component('notebook-project', {
     },
     computed: {},
     template: `<div class="card nb-card" @click="handle_click"> 
-                    <i class="fas fa-newspaper published-icon" title="Published"></i>
+                    <div class="icon-space">
+                        <i class="fas fa-share shared-icon" title="Shared"></i>
+                        <i class="fas fa-newspaper published-icon" title="Published"></i>
+                    </div>
                     <div class="dropdown project-gear-menu">
                         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-cog" title="Options" />
