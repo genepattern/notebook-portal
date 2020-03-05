@@ -1,15 +1,17 @@
 import json
 
 from django.contrib.auth.models import User, Group
+from django.http import HttpResponsePermanentRedirect
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from portal.hub import spawn_server, delete_server, stop_server, encode_name, zip_project, unzip_project
-from portal.models import Project, ProjectAccess, PublishedProject, Tag
+from portal.models import Project, ProjectAccess, PublishedProject, Tag, SharingInvite
 from portal.serializers import UserSerializer, GroupSerializer, ProjectSerializer, ProjectAccessSerializer, \
-    PublishedProjectSerializer, TagSerializer, PublishedProjectGetSerializer, ProjectGetSerializer
-from .utils import create_tags, create_access, model_from_url, is_email, get_owner
+    PublishedProjectSerializer, TagSerializer, PublishedProjectGetSerializer, ProjectGetSerializer, \
+    SharingInviteSerializer
+from .utils import create_tags, create_access, model_from_url, get_owner, merge_access
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -36,6 +38,16 @@ class TagViewSet(viewsets.ModelViewSet):
     """
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filterset_fields = '__all__'
+
+
+class SharingInviteViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows projects to be viewed or edited.
+    """
+    queryset = SharingInvite.objects.all()
+    serializer_class = SharingInviteSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filterset_fields = '__all__'
 
@@ -90,42 +102,25 @@ class ProjectViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['put'])
     def share(self, request, pk=None):
         instance = self.get_object()
-        messages = []
-
-        # Summarize the list of users with existing access
-        existing_access = []
-        for access in instance.access.all():
-            if access.user: existing_access.append(access.user.username)
-
-        # Create new ProjectAccess objects as requested
-        new_access = []
-        for access in request.data:
-            new_access.append(access['user'])
-            if access['user'] not in existing_access:
-                # Get the user, if available, and add it to the access list
-                try:
-                    user = User.objects.get(username=access['user'])
-                    ProjectAccess(project=instance, user=user, group=None, owner=False).save()
-
-                # Otherwise, check to see if this is an email
-                except User.DoesNotExist:
-                    if is_email(access['user']):
-                        # TODO: Send email
-                        pass
-                # Otherwise, report error
-                    else:
-                        messages.append(f'User {access["user"]} could not be found')
-        instance.save()
-
-        # Remove old ProjectAccess objects as requested
-        to_remove = [a for a in existing_access if a not in new_access]
-        for username in to_remove:
-            user = User.objects.get(username=username)
-            if user != request.user:
-                pa = ProjectAccess.objects.get(user=user, project=instance)
-                ProjectAccess.delete(pa)
-
+        messages = merge_access(instance, request.user, request.data)
         return Response(data=messages, status=status.HTTP_202_ACCEPTED)
+
+    @action(detail=False, methods=['get'])
+    def accept(self, request):
+        token = request.query_params.get('token')
+        if not token: return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            invite = SharingInvite.objects.get(token=token)
+            if request.user.is_authenticated():
+                for a in invite.project.access.all():
+                    if a.user == request.user: return Response(status=status.HTTP_409_CONFLICT)
+                ProjectAccess(user=request.user, group=None, project=invite.project, owner=False).save()
+                invite.delete()
+                return HttpResponsePermanentRedirect("/workspace/")
+                # return Response(data='OK', status=status.HTTP_202_ACCEPTED)
+            else: return Response(status=status.HTTP_403_FORBIDDEN)
+        except SharingInvite.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class ProjectAccessViewSet(viewsets.ModelViewSet):

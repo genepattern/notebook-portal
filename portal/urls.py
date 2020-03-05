@@ -1,12 +1,14 @@
 from rest_framework import routers
 
-from portal.views import UserViewSet, GroupViewSet, ProjectViewSet, PublishedProjectViewSet, ProjectAccessViewSet, TagViewSet
+from portal.views import UserViewSet, GroupViewSet, ProjectViewSet, PublishedProjectViewSet, ProjectAccessViewSet, \
+    TagViewSet, SharingInviteViewSet
 
 router = routers.DefaultRouter()
 
 router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
 router.register(r'tags', TagViewSet)
+router.register(r'invites', SharingInviteViewSet)
 router.register(r'projects', ProjectViewSet)
 router.register(r'access', ProjectAccessViewSet)
 router.register(r'notebooks', PublishedProjectViewSet)

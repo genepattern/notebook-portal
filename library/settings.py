@@ -393,10 +393,21 @@ BASE_HUB_URL = "https://notebook.genepattern.org"
 #####################
 # REST API SETTINGS #
 #####################
+
 try:
     from mezzanine_api.settings import *
 except ImportError:
     pass
+
+
+#####################
+# EMAIL SETTINGS    #
+#####################
+
+NOTIFICATION_EMAIL = ''
+EMAIL_SERVER = ''
+EMAIL_USERNAME = ''
+EMAIL_PASSWORD = ''
 
 ##################
 # LOCAL SETTINGS #

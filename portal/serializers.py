@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
-from portal.models import Tag, Project, ProjectAccess, PublishedProject
+from portal.models import Tag, Project, ProjectAccess, PublishedProject, SharingInvite
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -14,6 +14,12 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ('url', 'name')
+
+
+class SharingInviteSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = SharingInvite
+        fields = ('url', 'project', 'email', 'token')
 
 
 class TagSerializer(serializers.HyperlinkedModelSerializer):
