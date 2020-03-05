@@ -1,26 +1,25 @@
 import os
 import shutil
-from zipfile import ZipFile
 from dockerspawner import DockerSpawner
+from traitlets import Unicode
 
 
 class PortalSpawner(DockerSpawner):
+    mount_username = Unicode("", config=True)
+
     def __init__(self, **kwargs):
         self.remove_containers = True
         self.debug = True
-        self.volumes = {  # Mount the user's directory in the project container
-            os.environ['DATA_DIR'] + '/users/{mount_username}/{servername}': '/home/jovyan',
-        }
+        if 'DATA_DIR' in os.environ:
+            self.volumes = {  # Mount the user's directory in the project container
+                os.environ['DATA_DIR'] + '/users/{mount_username}/{servername}': '/home/jovyan',
+            }
         super(PortalSpawner, self).__init__(**kwargs)
 
     def run_pre_spawn_hook(self):
-        project_copy = getattr(self, "project_copy", "")
-        mount_username = getattr(self, "mount_username", self.user.name)
+        mount_username = self._get_mount_username()
         server_name = getattr(self, "name", "")
-        if project_copy:  # If this is launching a new public notebook
-            self._copy_notebook_project(project_copy, mount_username, server_name)
-        else:  # Otherwise, lazily create the directory if necessary
-            self._create_directory(mount_username, server_name)
+        self._create_directory(mount_username, server_name)
 
         super(PortalSpawner, self).run_pre_spawn_hook()
 
@@ -30,7 +29,7 @@ class PortalSpawner(DockerSpawner):
     def template_namespace(self):
         escaped_image = self.image.replace("/", "_")
         server_name = getattr(self, "name", "")
-        mount_username = getattr(self, "mount_username", self.user.name)
+        mount_username = self._get_mount_username()
         return {
             "username": self.escaped_name,
             "safe_username": self.user.name,
@@ -41,17 +40,20 @@ class PortalSpawner(DockerSpawner):
             "mount_username": mount_username
         }
 
-    @staticmethod
-    def _copy_notebook_project(project_copy, mount_username, server_name):
-        dir_path = os.environ['DATA_DIR'] + '/users/' + mount_username + '/' + server_name
+    def _get_mount_username(self):
+        mount_username = getattr(self, "mount_username", self.user.name)
+        mount_option = self.user_options.get('mount_username')
+        if mount_option: mount_username = mount_option
+        return mount_username
 
-        # Create directory if it doesn't exist
-        if not os.path.exists(dir_path):
-            os.makedirs(dir_path)
-            os.chmod(dir_path, 0o777)
-
-        with ZipFile(project_copy, 'r') as zip:
-            zip.extractall(path=dir_path)
+    def options_from_form(self, formdata):
+        """Turn options formdata into user_options"""
+        options = {}
+        if 'image' in formdata:
+            options['image'] = formdata['image'][0]
+        if 'mount_username' in formdata:
+            options['mount_username'] = formdata['mount_username'][0]
+        return options
 
     @staticmethod
     def _create_directory(username, servername):

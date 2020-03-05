@@ -9,7 +9,7 @@ from portal.hub import spawn_server, delete_server, stop_server, encode_name, zi
 from portal.models import Project, ProjectAccess, PublishedProject, Tag
 from portal.serializers import UserSerializer, GroupSerializer, ProjectSerializer, ProjectAccessSerializer, \
     PublishedProjectSerializer, TagSerializer, PublishedProjectGetSerializer, ProjectGetSerializer
-from .utils import create_tags, create_access, model_from_url, get_copy_path, is_email
+from .utils import create_tags, create_access, model_from_url, is_email, get_owner
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -83,7 +83,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def launch(self, request, pk=None):
         instance = self.get_object()
-        spawn_server(user=request.user, server_name=instance.dir_name, image=instance.image)
+        owner = get_owner(instance)
+        spawn_server(user=request.user, server_name=instance.dir_name, image=instance.image, owner=owner)
         return Response(data=None, status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=True, methods=['put'])
@@ -124,11 +125,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
                 pa = ProjectAccess.objects.get(user=user, project=instance)
                 ProjectAccess.delete(pa)
 
-        print(instance.access.all())
-        print(messages)
-        print(existing_access)
-        print(new_access)
-        print(to_remove)
         return Response(data=messages, status=status.HTTP_202_ACCEPTED)
 
 

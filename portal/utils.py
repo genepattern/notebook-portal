@@ -50,6 +50,7 @@ def is_email(email):
     return False
 
 
-def get_copy_path(data):
-    # TODO: Implement
-    return True
+def get_owner(project):
+    try: project = ProjectAccess.objects.get(project=project, owner=True)
+    except ProjectAccess.DoesNotExist: return None
+    return project.user.username

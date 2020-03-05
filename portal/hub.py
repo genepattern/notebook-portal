@@ -29,9 +29,10 @@ def create_user(user):
     else: raise RuntimeError(response.text)
 
 
-def spawn_server(user, server_name, image, copy=False):
+def spawn_server(user, server_name, image, owner=None):
     user = encode_name(str(user))
     data = {'image': image}
+    if owner: data['mount_username'] = encode_name(owner)  # Add the owner to the data, if provided
 
     response = requests.post(f'{settings.BASE_HUB_URL}/hub/api/users/{user}/servers/{server_name}',
                              headers={'Authorization': f'token {settings.HUB_TOKEN}'},
