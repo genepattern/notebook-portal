@@ -119,6 +119,8 @@ h6 {
 .gpbp {
     border: 1px solid lightgrey;
     padding: 20px;
+    background-color: #337ab7;
+    opacity: 0.5;
 }
 
 a.editable-link {
@@ -557,6 +559,9 @@ header .nav-link {
     font-size: 15px;
 }
 
+.gpbp {
+
+}
 
 @media (min-width: 768px) {
     .col-md-3 {
