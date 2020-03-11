@@ -8,8 +8,8 @@ html {
 }
 
 body {
-    /* font-family: 'Roboto', sans-serif; */
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: 'Roboto', sans-serif;
+    /* font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; */
     /* background-image: url(/static/images/banner-grayscale3.png); */
     background-image: url(/static/images/banner2.jpg);
     background-repeat: no-repeat;
