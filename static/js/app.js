@@ -22,7 +22,6 @@ export function public_notebooks() {
         return new Promise(function(resolve) {
             resolve(_public_notebooks['results']);
         });
-
     else
         return fetch(PUBLIC_NOTEBOOK_SEVER + 'services/sharing/notebooks/')
             .then(response => response.json())

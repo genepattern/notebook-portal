@@ -4,21 +4,55 @@
 {% block meta_title %}Notebook Library{% endblock %}
 {% block title %}Notebook Library{% endblock %}
 
-{% block extra_css %}
-    <style type="text/css">
-    </style>
-{% endblock %}
+
 
 {% block body_class %}no-cover{% endblock %}
-
-
-
 
 {% block library %}
 
 {% block main-content %} 
     {% block content %} {% endblock content %} 
 {% endblock main-content %}
+
+{% block extra_css %}
+<style type="text/css">
+.container {
+    width: 90%;
+    margin: auto;
+}    
+@media (min-width: 576px) {
+    .container {
+        max-width: inherit;
+    } 
+}
+@media (min-width: 1200px) {
+    .container {
+        max-width: inherit;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+        max-width: inherit;
+    }
+}
+@media (min-width: 768px)
+{
+    .container {
+        max-width: inherit;
+    }
+}
+@media (min-width: 576px)
+{
+    .container {
+        max-width: inherit;
+    }
+}
+.notebooks {
+   text-align: center; 
+}
+</style>
+{% endblock %}
 
     <div class="container main-container no-negative-header">
         <div class="row">
