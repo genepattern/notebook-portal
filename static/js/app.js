@@ -7,10 +7,209 @@ let _public_notebooks = null;
 let _notebook_tags = null;
 let _pinned_tags = null;
 let _shared_notebooks = null;
-let _workspace_notebooks = null;
+let _notebook_projects = null;
 let _genepattern_modules = null;
 let _genepattern_token = null;
 let _jupyterhub_token = null;
+
+export function jupyterhub_encode(raw_name) {
+    return encodeURIComponent(raw_name)
+        .replace(/\./g, '%2e')
+        .replace(/-/g, '%2d')
+        .replace(/~/g, '%7e')
+        .replace(/_/g, '%5f')
+        .replace(/%/g, '-')
+}
+
+/**
+ * Returns a list of the user's notebook projects
+ *
+ * @returns {Promise<any>}
+ */
+export function notebook_projects(force_update=false) {
+    if (force_update) _notebook_projects = null;
+
+    if (_notebook_projects !== null)
+        return new Promise(function(resolve) {
+            resolve(_notebook_projects);
+        });
+
+    else
+        return fetch('/rest/projects/')
+            .then(response => response.json())
+            .then(function(response) {
+                _notebook_projects = response;
+                return response;
+            });
+}
+
+/**
+ * Deletes a notebook project with the specified URL
+ *
+ * @param url
+ */
+export function delete_project(url) {
+    return fetch(url, {
+        'method': 'DELETE',
+        'headers': {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRFToken': get_csrf()
+        }})
+        .then(function(response) {
+            return response;
+        });
+}
+
+/**
+ * Creates a new notebook project with the given form data
+ *
+ * @param data
+ * @param copy
+ */
+export function create_project(data) {
+    // Transform tags to an array
+    if (typeof data.tags === 'string' && data.tags.trim() === "") data.tags = [];
+    else if (typeof data.tags === 'string') data.tags = data.tags.trim().toLowerCase().split(',');
+
+    // Set dir_name
+    data.dir_name = jupyterhub_encode(data.name);
+
+    return fetch('/rest/projects/', {
+            'method': 'POST',
+            'headers': {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken': get_csrf()
+            },
+            'body': JSON.stringify(data) })
+        .then(response => {
+            if (!response.ok)
+                throw Error(response.statusText);
+            else return response.json()
+        })
+        .then(function(response) {
+            return response;
+        });
+}
+
+export function launch_project(url) {
+    return fetch(`${url}launch/`, {
+            'method': 'POST',
+            'headers': {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken': get_csrf()
+            }})
+        .then(response => {
+            if (!response.ok)
+                throw Error(response.statusText);
+            else return response;
+        })
+}
+
+export function edit_project(project, data) {
+    // Transform tags to an array
+    if (data.tags.trim() === "") data.tags = [];
+    else data.tags = data.tags.trim().toLowerCase().split(',');
+
+    // Merge edits into original object
+    Object.keys(data).forEach(key => {
+        const value = data[key];
+        project[key] = value;
+    });
+
+    return fetch(`${project.url}`, {
+            'method': 'PUT',
+            'headers': {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken': get_csrf()
+            },
+            'body': JSON.stringify(project) })
+        .then(response => {
+            if (!response.ok)
+                throw Error(response.statusText);
+            else return response.json()
+        })
+        .then(function(response) {
+            return response;
+        });
+}
+
+export function publish_project(project, data) {
+    // Update the source project
+    edit_project(project, data).catch(e => {throw Error(e)});
+
+    // Create the new published project
+    return fetch('/rest/notebooks/', {
+        'method': 'POST',
+        'headers': {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRFToken': get_csrf()
+        },
+        'body': JSON.stringify(data) })
+    .then(response => {
+        if (!response.ok)
+            throw Error(response.statusText);
+        else return response.json()
+    })
+    .then(function(response) {
+        return response;
+    });
+}
+
+export function update_published_project(project, data) {
+    // Update the source project
+    edit_project(project, data).catch(e => {throw Error(e)});
+
+    // Create the new published project
+    return fetch(`${project.published}`, {
+        'method': 'PUT',
+        'headers': {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRFToken': get_csrf()
+        },
+        'body': JSON.stringify(data) })
+    .then(response => {
+        if (!response.ok)
+            throw Error(response.statusText);
+        else return response.json()
+    })
+    .then(function(response) {
+        return response;
+    });
+}
+
+export function unpublish_project(url) {
+    return fetch(url, {
+        'method': 'DELETE',
+        'headers': {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRFToken': get_csrf()
+        }})
+        .then(function(response) {
+            return response;
+        });
+}
+
+export function launch_public_project(nb) {
+    return fetch(`${nb.url}launch/`, {
+            'method': 'POST',
+            'headers': {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken': get_csrf()
+            }})
+        .then(response => {
+            if (!response.ok)
+                throw Error(response.statusText);
+            else return response;
+        })
+}
 
 /**
  * Retrieves the public notebooks from the cache, if possible, from the server if not
@@ -544,41 +743,114 @@ export function workspace(selector) {
         el: selector,
         delimiters: ['[[', ']]'],
         data: {
-            workspace: [],
+            user: null,
+            projects: [],
             search: ''
         },
         computed: {},
         created() {
             if (window.is_authenticated) GenePattern.login_to_jupyterhub({suppress_errors: true});
-            GenePattern.workspace_notebooks().then(r => this.workspace = r);
+            GenePattern.notebook_projects().then(r => this.projects = r);
+            this.user = get_login_data().username;
         },
-        methods: {},
+        methods: {
+            'create_project_dialog': function() {
+                modal({
+                    title: 'Create a New Notebook Project',
+                    body: `<form class="modal-form new-project-form">
+                               <div class="form-group row">
+                                   <label for="name" class="col-sm-3">Project Name*</label> 
+                                   <input name="name" type="text" class="form-control col-sm-9" />
+                               </div>
+                               <div class="form-group row">
+                                   <label for="image" class="col-sm-3">Environment*</label> 
+                                   <select name="image" class="form-control col-sm-9">
+                                       <option value="genepattern/notebook-python37">Python 3.7</option>
+                                       <option value="genepattern/notebook-r36">R 3.6</option>
+                                   </select>
+                               </div>
+                               <h5 class="expand-header" data-toggle="collapse" data-target=".new-project-optional"><i class="fa fa-plus" /> Optional Information</h5>
+                               <div class="collapse new-project-optional">
+                                   <div class="form-group row">
+                                       <label for="description" class="col-sm-3">Description</label> 
+                                       <input name="description" type="text" class="form-control col-sm-9" />
+                                   </div>
+                                   <div class="form-group row">
+                                       <label for="authors" class="col-sm-3">Authors</label> 
+                                       <input name="authors" type="text" class="form-control col-sm-9" />
+                                   </div>
+                                   <div class="form-group row">
+                                       <label for="quality" class="col-sm-3">Quality</label> 
+                                       <select name="quality" class="form-control col-sm-9">
+                                           <option value="development">Development</option>
+                                           <option value="beta">Beta</option>
+                                           <option value="release">Release</option>
+                                       </select>
+                                   </div>
+                                   <div class="form-group row">
+                                       <label for="tags" class="col-sm-3">Tags</label> 
+                                       <div class="col-sm-9" style="padding: 0;">
+                                           <input name="tags" type="text" class="form-control" />
+                                       </div>
+                                   </div>
+                               </div>
+                               <input name="path" type="hidden" value="/" />
+                           </form>`,
+                    buttons: {
+                        'Cancel': {},
+                        'Create': {
+                            'class': 'btn btn-primary',
+                            'click': function() {
+                                var data = {};
+                                $(".new-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
+                                show_spinner();
+                                create_project(data).then(() => {
+                                    hide_spinner();
+                                    close_modal();
+                                    const encoded_user = jupyterhub_encode(workspace_app.user);
+                                    const encoded_server = jupyterhub_encode(data.name);
+                                    setTimeout(() => window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${encoded_server}/tree`), 1000);
+                                    // GenePattern.notebook_projects(true).then(r => workspace_app.projects = r);
+                                    location.reload();
+                                }).catch(error => {
+                                    close_modal();
+                                    hide_spinner();
+
+                                    // Handle errors
+                                    message(error, 'danger');
+                                })
+
+                            }
+                        }
+                    }
+                });
+
+                // Init tag-it
+                $("input[name=tags]").tagit({
+                    singleField: true,
+                    caseSensitive: false
+                });
+
+                // Init expand/collapse extra info header
+                $('.expand-header').click(() => {
+                    const icon = $('.expand-header > i');
+                    if (icon.hasClass('fa-plus')) icon.removeClass('fa-plus').addClass('fa-minus');
+                    else icon.removeClass('fa-minus').addClass('fa-plus');
+                })
+            }
+        },
         watch: {
             'search': function(event) {
                 let search = this.search.trim().toLowerCase();
+                // Display the matching projects
+                const cards = document.querySelector('.workspace').querySelectorAll('.nb-card');
+                cards.forEach(function(card) {
+                    // Matching notebook
+                    if (card.textContent.toLowerCase().includes(search)) card.classList.remove('d-none');
 
-                // // Set active tab
-                // const tabs = document.querySelector('.tags').querySelectorAll('.tag-tab');
-                // tabs.forEach(function(tab) {
-                //     // Matching tab
-                //     if (tab.textContent.toLowerCase() === search) tab.classList.add('active');
-                //
-                //     // Not matching tab
-                //     else tab.classList.remove('active');
-                // });
-                //
-                // // special case for "all notebooks"
-                // if (search === "all notebooks") search = "";
-                //
-                // // Display the matching notebooks
-                // const cards = document.querySelector(selector).querySelector('.notebooks').querySelectorAll('.nb-card');
-                // cards.forEach(function(card) {
-                //     // Matching notebook
-                //     if (card.textContent.toLowerCase().includes(search)) card.classList.remove('d-none');
-                //
-                //     // Not matching notebook
-                //     else card.classList.add('d-none');
-                // });
+                    // Not matching notebook
+                    else card.classList.add('d-none');
+                });
             }
         }
     });
@@ -986,6 +1258,10 @@ Vue.component('notebook-card', {
             type: String,
             required: false,
             default: "featured"
+        },
+        'tags': {
+            type: Array,
+            default: []
         }
     },
     methods: {
@@ -994,17 +1270,40 @@ Vue.component('notebook-card', {
             if (this.nb.lsid)
                 window.open(`/analyses/${this.nb.lsid}/`);
 
-            // If this is a notebook
+            // This is a new-style public notebook
+            else if (this.nb.source) this.launch_project();
+
+            // If this is an old-style public notebook
             else if (this.nb.quality)
                 window.open(`${PUBLIC_NOTEBOOK_SEVER}services/sharing/notebooks/${this.nb.id}/preview/`);
+        },
+        'launch_project': function() {
+            const credentials = get_login_data();
+            const encoded_user = jupyterhub_encode(credentials.username);
+            modal({
+                'title': `Launching ${this.nb.name}`,
+                'body': 'Please wait...',
+                'buttons': {}
+            });
+            show_spinner();
+            launch_public_project(this.nb).then(() => {
+                window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${this.nb.source.dir_name}/`);
+                setTimeout(() => {
+                    hide_spinner();
+                    close_modal();
+                }, 500);
+            });
         }
     },
     computed: {
         img_src() {
             // If this is a GenePattern module
-            if (this.nb.lsid) return "/static/images/banner.jpg";
+            if (this.nb.lsid) return "/static/images/banner2.jpg";
 
-            // Else, if this is a notebook
+            // This is a new-style public notebook
+            else if (this.nb.source) return "/static/images/banner2.jpg";
+
+            // Else, this is an old style public notebook
             else return `/thumbnail/${this.nb.id}/`;
         },
         filter() {
@@ -1019,12 +1318,18 @@ Vue.component('notebook-card', {
             return show;
         }
     },
+    mounted: function() {
+        this.nb.tags.forEach(tag => {
+            if (typeof tag === 'string') this.tags.push(tag);
+            else this.tags.push(tag.label);
+        });
+    },
     template: `<div v-bind:class="{'card': true, 'nb-card': true, 'd-none':!filter}" v-on:click="preview" > 
                     <img class="card-img-top" v-bind:src="img_src" alt="Notebook Thumbnail"> 
                     <div class="card-body"> 
                         <h8 class="card-title">[[ nb.name ]]</h8> 
                         <p class="card-text">[[ nb.description ]]</p> 
-                        <div class="card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in nb.tags">[[ tag.label ]] </span></div>
+                        <div class="card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in tags">[[ tag ]] </span></div>
                     </div> 
                 </div>`
 });
@@ -1117,25 +1422,269 @@ Vue.component('notebook-carousel', {
                </div>`
 });
 
-Vue.component('workspace-notebook', {
+Vue.component('notebook-project', {
     delimiters: ['[[', ']]'],
     props: {
-        'nb': {
+        'project': {
             type: Object,
             required: true
         }
     },
+    mounted() {
+        if (this.project.published === null)
+            this.$el.querySelector('.published-icon').classList.add('d-none');
+    },
     methods: {
-        'open': function() {
-            window.open(`${PUBLIC_NOTEBOOK_SEVER}user-redirect/notebooks/${this.file.name}`);
+        'handle_click': function(event) {
+            if (event.target.classList.contains('delete-project')) this.confirm_delete();
+            else if (event.target.classList.contains('edit-project')) this.edit_dialog();
+            else if (event.target.classList.contains('share-project')) this.share_dialog();
+            else if (event.target.classList.contains('publish-project')) this.publish_dialog();
+            else if (event.target.classList.contains('dropdown-toggle') || event.target.classList.contains('fa-cog')) return false;
+            else this.launch_project();
+        },
+        'edit_dialog': function() {
+            const app = this.$parent;
+            const project = this.project;
+            modal({
+                title: `Edit ${this.project.name}`,
+                body: `<form class="modal-form edit-project-form">
+                           <div class="form-group row">
+                               <label for="name" class="col-sm-3">Project Name*</label> 
+                               <input name="name" type="text" class="form-control col-sm-9" value="${this.project.name}"/>
+                           </div>
+                           <div class="form-group row">
+                               <label for="image" class="col-sm-3">Environment*</label> 
+                               <select name="image" class="form-control col-sm-9">
+                                   <option value="genepattern/notebook-python37">Python 3.7</option>
+                                   <option value="genepattern/notebook-r36">R 3.6</option>
+                               </select>
+                           </div>
+                           <div class="form-group row">
+                               <label for="description" class="col-sm-3">Description</label> 
+                               <input name="description" type="text" class="form-control col-sm-9" value="${this.project.description}"/>
+                           </div>
+                           <div class="form-group row">
+                               <label for="authors" class="col-sm-3">Authors</label> 
+                               <input name="authors" type="text" class="form-control col-sm-9" value="${this.project.authors}" />
+                           </div>
+                           <div class="form-group row">
+                               <label for="quality" class="col-sm-3">Quality</label> 
+                               <select name="quality" class="form-control col-sm-9">
+                                   <option value="development">Development</option>
+                                   <option value="beta">Beta</option>
+                                   <option value="release">Release</option>
+                               </select>
+                           </div>
+                           <div class="form-group row">
+                               <label for="tags" class="col-sm-3">Tags</label> 
+                               <div class="col-sm-9" style="padding: 0;">
+                                   <input name="tags" type="text" class="form-control" value="${this.project.tags}" />
+                               </div>
+                           </div>
+                           <input name="path" type="hidden" value="${this.project.path}" />
+                       </form>`,
+                buttons: {
+                    'Cancel': {},
+                    'Edit': {
+                        'class': 'btn btn-primary',
+                        'click': function() {
+                            const data = {};
+                            $(".edit-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
+                            show_spinner();
+                            edit_project(project, data).then(() => {
+                                hide_spinner();
+                                close_modal();
+                                GenePattern.notebook_projects(true).then(r => app.projects = r);
+                            }).catch(error => {
+                                close_modal();
+                                hide_spinner();
+
+                                // Handle errors
+                                message(error, 'danger');
+                            })
+
+                        }
+                    }
+                }
+            });
+
+            // Init tag-it
+            $("input[name=tags]").tagit({
+                singleField: true,
+                caseSensitive: false
+            });
+
+            // Init selects
+            $('.edit-project-form select[name=image]').val(this.project.image);
+            $('.edit-project-form select[name=quality]').val(this.project.quality);
+        },
+        'share_dialog': function() {
+            // TODO: Implement
+        },
+        'publish_dialog': function() {
+            const app = this.$parent;
+            const project = this.project;
+            modal({
+                title: `Publish "${this.project.name}" to Notebook Library`,
+                body: `<form class="modal-form publish-project-form">
+                           <div class="alert alert-info">
+                               This will make a copy of the project available to anyone. A published notebook project does 
+                               not update automatically when you save it again in the future. To update the published copy 
+                               you will have to click publish again after making any changes and saving.</div>
+                           <div class="form-group row">
+                               <label for="name" class="col-sm-3">Project Name*</label> 
+                               <input name="name" type="text" class="form-control col-sm-9" value="${this.project.name}"/>
+                           </div>
+                           <input name="image" type="hidden" value="${this.project.image}" />
+                           <div class="form-group row">
+                               <label for="description" class="col-sm-3">Description</label> 
+                               <input name="description" type="text" class="form-control col-sm-9" value="${this.project.description}"/>
+                           </div>
+                           <div class="form-group row">
+                               <label for="authors" class="col-sm-3">Authors</label> 
+                               <input name="authors" type="text" class="form-control col-sm-9" value="${this.project.authors}" />
+                           </div>
+                           <div class="form-group row">
+                               <label for="quality" class="col-sm-3">Quality</label> 
+                               <select name="quality" class="form-control col-sm-9">
+                                   <option value="development">Development</option>
+                                   <option value="beta">Beta</option>
+                                   <option value="release">Release</option>
+                               </select>
+                           </div>
+                           <div class="form-group row">
+                               <label for="tags" class="col-sm-3">Tags</label> 
+                               <div class="col-sm-9" style="padding: 0;">
+                                   <input name="tags" type="text" class="form-control" value="${this.project.tags}" />
+                               </div>
+                           </div>
+                           <input name="source" type="hidden" value="${this.project.url}" />
+                           <input name="path" type="hidden" value="${this.project.path}" />
+                       </form>`,
+                buttons: {
+                    'Cancel': {},
+                    'Unpublish': {
+                        'class': 'btn btn-danger unpublish-button',
+                        'click': function() {
+                            close_modal();
+                            modal({
+                                title: 'Confirm Unpublication',
+                                body: `Are you sure that you want to unpublish ${project.name}?`,
+                                buttons: {'Cancel': {}, 'UNPUBLISH': {
+                                    'class': 'btn btn-danger',
+                                        'click': () => {
+                                            show_spinner();
+                                            unpublish_project(project.published).then(() => {
+                                                location.reload();
+                                            });
+                                        }
+                                }}
+                            });
+                        }
+                    },
+                    'Update': {
+                        'class': 'btn btn-primary update-button',
+                        'click': function() {
+                            const data = {};
+                            $(".publish-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
+                            show_spinner();
+                            update_published_project(project, data).then(() => {
+                                location.reload();
+                            }).catch(error => {
+                                close_modal();
+                                hide_spinner();
+
+                                // Handle errors
+                                message(error, 'danger');
+                            })
+                        }
+                    },
+                    'Publish': {
+                        'class': 'btn btn-primary publish-button',
+                        'click': function() {
+                            const data = {};
+                            $(".publish-project-form").serializeArray().map(function(x){data[x.name] = x.value;});
+                            show_spinner();
+                            publish_project(project, data).then(() => {
+                                location.reload();
+                            }).catch(error => {
+                                close_modal();
+                                hide_spinner();
+
+                                // Handle errors
+                                message(error, 'danger');
+                            })
+                        }
+                    }
+                }
+            });
+
+            // Hide unwanted buttons
+            if (project.published !== null) $('.publish-button').addClass('d-none');
+            else $('.unpublish-button, .update-button').addClass('d-none');
+
+            // Init tag-it
+            $("input[name=tags]").tagit({
+                singleField: true,
+                caseSensitive: false
+            });
+
+            // Init selects
+            $('.publish-project-form select[name=quality]').val(this.project.quality);
+        },
+        'confirm_delete': function() {
+            modal({
+                title: 'Confirm Deletion',
+                body: `Are you sure that you want to delete ${this.project.name}?`,
+                buttons: {'Cancel': {}, 'DELETE': {
+                    'class': 'btn btn-danger',
+                        'click': () => {
+                            delete_project(this.project.url).then(() => {
+                                this.$el.remove();
+                                close_modal()
+                            });
+                        }
+                }}
+            });
+        },
+        'launch_project': function() {
+            const credentials = get_login_data();
+            const encoded_user = jupyterhub_encode(credentials.username);
+            modal({
+                'title': `Launching ${this.project.name}`,
+                'body': 'Please wait...',
+                'buttons': {}
+            });
+            show_spinner();
+            launch_project(this.project.url).then(() => {
+                window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${this.project.dir_name}/`);
+                setTimeout(() => {
+                    hide_spinner();
+                    close_modal();
+                }, 500);
+            });
         }
     },
     computed: {},
-    template: `<div class="card" v-on:click="open" > 
-                    <img class="card-img-top" src="/static/images/banner.jpg" alt="File Icon" /> 
+    template: `<div class="card nb-card" @click="handle_click"> 
+                    <i class="fas fa-newspaper published-icon" title="Published"></i>
+                    <div class="dropdown project-gear-menu">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-cog" title="Options" />
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item edit-project" href="#">Edit</a>
+                            <a class="dropdown-item publish-project" href="#">Publish</a>
+                            <a class="dropdown-item share-project" href="#">Share</a>
+                            <a class="dropdown-item delete-project" href="#">Delete</a>
+                        </div>
+                    </div>
+                    <img class="card-img-top" src="/static/images/banner2.jpg" alt="Project Icon" /> 
                     <div class="card-body"> 
-                        <h8 class="card-title">[[ nb.name ]]</h8> 
-                        <p class="card-text">[[ nb.type ]]</p>                     
+                        <h8 class="card-title">[[ project.name ]]</h8> 
+                        <p class="card-text">[[ project.description ]]</p>  
+                        <div class="card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in project.tags">[[ tag ]] </span></div>                   
                     </div> 
                 </div>`
 });
