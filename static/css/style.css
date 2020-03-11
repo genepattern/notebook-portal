@@ -8,7 +8,8 @@ html {
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+    /* font-family: 'Roboto', sans-serif; */
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     /* background-image: url(/static/images/banner-grayscale3.png); */
     background-image: url(/static/images/banner2.jpg);
     background-repeat: no-repeat;
@@ -72,13 +73,19 @@ h6 {
     h6 {
         font-size: 15px;
     }
+    footer li a {
+        font-size: 12px !important;
+    }
+    footer h5 {
+        font-size: 20px !important;
+    } 
 }
 @media screen and (min-width: 1400px) {
     #slogan-center {
        font-size: 50px;
     }
     p, span, li {
-        font-size: 18px;
+        font-size: 14px !important;
     }
     h1 {
         font-size: 50px;
@@ -158,7 +165,7 @@ iframe {
     text-shadow: 5px 5px 20px black;
     font-size: 3.75vw;
     line-height: 1.5;
-    font-weight: 100;
+    font-weight: 300;
 }
 @media screen and (min-width: 1400px) {
     #slogan-center {
@@ -221,12 +228,12 @@ footer {
     right: 0;
     left: 0;
 }
-/* footer li a {
-    font-size: 1vw;
+footer li a {
+    font-size: 1vw ;
 }
 footer h5 {
-    font-size: 1.5vw;
-} */
+    font-size: 1.5vw ;
+}
 header {
     padding: 0;
     padding-top: 30px;
@@ -693,7 +700,7 @@ i.fa.fa-angle-left, i.fa.fa-angle-right {
 }
 #page-description {
     text-align: center;
-    font-weight: 300;
+    font-weight: 400;
     font-size: 22px;
     width: 70%;
     margin: auto;
