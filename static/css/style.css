@@ -176,7 +176,7 @@ footer {
     left: 0;
 }
 footer li a, footer li {
-    font-size: 0.8vw ;
+    font-size: 0.9vw ;
 }
 footer h5 {
     font-size: 1.3vw ;
@@ -353,11 +353,12 @@ header .nav-link {
     height: 50px;
     margin-right: 10px;
     border-radius: 10px;
-    line-height: 1.5;
-    margin-top: 10px;
+}
+.about table {
+    border-spacing:0 20px;
 }
 .about img:hover {
-    transform: scale(1.05);
+    transform: (1.05);
     transition: all 0.5s ease;
 }
 .about a {
@@ -665,9 +666,9 @@ i.fa.fa-angle-left, i.fa.fa-angle-right {
     color:white;
 }
 .index-logo:hover{
-    transform: translateY(-1px);
-    transform: scale(1.1);
-    transition: all 0.5s ease;
+    /* transform: translateY(-1px); */
+    /* transform: scale(1.1); */
+    transition: all 0.5s;
 }
 
 #slogan-center a:hover {
@@ -827,7 +828,7 @@ a.nav-link.login_link:hover, a.nav-link.register_link:hover {
 
 
 .about h2 {
-    margin-bottom: 4%;
+    margin-bottom: 2%;
 }
 
 #main-pane ul.login-card {
@@ -1248,7 +1249,7 @@ div.nb-card-new {
 
   @media screen and (max-width: 1000px) { 
     p, span, li {
-        font-size: 14px;
+        font-size: 16px;
     }
     h1 {
         font-size: 30px;
@@ -1277,7 +1278,7 @@ div.nb-card-new {
 }
 @media screen and (min-width: 1400px) {
     p, span, li {
-        font-size: 14px !important;
+        font-size: 16px !important;
     }
     h1 {
         font-size: 50px;
