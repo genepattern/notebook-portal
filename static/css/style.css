@@ -859,7 +859,9 @@ a.nav-link.login_link:hover, a.nav-link.register_link:hover {
     color: white;
     background-color: #485058;
 }
-
+.nav-link.tag-tab {
+    border: 1px solid lightblue;
+}
 ul.tags,
 div.notebooks {
     margin-bottom: 10px;
@@ -1055,7 +1057,7 @@ div.nb-card:hover {
     cursor: pointer;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
     .navbar-nav {
         padding-left: 150px; 
     }
@@ -1067,7 +1069,7 @@ div.nb-card:hover {
     }
 }
 
-@media (max-width: 995px) {
+@media (max-width: 1100px) {
     .navbar-expand-sm .navbar-nav .nav-link {
         padding-right: 3px;
         padding-left: 3px;
@@ -1075,7 +1077,7 @@ div.nb-card:hover {
 
 }
 
-@media (max-width: 970px) {
+@media (max-width: 1100px) {
    .navbar-nav li a {
      font-size: 16px;
    }
