@@ -1020,13 +1020,20 @@ Vue.component('notebook-card', {
         }
     },
     template: `<div v-bind:class="{'card': true, 'nb-card': true, 'd-none':!filter}" v-on:click="preview" > 
-                    <img class="card-img-top" v-bind:src="img_src" alt="Notebook Thumbnail"> 
                     <div class="card-body"> 
-                        <h8 class="card-title">[[ nb.name ]]</h8> 
+                        <h8 class="card-title">[[ nb.name ]] <i class="fas fa-external-link-alt" style="font-size: 80%"></i></h8> 
                         <p class="card-text">[[ nb.description ]]</p> 
-                        <div class="card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in nb.tags">[[ tag.label ]] </span></div>
+                        </div>
+                        <div class="card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in nb.tags">[[ tag.label ]]</span></div>
                     </div> 
                 </div>`
+    // template: `<div v-bind:class="{'card': true, 'nb-card': true, 'd-none':!filter}" v-on:click="preview" > 
+    //             <div class="card-body"> 
+    //                 <h8 class="card-title">[[ nb.name ]]</h8> 
+    //                 <p class="card-text">[[ nb.description ]]</p> 
+    //                 <div class="card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in nb.tags">[[ tag.label ]] </span></div>
+    //             </div> 
+    //         </div>`
 });
 
 
@@ -1117,28 +1124,28 @@ Vue.component('notebook-carousel', {
                </div>`
 });
 
-Vue.component('workspace-notebook', {
-    delimiters: ['[[', ']]'],
-    props: {
-        'nb': {
-            type: Object,
-            required: true
-        }
-    },
-    methods: {
-        'open': function() {
-            window.open(`${PUBLIC_NOTEBOOK_SEVER}user-redirect/notebooks/${this.file.name}`);
-        }
-    },
-    computed: {},
-    template: `<div class="card" v-on:click="open" > 
-                    <img class="card-img-top" src="/static/images/banner.jpg" alt="File Icon" /> 
-                    <div class="card-body"> 
-                        <h8 class="card-title">[[ nb.name ]]</h8> 
-                        <p class="card-text">[[ nb.type ]]</p>                     
-                    </div> 
-                </div>`
-});
+// Vue.component('workspace-notebook', {
+//     delimiters: ['[[', ']]'],
+//     props: {
+//         'nb': {
+//             type: Object,
+//             required: true
+//         }
+//     },
+//     methods: {
+//         'open': function() {
+//             window.open(`${PUBLIC_NOTEBOOK_SEVER}user-redirect/notebooks/${this.file.name}`);
+//         }
+//     },
+//     computed: {},
+//     template: `<div class="card" v-on:click="open" > 
+//                     <img class="card-img-top" src="/static/images/banner.jpg" alt="File Icon" /> 
+//                     <div class="card-body"> 
+//                         <h8 class="card-title">[[ nb.name ]]</h8> 
+//                         <p class="card-text">[[ nb.type ]]</p>                     
+//                     </div> 
+//                 </div>`
+// });
 
 Vue.component('login-register', {
     delimiters: ['[[', ']]'],

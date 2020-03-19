@@ -4,8 +4,6 @@
 {% block meta_title %}Notebook Library{% endblock %}
 {% block title %}Notebook Library{% endblock %}
 
-
-
 {% block body_class %}no-cover{% endblock %}
 
 {% block library %}
@@ -63,8 +61,12 @@
                 </div>
                 <p>Search for a public notebook using the box in the upper right or click on one of the featured categories below.</p>
                 <ul class="nav nav-tabs tags">
+                    <notebook-tag :tag="{'label': 'featured'}"></notebook-tag>
+                    <notebook-tag :tag="{'label': 'tutorial'}"></notebook-tag>
+                    <notebook-tag :tag="{'label': 'community'}"></notebook-tag>
+                    <notebook-tag :tag="{'label': 'workshop'}"></notebook-tag>
                     <notebook-tag :tag="{'label': 'all notebooks'}"></notebook-tag>
-                    <notebook-tag v-for="t in pinned" :tag="t"></notebook-tag>
+                    <!-- <notebook-tag v-for="t in pinned" :tag="t"></notebook-tag> -->
                 </ul>
                 <div class="notebooks">
                     <notebook-card v-for="nb in notebooks" :nb="nb"></notebook-card>

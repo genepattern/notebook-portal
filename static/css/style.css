@@ -8,8 +8,8 @@ html {
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
-    /* font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; */
+    /* font-family: 'Roboto', sans-serif; */
+    font-family: "Helvetica",Helvetica,Arial,sans-serif;
     /* background-image: url(/static/images/banner-grayscale3.png); */
     background-image: url(/static/images/banner2.jpg);
     background-repeat: no-repeat;
@@ -51,61 +51,6 @@ h6 {
     font-size: 1.2vw;
     /* color: rgb(50,50,50); */
 }
-@media screen and (max-width: 1000px) { 
-    p, span, li {
-        font-size: 14px;
-    }
-    h1 {
-        font-size: 30px;
-    }
-    h2 {
-        font-size: 25px;
-    }
-    h3 {
-        font-size: 20px;
-    }
-    h4 {
-        font-size: 17px;
-    }
-    h5 {
-        font-size: 17px;
-    }
-    h6 {
-        font-size: 15px;
-    }
-    footer li a {
-        font-size: 12px !important;
-    }
-    footer h5 {
-        font-size: 20px !important;
-    } 
-}
-@media screen and (min-width: 1400px) {
-    #slogan-center {
-       font-size: 50px;
-    }
-    p, span, li {
-        font-size: 14px !important;
-    }
-    h1 {
-        font-size: 50px;
-    }
-    h2 {
-        font-size: 45px;
-    }
-    h3 {
-        font-size: 40px;
-    }
-    h4 {
-        font-size: 35px;
-    }
-    h5 {
-        font-size: 30px;
-    }
-    h6 {
-        font-size: 30px;
-    }
-  }
 
 
 /* td {
@@ -160,20 +105,25 @@ iframe {
     font-weight: 100; 
 }
 
+#title-center {
+    /* position: absolute; */
+    position: relative;
+    color:white;
+    text-shadow: 5px 5px 20px black;
+    font-size: 5vw;
+    max-font-size: 40px;
+    line-height: 1.5;
+    font-weight: 400;
+}
 #slogan-center {
     /* position: absolute; */
     position: relative;
     color:white;
     text-shadow: 5px 5px 20px black;
-    font-size: 3.75vw;
+    font-size: 2vw;
     line-height: 1.5;
-    font-weight: 300;
+    font-weight: 400;
 }
-@media screen and (min-width: 1400px) {
-    #slogan-center {
-       font-size: 60px;
-    }
-  }
 
 #join-carousel {
     position: absolute;
@@ -202,11 +152,6 @@ iframe {
 a:hover {
     text-decoration: none;
 }
-
-.lead-cover a:hover {
-    color: #ed1c24;
-    opacity: 0.9;
-}
 .navbar-fixed-top {
     border: none;
     color: white;
@@ -230,11 +175,11 @@ footer {
     right: 0;
     left: 0;
 }
-footer li a {
-    font-size: 1vw ;
+footer li a, footer li {
+    font-size: 0.8vw ;
 }
 footer h5 {
-    font-size: 1.5vw ;
+    font-size: 1.3vw ;
 }
 header {
     padding: 0;
@@ -273,8 +218,9 @@ header .navbar-dark .navbar-nav .nav-link {
 } */
 
 footer a:hover {
-    color:white;
-    opacity: 0.5;
+    color: rgba(255,255,255,0.8);
+    opacity: 0.7;
+    transition: all 1s ease;
 }
 /* h1, h2, h3, h4, h5, h6, h7, h8 {
     font-family: 'Oswald', sans-serif;
@@ -410,17 +356,25 @@ header .nav-link {
     line-height: 1.5;
     margin-top: 10px;
 }
+.about img:hover {
+    transform: scale(1.05);
+    transition: all 0.5s ease;
+}
 .about a {
     color: white;
 }
-.about a:hover {
-    opacity: 0.7;
-}
 
-#front-link {
-    font-size: 18px;
+
+.front-link {
+    font-size: 15px;
     text-shadow: 3px 3px 15px black;
     line-height: 2;
+}
+.front-link:hover {
+    color:white;
+    transform: translateY(-1px);
+    text-shadow: 5px 5px 10px black;
+    transition: all 0.5s ease;
 }
 .inside-img {
     max-height: 500px;
@@ -559,10 +513,6 @@ header .nav-link {
     font-size: 15px;
 }
 
-.gpbp {
-
-}
-
 @media (min-width: 768px) {
     .col-md-3 {
         max-width: 100%;
@@ -667,10 +617,7 @@ i.fa.fa-angle-left, i.fa.fa-angle-right {
 .lead-cover a {
     color: white;
 }
-#front-link:hover {
-    color: white;
-    opacity: 0.6;
-}
+
 
 .lead-cover h1 {
     font-size: 2em;
@@ -714,9 +661,15 @@ i.fa.fa-angle-left, i.fa.fa-angle-right {
     text-shadow: 3px 3px 10px black;
 }
 .index-logo {
-    height: 2em;
+    height: 1.6em;
     color:white;
 }
+.index-logo:hover{
+    transform: translateY(-1px);
+    transform: scale(1.1);
+    transition: all 0.5s ease;
+}
+
 #slogan-center a:hover {
     color:rgba(255,255,255,0.7);
 }
@@ -872,6 +825,11 @@ a.nav-link.login_link:hover, a.nav-link.register_link:hover {
     color: white;
 }
 
+
+.about h2 {
+    margin-bottom: 4%;
+}
+
 #main-pane ul.login-card {
     height: 200px;
     text-align: center;
@@ -913,16 +871,24 @@ ul.tags .nav-link {
 
 div.nb-card {
     display: inline-block;
-    width: 275px;
+    width: 500px;
+    height: 100px;
     vertical-align: top;
-    height: 212px;
     margin-bottom: 10px;
     margin-right: 10px;
     text-align: left;
     cursor: pointer;
+    padding: 10px;
+    
     box-shadow: 0 3px 3px rgba(0, 0, 0, .24);
     border: lightgray 1px solid;
 }
+div.nb-card:hover {
+    transform: translateY(2px);
+    box-shadow: 0 5px 5px rgba(0, 0, 0, .5);
+    transition: all 0.35s; 
+}
+
 
 .nb-card > .card-img-top {
     width: 100%;
@@ -935,8 +901,10 @@ div.nb-card {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 265px;
+    width: 100%;
     display: block;
+    font-size: 1.1em;
+    font-weight: 600;
 }
 
 .nb-card > .card-body {
@@ -944,9 +912,10 @@ div.nb-card {
 }
 
 .nb-card > .card-body > .card-text {
-    font-size: 0.8em;
-    line-height: 1.2em;
+    font-size: 0.7em;
+    line-height: 1.0em;
     overflow: hidden;
+    text-overflow: ellipsis;
     /* for set '...' in absolute position */
     position: relative;
     /* max-height = line-height (1.2) * lines max number (3) */
@@ -984,6 +953,7 @@ div.nb-card {
 }
 
 .nb-card > .card-body > .nb-card-tags {
+    display: none;
     position: absolute;
     bottom: 5px;
     width: 100%;
@@ -992,8 +962,11 @@ div.nb-card {
 }
 
 .nb-card > .card-body > .nb-card-tags > .badge {
-    display: inline-block;
+    display: none;
     margin-right: 3px;
+}
+.badge {
+    display: none;
 }
 
 .sidebar[style*="block"] + .main-container {
@@ -1204,7 +1177,7 @@ ul.tagit input[type="text"] {
  } */
 
 div.no-negative-header {
-    margin-top: 150px;
+    margin-top: 120px;
 }
 
 .page-header {
@@ -1258,3 +1231,111 @@ div.nb-card-new {
 .modal-form select {
     max-width: 100%;
 }
+.ucsd-logo {
+    height: 40px;
+    border-radius: 0px;;
+}
+@media screen and (min-width: 1400px) {
+    #title-center {
+       font-size: 70px;
+    }
+    #slogan-center {
+        font-size: 30px;
+     }
+  }
+
+  @media screen and (max-width: 1000px) { 
+    p, span, li {
+        font-size: 14px;
+    }
+    h1 {
+        font-size: 30px;
+    }
+    h2 {
+        font-size: 25px;
+    }
+    h3 {
+        font-size: 20px;
+    }
+    h4 {
+        font-size: 17px;
+    }
+    h5 {
+        font-size: 17px;
+    }
+    h6 {
+        font-size: 15px;
+    }
+    footer li a {
+        font-size: 12px !important;
+    }
+    footer h5 {
+        font-size: 20px !important;
+    } 
+}
+@media screen and (min-width: 1400px) {
+    p, span, li {
+        font-size: 14px !important;
+    }
+    h1 {
+        font-size: 50px;
+    }
+    h2 {
+        font-size: 45px;
+    }
+    h3 {
+        font-size: 40px;
+    }
+    h4 {
+        font-size: 35px;
+    }
+    h5 {
+        font-size: 30px;
+    }
+    h6 {
+        font-size: 30px;
+    }
+  }
+  @media (min-width: 768px){
+        .inside .row {
+        width: 750px;
+        margin: auto;
+        }
+        .about .row {
+            width: 750px;
+            margin: auto;
+        }
+        .video .row {
+            width: 750px;
+            margin: auto;
+        }
+    }
+    @media (min-width: 992px){
+        .inside .row {
+            width: 970px;
+            margin: auto;
+        }
+        .about .row {
+            width: 970px;
+            margin: auto;
+        }
+        .video .row {
+            width: 970px;
+            margin: auto;
+        }
+        }
+    @media (min-width: 1200px) {
+        .inside .row {
+            width: 1170px;
+            margin: auto;
+        }
+        .about .row {
+            width: 1170px;
+            margin: auto;
+        }
+        .video .row {
+            width: 1170px;
+            margin: auto;
+        }
+    }
+    
