@@ -1502,9 +1502,10 @@ Vue.component('notebook-project', {
             this.$el.querySelector('.published-icon').classList.add('d-none');
         if (!this.shared)  // Hide shared icon if not published
             this.$el.querySelector('.shared-icon').classList.add('d-none');
-        if (this.shared && !this.owner) {// Hide edit sharing if shared and not owner
+        if (this.shared && !this.owner) { // Hide sharing/publishing/delete if shared and not owner
             this.$el.querySelector('.dropdown-item.share-project').classList.add('d-none');
             this.$el.querySelector('.dropdown-item.publish-project').classList.add('d-none');
+            this.$el.querySelector('.dropdown-item.delete-project').classList.add('d-none');
         }
         this.apply_filter();
     },
