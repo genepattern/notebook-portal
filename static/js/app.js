@@ -19,6 +19,7 @@ export function jupyterhub_encode(raw_name) {
         .replace(/~/g, '%7e')
         .replace(/_/g, '%5f')
         .replace(/%/g, '-')
+        .toLowerCase()
 }
 
 /**
