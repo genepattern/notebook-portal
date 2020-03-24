@@ -155,7 +155,7 @@ class PublishedProjectViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         dir_name = unzip_project(copy=str(instance.source.id), user=request.user, server_name=instance.source.dir_name)
         url = spawn_server(user=request.user, server_name=dir_name, image=instance.image)
-        project = Project(name=instance.name, image=instance.image, path='/', dir_name=dir_name,
+        project = Project(name="Copy of " + instance.name, image=instance.image, path='/', dir_name=dir_name,
                               default=instance.default, description=instance.description, authors=instance.authors,
                               quality=instance.quality)
         project.save()
