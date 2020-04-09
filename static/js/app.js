@@ -600,9 +600,42 @@ export function library(selector) {
         created() {
             const app = this;
             if (window.is_authenticated) GenePattern.login_to_jupyterhub({suppress_errors: true});
-            GenePattern.public_notebooks().then(r => this.notebooks = r);
-            GenePattern.notebook_tags().then(r => this.tags = r);
-            GenePattern.pinned_tags().then(r => this.pinned = r);
+            GenePattern.public_notebooks().then((results) => {
+                const non_workshop = [];
+                results.forEach(nb => {
+                    let found_workshop = false;
+                    nb.tags.forEach(tag => {
+                        if (tag.label === 'workshop') found_workshop = true;
+                    });
+                    if (found_workshop === false) non_workshop.push(nb);
+                })
+                non_workshop.sort((a, b) => {
+                    const a_name = a.name.toLowerCase();
+                    const b_name = b.name.toLowerCase();
+                    return (a_name < b_name) ? -1 : (a_name > b_name) ? 1 : 0;
+                });
+                this.notebooks = non_workshop;
+            });
+            GenePattern.notebook_tags().then((results) => {
+                const sorted_tags = [];
+                results.forEach(nb => {
+                    nb.tags.forEach(tag => {
+                        if (tag.label == true) sorted_tags.push(nb)}
+                        );
+                })
+                sorted_tags.sort()
+                this.tags = sorted_tags;
+            });
+            GenePattern.pinned_tags().then((results) => {
+                const sorted_ptags = [];
+                results.forEach(nb => {
+                    nb.tags.forEach(tag => {
+                        if (tag.label == true) sorted_ptag.push(nb)}
+                        );
+                })
+                sorted_ptag.sort()
+                this.pinned = sorted_ptags;
+            });
         },
         methods: {},
         watch: {
@@ -626,8 +659,9 @@ export function library(selector) {
                 const cards = document.querySelector(selector).querySelector('.notebooks').querySelectorAll('.nb-card');
                 cards.forEach(function(card) {
                     // Matching notebook
-                    if (card.textContent.toLowerCase().includes(search)) card.classList.remove('d-none');
-
+                    if (card.textContent.toLowerCase().includes(search)) {
+                        card.classList.remove('d-none');
+                    }
                     // Not matching notebook
                     else card.classList.add('d-none');
                 });
@@ -1024,7 +1058,7 @@ Vue.component('notebook-card', {
                         <h8 class="card-title">[[ nb.name ]] <i class="fas fa-external-link-alt" style="font-size: 80%"></i></h8> 
                         <p class="card-text">[[ nb.description ]]</p> 
                         </div>
-                        <div class="card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in nb.tags">[[ tag.label ]]</span></div>
+                        <div class="d-none card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in nb.tags">[[ tag.label ]]</span></div>
                     </div> 
                 </div>`
     // template: `<div v-bind:class="{'card': true, 'nb-card': true, 'd-none':!filter}" v-on:click="preview" > 
