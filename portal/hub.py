@@ -79,3 +79,11 @@ def unzip_project(copy, user, server_name):
     response = requests.get(f'{settings.BASE_HUB_URL}/services/library/?copy={copy}&user={user}&server={server}')
     if response.status_code == 201 or response.status_code == 200: return response.text
     else: raise RuntimeError(response.text)
+
+
+def user_status(user):
+    user = encode_name(str(user))
+    response = requests.get(f'{settings.BASE_HUB_URL}/hub/api/users/{user}',
+                            headers={'Authorization': f'token {settings.HUB_TOKEN}'})
+    if response.status_code == 200: return response.json()
+    else: raise RuntimeError(response.text)

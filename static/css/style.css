@@ -1254,3 +1254,7 @@ div.nb-card-new {
 .modal-form select {
     max-width: 100%;
 }
+
+.project-stopped {
+    filter: grayscale(100%) brightness(150%);
+}

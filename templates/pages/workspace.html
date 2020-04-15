@@ -59,7 +59,7 @@
                 <p>Launch, create or share notebook workspaces.</p>
                 <div class="workspace">
                     <div class="my-workspaces">
-                        <notebook-project v-for="p in projects" :project="p" filter="owner"></notebook-project>
+                        <notebook-project v-for="p in projects" :project="p" filter="owner" ref="my_projects"></notebook-project>
                         <div class="card nb-card nb-card-new" @click="create_project_dialog">
                             <div class="card-img-top" style="background: rgba(0, 0, 0, 0.05);">
                                 <i class="fa fa-plus-circle card-icon"></i>
@@ -73,7 +73,7 @@
                     <div class="shared-with-me">
                         <h3>Shared With Me</h3>
                         <p>Notebook workspaces that others have shared with you.</p>
-                        <notebook-project v-for="p in projects" :project="p" filter="!owner" v-if="projects.length > 0"></notebook-project>
+                        <notebook-project v-for="p in projects" :project="p" filter="!owner" v-if="projects.length > 0" ref="shared_projects"></notebook-project>
                         <p v-if="projects.length === 0" class="lead text-muted">No one has shared any notebook workspaces with you.</p>
                     </div>
                 </div>

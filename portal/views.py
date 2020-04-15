@@ -1,14 +1,12 @@
-import json
-
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponsePermanentRedirect
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from portal.hub import spawn_server, delete_server, stop_server, encode_name, zip_project, unzip_project
-from portal.models import Project, ProjectAccess, PublishedProject, Tag, SharingInvite
-from portal.serializers import UserSerializer, GroupSerializer, ProjectSerializer, ProjectAccessSerializer, \
+from .hub import spawn_server, delete_server, stop_server, encode_name, zip_project, unzip_project, user_status
+from .models import Project, ProjectAccess, PublishedProject, Tag, SharingInvite
+from .serializers import UserSerializer, GroupSerializer, ProjectSerializer, ProjectAccessSerializer, \
     PublishedProjectSerializer, TagSerializer, PublishedProjectGetSerializer, ProjectGetSerializer, \
     SharingInviteSerializer
 from .utils import create_tags, create_access, model_from_url, get_owner, merge_access
@@ -21,6 +19,11 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAdminUser,)
+
+    @action(detail=True, methods=['get'])
+    def status(self, request, pk=None):
+        user_json = user_status(user=request.user)
+        return Response(data=user_json, status=status.HTTP_200_OK)
 
 
 class GroupViewSet(viewsets.ModelViewSet):

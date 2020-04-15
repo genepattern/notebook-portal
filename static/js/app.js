@@ -251,26 +251,29 @@ export function launch_public_project(nb) {
         });
 }
 
+export function user_status(user) {
+    return fetch(`/rest/users/${user}/status/`, {
+            'method': 'GET',
+            'headers': {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken': get_csrf()
+            }})
+        .then(response => {
+            if (!response.ok)
+                throw Error(response.statusText);
+            else return response.json()
+        })
+        .then(function(response) {
+            return response;
+        });
+}
+
 /**
  * Retrieves the public notebooks from the cache, if possible, from the server if not
  *
  * @returns {Promise<any>}
  */
-// export function public_notebooks() {
-//     if (_public_notebooks !== null)
-//         return new Promise(function(resolve) {
-//             resolve(_public_notebooks['results']);
-//         });
-//
-//     else
-//         return fetch(PUBLIC_NOTEBOOK_SEVER + 'services/sharing/notebooks/')
-//             .then(response => response.json())
-//             .then(function(response) {
-//                 _public_notebooks = response;
-//                 return response['results'];
-//             });
-// }
-// TODO: Uncomment and remove above function upon release
 export function public_notebooks() {
     if (_public_notebooks !== null)
         return new Promise(function(resolve) {
@@ -796,11 +799,44 @@ export function workspace(selector) {
         },
         computed: {},
         created() {
-            if (window.is_authenticated) GenePattern.login_to_jupyterhub({suppress_errors: true});
-            GenePattern.notebook_projects().then(r => this.projects = r);
             this.user = get_login_data().username;
+            if (window.is_authenticated) GenePattern.login_to_jupyterhub({suppress_errors: true});
+            GenePattern.notebook_projects().then(r => {
+                this.projects = r;          // Cache the projects
+                this.begin_status_poll()    // Begin polling for project status
+            });
+
         },
         methods: {
+            'begin_status_poll': function() {
+                // Status poll function
+                const status_poll = () => {
+                    user_status(this.user).then((user) => {
+                        // If no servers are listed, nothing to update
+                        if (!user.servers) return;
+
+                        // For each project, update the running status
+                        workspace_app.$refs.my_projects &&
+                        workspace_app.$refs.my_projects.forEach(project => {
+                            const server_data = user.servers[project.project.dir_name];
+                            project.running = server_data && server_data.ready;
+                        });
+
+                        // For shared project, update the running status
+                        workspace_app.$refs.shared_projects &&
+                        workspace_app.$refs.shared_projects.forEach(project => {
+                            const server_data = user.servers[project.project.dir_name];
+                            project.running = server_data && server_data.ready;
+                        });
+                    });
+                };
+
+                // Begin the polling interval
+                setInterval(status_poll, 15 * 1000); // Poll every 15 seconds
+
+                // Do the initial poll
+                status_poll();
+            },
             'create_project_dialog': function() {
                 modal({
                     title: 'Create a New Notebook Project',
@@ -1493,6 +1529,11 @@ Vue.component('notebook-project', {
         'shared': {
             type: Boolean,
             required: false
+        },
+        'running': {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     mounted() {
@@ -1507,9 +1548,14 @@ Vue.component('notebook-project', {
             this.$el.querySelector('.dropdown-item.publish-project').classList.add('d-none');
             this.$el.querySelector('.dropdown-item.delete-project').classList.add('d-none');
         }
+        this.apply_running();
         this.apply_filter();
     },
     methods: {
+        'apply_running': function() {
+            if (!this.running) this.$el.querySelector('.card-img-top').classList.add('project-stopped');
+            else this.$el.querySelector('.card-img-top').classList.remove('project-stopped');
+        },
         'apply_filter': function () {
             if (this.filter === 'owner' && !this.owner) this.$el.remove();
             if (this.filter === '!owner' && this.owner) this.$el.remove();
@@ -1808,11 +1854,17 @@ Vue.component('notebook-project', {
             show_spinner();
             launch_project(this.project.url).then(() => {
                 window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${this.project.dir_name}/`);
+                this.running = true;
                 setTimeout(() => {
                     hide_spinner();
                     close_modal();
                 }, 500);
             });
+        }
+    },
+    watch: {
+        'running': function() {
+            this.apply_running();
         }
     },
     computed: {},
@@ -1832,7 +1884,8 @@ Vue.component('notebook-project', {
                             <a class="dropdown-item delete-project" href="#">Delete</a>
                         </div>
                     </div>
-                    <img class="card-img-top" src="/static/images/banner2.jpg" alt="Project Icon" /> 
+                    <img v-if="!project.running" class="card-img-top project-stopped" src="/static/images/banner2.jpg" alt="Project Icon" /> 
+                    <img v-if="project.running" class="card-img-top" src="/static/images/banner2.jpg" alt="Project Icon" /> 
                     <div class="card-body"> 
                         <h8 class="card-title">[[ project.name ]]</h8> 
                         <p class="card-text">[[ project.description ]]</p>  
