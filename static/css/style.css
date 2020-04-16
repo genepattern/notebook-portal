@@ -26,13 +26,10 @@ body {
     line-height: 1.5;
 }
 
+
 p, span, li, b, td {
-    font-size: 1.2vw;
+    /* font-size: 1.2vw; */
     font-weight: 300;
-}
-b {
-    font-size: 1.0vw;
-    font-weight: 600;
 }
 h1, h2, h3, h4, h5, h6 {
     font-weight:400;
@@ -40,7 +37,7 @@ h1, h2, h3, h4, h5, h6 {
 .main-container h1, .main-container h2, .main-container h3, .main-container h4, .main-container h5, .main-container h6 {
     font-weight:500;
 }
-h1 {
+/* h1 {
     font-size: 3.5vw;
 }
 h2 {
@@ -58,7 +55,7 @@ h5 {
 h6 {
     font-size: 1.2vw;
     /* color: rgb(50,50,50); */
-}
+} */
 
 
 /* td {
@@ -166,8 +163,15 @@ a:hover {
     opacity: 1;
 }
 .navbar-fixed-top.scrolled {
-    background: rgba(31, 60, 118,0.9);
+    background-color: rgba(31, 60, 118,0.9);
     transition: background-color 200ms linear;
+}
+.navbar-collapse.collapse.show, .navbar-collapse.collapsing {
+    padding-left: 50px;
+    background-color: rgba(31, 60, 118,0.9);
+}
+.navbar-collapse.collapse.show > .login-register {
+    margin-bottom: 2px;
 }
 footer {
     border: none;
@@ -183,11 +187,12 @@ footer {
     left: 0;
 }
 footer li a, footer li {
-    font-size: 1vw ;
+    font-size: 14px ;
 }
+
 footer h5 {
-    font-size: 1.3vw ;
-}
+    font-size: 18px ;
+} 
 header {
     padding: 0;
     padding-top: 30px;
@@ -826,7 +831,7 @@ body.no-sidebar #main-pane {
     border: none;
 }
 
-a.nav-link.login_link, a.nav-link.register_link {
+a.nav-link.login_link {
     margin-right: 10px;
     padding: 10px !important;
     padding-left: 20px !important;
@@ -834,6 +839,17 @@ a.nav-link.login_link, a.nav-link.register_link {
     background: #428bca;
     border-radius: 20px;
     text-shadow: none !important;
+    width: 80px;
+}
+a.nav-link.register_link {
+    margin-right: 10px;
+    padding: 10px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    background: #428bca;
+    border-radius: 20px;
+    text-shadow: none !important;
+    width: 100px;
 }
 a.nav-link.login_link:hover, a.nav-link.register_link:hover {
     opacity: 0.8;
@@ -1264,7 +1280,7 @@ div.nb-card-new {
     background-size: 100%;
     }
 }
-  @media screen and (max-width: 1000px) { 
+  /* @media screen and (max-width: 1000px) { 
     p, span, li {
         font-size: 15px;
     }
@@ -1292,8 +1308,8 @@ div.nb-card-new {
     footer h5 {
         font-size: 20px !important;
     } 
-}
-@media screen and (min-width: 1400px) {
+} */
+/* @media screen and (min-width: 1400px) {
     p, span, li, td, b {
         font-size: 16px;
     }
@@ -1314,7 +1330,7 @@ div.nb-card-new {
     }
     h6 {
         font-size: 30px;
-    }
+    } */
   }
   @media (min-width: 768px){
         .inside .row {
