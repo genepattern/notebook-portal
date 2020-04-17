@@ -800,7 +800,10 @@ export function workspace(selector) {
         computed: {},
         created() {
             this.user = get_login_data().username;
-            if (window.is_authenticated) GenePattern.login_to_jupyterhub({suppress_errors: true});
+            if (window.is_authenticated) {
+                GenePattern.login_to_jupyterhub({suppress_errors: true});
+                GenePattern.login_to_genepattern({suppress_errors: true});
+            }
             GenePattern.notebook_projects().then(r => {
                 this.projects = r;          // Cache the projects
                 this.begin_status_poll()    // Begin polling for project status
