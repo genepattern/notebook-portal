@@ -125,6 +125,19 @@ class ProjectViewSet(viewsets.ModelViewSet):
         except SharingInvite.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @action(detail=False, methods=['get'])
+    def user(self, request, *args, **kwargs):
+        user = kwargs['user']
+        dir_name = kwargs['dir']
+
+        if user != request.user.username or not request.user.is_staff: return Response(status=status.HTTP_403_FORBIDDEN)
+
+        try: project = Project.objects.get(access__user=request.user, dir_name=dir_name)
+        except Project.DoesNotExist: return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(project)
+        return Response(serializer.data)
+
 
 class ProjectAccessViewSet(viewsets.ModelViewSet):
     """

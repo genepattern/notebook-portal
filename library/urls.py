@@ -44,6 +44,7 @@ urlpatterns = i18n_patterns(
 
     # Notebook Portal
     url(r'^rest/', include(portal.urls.router.urls)),
+    url(r'^rest/', include(portal.urls.urlpatterns)),
 
     # Notebook Library
     url(r'^thumbnail/(?P<id>[0-9]+)/$', serve_thumbnail),
