@@ -22,7 +22,6 @@
 
     <!-- Include Mezzanine Resources -->
     <link rel="stylesheet" href="{% static "css/mezzanine.css" %}">
-    {% block extra_css %}{% endblock %}
     <script src="{% static "mezzanine/js/"|add:settings.JQUERY_FILENAME %}"></script>
 
     <!-- Include Bootstrap 4 -->
@@ -37,6 +36,7 @@
 
     <!-- Include Site Stylesheet -->
     <link rel="stylesheet" href="/static/css/style.css" type="text/css" media="screen"/>
+    {% block extra_css %}{% endblock %}
 
     <!-- Include App javascript -->
     <script type="module" src="{% static "js/app.js" %}"></script>
@@ -94,18 +94,17 @@
     {% block lead %}
         <div class="lead-cover">
             <div class="container" style="padding:0px;">
-                <div class="row">
-                    <div class="col-md-12">
-                            <h1 id="page-title">{% block title %}{% endblock %}</h1>
-                            <h4 id="page-description">{% block description %}{% endblock %}</h4>
-                    </div>
-                </div>
+                <h1 id="page-title">{% block title %}{% endblock %}</h1>
+                <h4 id="page-description">{% block description %}{% endblock %}</h4>
             </div>
         </div>
     {% endblock %}
 
     {% block index %}
     {% endblock index %}
+
+    {% block docs %}
+    {% endblock docs %}
 
     <!-- Display the main content -->
     {% block main-container %}

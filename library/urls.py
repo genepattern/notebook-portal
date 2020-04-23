@@ -15,7 +15,7 @@ from mezzanine_api.views import PageViewSet, PostViewSet, CategoryViewSet, SiteV
 from rest_framework import routers
 
 import portal.urls
-from library.views import dashboard, jobs, analyses, run_analysis, serve_thumbnail, library, workspace, logout
+from library.views import dashboard, jobs, analyses, run_analysis, serve_thumbnail, library, workspace, logout, docs
 
 admin.autodiscover()
 
@@ -52,6 +52,7 @@ urlpatterns = i18n_patterns(
     url(r'^library/$', library),
     url(r'^jobs/$', jobs),
     url(r'^analyses/$', analyses),
+    url(r'^docs/$', docs),
     url(r'^analyses/(?P<lsid>.*)/$', run_analysis),
 )
 

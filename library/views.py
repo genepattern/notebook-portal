@@ -60,7 +60,15 @@ def analyses(request):
     return HttpResponse(template.render({}, request))
 
 
+def docs(request):
+    # Display the analysis template
+    template = loader.get_template('pages/docs.html')
+    return HttpResponse(template.render({}, request))
+
+
 def run_analysis(request, lsid):
     # Display the run template
     template = loader.get_template('pages/run_analysis.html')
     return HttpResponse(template.render({'lsid': lsid}, request))
+
+

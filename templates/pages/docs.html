@@ -1,0 +1,158 @@
+{% extends "pages/page.html" %}
+{% load mezzanine_tags keyword_tags staticfiles static %}
+
+{% block meta_title %}Docs{% endblock %}
+{% block title %}Documentation{% endblock %}
+
+{% block extra_css %}
+    <style type="text/css">
+        #page-description {
+            display:none;
+        }
+        #page-title {
+            margin-bottom: 30px;
+        }
+    </style>   
+{% endblock %}
+
+{% block docs %}
+
+<div class="container main-container">
+    <div class="row">
+        <!-- <div class="col-md-2">
+            <h4>Test</h4>
+            <ul class="list-unstyled">
+                <li>test</li>
+            </ul>
+        </div> -->
+        <div id="main-pane" class="col-md-12">
+            <section class="docs">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="card">
+                        <h5 class="card-header">User Guide</h5>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a href="/quickstart/">Quickstart</a>
+                                    <p>10-minute tutorial on the GenePattern Notebook Environment
+                                    </p>
+                                </li>
+                                <li>
+                                    <a href="/basic-features/">Basic Features</a>
+                                    <p>Most commonly used features</p>
+                                </li>
+                                <li>
+                                    <a href="/publish-and-sharing/">Publish and Share Notebooks</a>
+                                    <p>How to share or publish notebooks</p>
+                                </li>
+                                <li>
+                                    <a href="/best-practices/">Best Practices</a>
+                                    <p>10 simple rules for reproducible research in GenePattern Notebook</p>
+                                </li>
+                                <li>
+                                    <a href="/cheat-sheet/">Cheat Sheet</a>
+                                    <p></p>
+                                </li>
+                                <li>
+                                    <a href="/tutorial-videos/">Tutorial Videos</a>
+                                </li>
+                            </ul>
+                        </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card">
+                        <h5 class="card-header">Technical Documentation</h5>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a href="https://gpnotebook-website-docs.readthedocs.io/en/latest/programmatic/" target="_blank">Programmatic Features
+                                    </a>
+                                    <p>The GenePattern Notebook environment also provides a variety of features intended primarily for use by coders</p>
+                                </li>
+                                <li>
+                                    <a href="https://gpnotebook-website-docs.readthedocs.io/en/latest/local-installation/" target="_blank">Local Installation
+                                    </a>
+                                    <p>How to install GenePattern Notebook locally using Docker or pip</p>
+                                </li>
+                                <li>
+                                    <a href="https://gpnotebook-website-docs.readthedocs.io/en/latest/jupyter-users/" target="_blank">Jupyter Users
+                                    </a>
+                                    <p>Additional information for more advanced Jupyter users</p>
+                                </li>
+                                <li>
+                                    <a href="https://gpnotebook-website-docs.readthedocs.io/en/latest/releases/" target="_blank">Release Notes
+                                    </a>
+                                    <p>Latest updates on GenePattern Notebook and its various extensions</p>
+                                </li>
+                                <li>
+                                    <a href="https://gpnotebook-website-docs.readthedocs.io/en/latest/faq/" target="_blank">FAQ
+                                    </a>
+                                    <p></p>
+                                </li>
+                                <li>
+                                    <a href="/programmatic-details/">Programmatic Details
+                                    </a>
+                                    <p>Information on dependencies, Jupyter extensions, and active kernels</p>
+                                </li>
+                            </ul>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <h5 class="card-header">GenePattern Documentation</h5>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <a href="https://genepattern.org/modules" target="_blank">GenePattern Analysis Modules
+                                        </a>
+                                        <p>List of active GenePattern modules</p>
+                                    </li>
+                                    <li>
+                                        <a href="https://genepattern.org/file-formats-guide" target="_blank">File Formats Guide
+                                        </a>
+                                        <p>Guide on all the file formats used in for GenePattern modules</p>
+                                    </li>
+                                    <li>
+                                        <a href="https://genepattern.org/programmers-guide" target="_blank">Programmers Guide
+                                        </a>
+                                        <p>Complete coders guide to GenePattern</p>
+                                    </li>
+                                    <li>
+                                        <a href="https://genepattern.org/concepts" target="_blank">GenePattern Concepts
+                                        </a>
+                                        <p>Brief introduction to the concepts and terms used in GenePattern and its documentation</p>
+                                    </li>
+                                    <li>
+                                        <a href="https://genepattern.org/video-tutorials" target="_blank">GenePattern Videos
+                                        </a>
+                                        <p></p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+{% block sidebar %} 
+{% endblock sidebar %}
+
+{% block main-container %} 
+{% endblock main-container %} 
+
+{% endblock %}
+
+{% block footer_js %}
+    <script type="module">
+        // Import the application module
+        import * as GenePattern from "/static/js/app.js";
+    </script>
+{% endblock %}
