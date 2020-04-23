@@ -342,12 +342,11 @@ header .nav-link {
     font-size: 18px;
     text-shadow: 3px 3px 15px black;
     line-height: 2;
+    color:white;
 }
 .front-link:hover {
-    color:white;
-    transform: translateY(-1px);
+    opacity: 0.8;
     text-shadow: 5px 5px 10px black;
-    transition: all 0.3s ease;
 }
 .inside-img {
     max-height: 500px;
@@ -1199,8 +1198,11 @@ div.nb-card-new {
 .ytp-cued-thumbnail-overlay-image {
     background-size: contain;
 }
+.about td {
+    padding-bottom: 10px;
+}
 
-@media (max-width: 768px){
+@media (max-width: 900px){
     .inside{
         padding: 0px;
     }
