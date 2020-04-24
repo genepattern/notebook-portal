@@ -362,7 +362,7 @@ header .nav-link {
     color: black;
 }
 .inside .row, .about .row, .video .row {
-    width: 80%;
+    width: 90%;
     margin:auto;
 }
 .video {
@@ -685,9 +685,9 @@ h1.lead-big {
     box-shadow: 2px 2px 10px lightgrey;
 }
 .docs .card .card-header {
-    background-color: rgba(51,122,183,0.95);
+    /* background-color: rgba(51,122,183,0.95);
     color: white;
-    text-shadow: 0px 3px 8px black;
+    text-shadow: 0px 3px 8px black; */
 }
 .docs .card li a {
     font-weight: 500;
@@ -1201,6 +1201,7 @@ div.nb-card-new {
 .about td {
     padding-bottom: 10px;
 }
+
 
 @media (max-width: 900px){
     .inside{
