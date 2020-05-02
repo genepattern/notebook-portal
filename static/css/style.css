@@ -66,6 +66,7 @@ a:hover {
 iframe {
     border: none;
     padding: 20px;
+    min-height: 400px;
 }
 
 .col-md-6, .col-md-5, .col-md-7, .col-md-8, .col-md-4, .col-md-3, .col-md-9, .col-md-12 {
@@ -1215,6 +1216,9 @@ div.nb-card-new {
     }
     .news-img {
         display:none;
+    }
+    .iframe {
+        min-height: unset;
     }
 }
     
