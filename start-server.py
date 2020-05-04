@@ -21,7 +21,7 @@ args = parser.parse_args()
 
 try:
     subprocess.Popen(f'docker run --rm \
-                                  --name=notebook_library \
+                                  --name=website \
                                   -p {args.port}:8000 \
                                   -v {args.config}:/config \
                                   genepattern/notebook-library:19.08'.split())
