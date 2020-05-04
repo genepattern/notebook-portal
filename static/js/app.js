@@ -821,7 +821,7 @@ export function login_form(selector) {
                 const next = $(selector).data("next");
 
                 // Call the login endpoint
-                login(this.username, this.password, next ? next : undefined)
+                login(this.username, this.password, next ? next : 'workspace')
             }
         }
     });
