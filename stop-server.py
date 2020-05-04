@@ -17,6 +17,6 @@ args = parser.parse_args()
 ##########################################
 
 try:
-    subprocess.Popen(f'docker stop  notebook_library'.split())
+    subprocess.Popen(f'docker stop website'.split())
 except KeyboardInterrupt:
     print('Shutting down Notebook Library')
