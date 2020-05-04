@@ -471,7 +471,7 @@ export function login(username, password, next="workspace") {
             if (typeof next === "function") next();
 
             // If next is workspace, forward to the notebook workspace
-            else if (next === "workspace") login_to_jupyterhub().then(response => location.href = PUBLIC_NOTEBOOK_SEVER);
+            else if (next === "workspace") login_to_jupyterhub().then(response => location.href = PUBLIC_NOTEBOOK_SEVER + '/hub/');
 
             // If not, reload the page
             else location.reload();
