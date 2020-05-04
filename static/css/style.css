@@ -1027,7 +1027,7 @@ div.nb-card:hover {
     display: none;
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1250px) {
     .navbar-nav {
         padding-left: 150px; 
     }
