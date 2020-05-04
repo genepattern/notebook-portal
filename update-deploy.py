@@ -18,7 +18,7 @@ args = parser.parse_args()
 try:
     # Stop the running container
     print('Stopping Docker container...')
-    subprocess.run(f'docker stop notebook_library'.split())
+    subprocess.run(f'docker stop website'.split())
     print('Container stopped')
 
     # GIT pull
@@ -34,7 +34,7 @@ try:
 
     # Update the database
     print('Updating the database schema')
-    subprocess.run('docker exec notebook_library /bin/bash -c "source activate webapp && /srv/notebook-library/manage.py makemigrations && /srv/notebook-library/manage.py migrate"', shell=True)
+    subprocess.run('docker exec website /bin/bash -c "source activate webapp && /srv/notebook-library/manage.py makemigrations && /srv/notebook-library/manage.py migrate"', shell=True)
     print('Database update complete')
 except KeyboardInterrupt:
     print('Interrupting script')
