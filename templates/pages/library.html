@@ -27,9 +27,9 @@
                     <h1>Notebook Library</h1>
                     <input type="search" placeholder="Search Notebooks" class="form-control nb-search" v-model="search" />
                 </div>
-                <p>Search for a public notebook using the box in the upper right or click on one of the featured categories below.</p>
+                <p>Search for a public notebook workspace using the box in the upper right or click on one of the featured categories below.</p>
                 <ul class="nav nav-tabs tags">
-                    <notebook-tag :tag="{'label': 'all notebooks'}"></notebook-tag>
+                    <notebook-tag :tag="{'label': 'all workspaces'}"></notebook-tag>
                     <notebook-tag v-for="t in pinned" :tag="t"></notebook-tag>
                 </ul>
                 <div class="notebooks">

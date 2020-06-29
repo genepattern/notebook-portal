@@ -842,10 +842,10 @@ export function workspace(selector) {
             },
             'create_project_dialog': function() {
                 modal({
-                    title: 'Create a New Notebook Project',
+                    title: 'Create a New Notebook Workspace',
                     body: `<form class="modal-form new-project-form">
                                <div class="form-group row">
-                                   <label for="name" class="col-sm-3">Project Name*</label> 
+                                   <label for="name" class="col-sm-3">Workspace Name*</label> 
                                    <input name="name" type="text" class="form-control col-sm-9" />
                                </div>
                                <div class="form-group row">
@@ -982,8 +982,8 @@ export function library(selector) {
                     else tab.classList.remove('active');
                 });
 
-                // special case for "all notebooks"
-                if (search === "all notebooks") search = "";
+                // special case for "all workspaces"
+                if (search === "all workspaces") search = "";
 
                 // Display the matching notebooks
                 const cards = document.querySelector(selector).querySelector('.notebooks').querySelectorAll('.nb-card');
@@ -1604,7 +1604,7 @@ Vue.component('notebook-project', {
                 title: `Edit ${this.project.name}`,
                 body: `<form class="modal-form edit-project-form">
                            <div class="form-group row">
-                               <label for="name" class="col-sm-3">Project Name*</label> 
+                               <label for="name" class="col-sm-3">Workspace Name*</label> 
                                <input name="name" type="text" class="form-control col-sm-9" value="${this.project.name}"/>
                            </div>
                            <div class="form-group row">
@@ -1640,7 +1640,7 @@ Vue.component('notebook-project', {
                        </form>`,
                 buttons: {
                     'Cancel': {},
-                    'Edit': {
+                    'Save': {
                         'class': 'btn btn-primary',
                         'click': function() {
                             const data = {};
@@ -1679,7 +1679,7 @@ Vue.component('notebook-project', {
                 title: `Share "${this.project.name}" With Others`,
                 body: `<form class="modal-form share-project-form">
                            <div class="alert alert-info">
-                               Enter the username or registered email address of those you want to share the notebook with below.
+                               Enter the username or registered email address of those you want to share the workspace with below.
                            </div>
                            </div>
                            <div class="form-group row">
@@ -1727,11 +1727,11 @@ Vue.component('notebook-project', {
                 title: `Publish "${this.project.name}" to Notebook Library`,
                 body: `<form class="modal-form publish-project-form">
                            <div class="alert alert-info">
-                               This will make a copy of the project available to anyone. A published notebook project does 
+                               This will make a copy of the workspace available to anyone. A published notebook workspace does 
                                not update automatically when you save it again in the future. To update the published copy 
                                you will have to click publish again after making any changes and saving.</div>
                            <div class="form-group row">
-                               <label for="name" class="col-sm-3">Project Name*</label> 
+                               <label for="name" class="col-sm-3">Workspace Name*</label> 
                                <input name="name" type="text" class="form-control col-sm-9" value="${this.project.name}"/>
                            </div>
                            <input name="image" type="hidden" value="${this.project.image}" />

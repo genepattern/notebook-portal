@@ -17,15 +17,15 @@
 {% block main %}
     <div id="vue">
         {% if not user.is_authenticated %}
-            <login-register title="Your Notebooks" next="reload"></login-register>
+            <login-register title="Your Workspaces" next="reload"></login-register>
         {% else %}
             xxx
         {% endif %}
-        <notebook-carousel header="Featured Notebooks" v-bind:nblist="featured_notebooks" :size="3" explore_text="All Featured Notebooks" explore_link="/library/"></notebook-carousel>
-        <notebook-carousel header="Public Notebooks" v-bind:nblist="notebooks" :size="3" explore_text="All Notebooks" explore_link="/library/#all"></notebook-carousel>
+        <notebook-carousel header="Featured Workspaces" v-bind:nblist="featured_notebooks" :size="3" explore_text="All Featured Notebooks" explore_link="/library/"></notebook-carousel>
+        <notebook-carousel header="Public Workspaces" v-bind:nblist="notebooks" :size="3" explore_text="All Workspaces" explore_link="/library/#all"></notebook-carousel>
         <notebook-carousel header="Analyses" v-bind:nblist="modules" :size="3" explore_text="All Analyses" explore_link="/analyses/"></notebook-carousel>
         {% if not user.is_authenticated %}
-            <login-register title="Shared Notebooks" next="reload"></login-register>
+            <login-register title="Shared Workspaces" next="reload"></login-register>
         {% else %}
             xxx
         {% endif %}

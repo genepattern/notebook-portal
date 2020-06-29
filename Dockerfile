@@ -53,6 +53,7 @@ RUN /bin/bash -c "source activate webapp && \
 
 WORKDIR /srv/notebook-library/
 RUN git clone https://github.com/genepattern/notebook-library.git /srv/notebook-library/
+RUN git checkout nbdev
 
 #############################################
 ##      Configure the repository           ##
