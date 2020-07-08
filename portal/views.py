@@ -166,6 +166,11 @@ class PublishedProjectViewSet(viewsets.ModelViewSet):
         zip_project(id=project.id, user=request.user, server_name=project.dir_name)
         return super(PublishedProjectViewSet, self).create(request, *args, **kwargs)
 
+    def update(self, request, *args, **kwargs):
+        project = model_from_url(Project, request.data['source'])
+        zip_project(id=project.id, user=request.user, server_name=project.dir_name)
+        return super(PublishedProjectViewSet, self).update(request, *args, **kwargs)
+
     @action(detail=True, methods=['post'])
     def launch(self, request, pk=None):
         instance = self.get_object()

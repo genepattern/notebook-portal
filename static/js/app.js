@@ -289,6 +289,18 @@ export function public_notebooks() {
             });
 }
 
+export function featured_notebooks() {
+    return public_notebooks().then((notebooks) => {
+        const featured = [];
+        notebooks.forEach(function(nb) {
+            nb.tags.forEach(function(tag) {
+                if (tag === "featured") featured.push(nb);
+            });
+        });
+        return featured;
+    });
+}
+
 /**
  * Retrieves the list of public notebook tags from the cache, if possible, from the server if not
  *
@@ -961,8 +973,9 @@ export function library(selector) {
             GenePattern.public_notebooks().then(r => this.notebooks = r);
             GenePattern.notebook_tags().then(r => this.tags = r);
             GenePattern.pinned_tags().then(r => this.pinned = r).then(() => {
-                GenePattern.public_notebooks().then(() => { // Ensure that both notebook & tag calls have fully loaded
-                    app.search = 'featured';
+                GenePattern.featured_notebooks().then((featured) => { // Ensure that both notebook & tag calls have fully loaded
+                    if (featured.length) app.search = 'featured';
+                    else app.search = 'all workspaces';
                     setTimeout(() => {document.querySelector('#library input.nb-search').value = '';}, 10);
                 });
             });
