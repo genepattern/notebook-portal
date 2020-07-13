@@ -11,6 +11,14 @@ class Tag(models.Model):
 
     def __str__(self): return self.label
 
+    def __init__(self, *args, **kwargs):
+        super(Tag, self).__init__(*args, **kwargs)
+        self.label = Tag.tag_normalize(self.label)  # Lowercase normalize it and strip special characters
+
+    @staticmethod
+    def tag_normalize(raw_label):
+        return ''.join(e for e in raw_label if e.isalnum()).lower()
+
 
 class Project(models.Model):
     name = models.CharField(max_length=256)

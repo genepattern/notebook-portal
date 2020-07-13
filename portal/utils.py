@@ -29,7 +29,7 @@ class IsOwnerOrReadOnly(BasePermission):
 def create_tags(tag_list):
     if tag_list is None or len(tag_list) == 0: return;
     for label in tag_list:
-        label = label.lower()
+        label = Tag.tag_normalize(label)
         try:
             Tag.objects.get(label=label)
         except Tag.DoesNotExist:

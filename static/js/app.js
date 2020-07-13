@@ -71,7 +71,7 @@ export function delete_project(url) {
 export function create_project(data) {
     // Transform tags to an array
     if (typeof data.tags === 'string' && data.tags.trim() === "") data.tags = [];
-    else if (typeof data.tags === 'string') data.tags = data.tags.trim().toLowerCase().split(',');
+    else if (typeof data.tags === 'string') data.tags = data.tags.replace(/[^0-9a-z,]/gi, '').toLowerCase().split(',');
 
     // Set dir_name
     data.dir_name = jupyterhub_encode(data.name);
@@ -112,7 +112,7 @@ export function launch_project(url) {
 export function edit_project(project, data) {
     // Transform tags to an array
     if (data.tags.trim() === "") data.tags = [];
-    else data.tags = data.tags.trim().toLowerCase().split(',');
+    else data.tags = data.tags.replace(/[^0-9a-z,]/gi, '').toLowerCase().split(',');
 
     // Merge edits into original object
     Object.keys(data).forEach(key => {
