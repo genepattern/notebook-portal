@@ -6,13 +6,27 @@
 
 {% block extra_css %}
     <style type="text/css">
+        .main-container {
+            min-height: calc(100vh - 300px);
+            min-width: 90%;
+        }
+        #library {
+            width: 100%;
+        }
     </style>
 {% endblock %}
 
 {% block body_class %}no-cover{% endblock %}
 
 
-
+{% block lead %}
+    <div class="page-toolbar">
+        <a class="btn btn-primary" href="/workspace/">Workspaces</a>
+        <a class="btn btn-primary" href="/library/">Library</a>
+        <a class="btn btn-primary" href="/analyses/">Analyses</a>
+        <a class="btn btn-primary" href="/jobs/">Jobs</a>
+    </div>
+{% endblock lead %}
 
 {% block library %}
 
@@ -20,7 +34,7 @@
     {% block content %} {% endblock content %} 
 {% endblock main-content %}
 
-    <div class="container main-container no-negative-header">
+    <div class="container main-container">
         <div class="row">
             <div id="library">
                 <div class="page-header">

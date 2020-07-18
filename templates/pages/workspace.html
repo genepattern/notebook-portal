@@ -45,11 +45,17 @@
     {% block content %} {% endblock content %}
 {% endblock main-content %}
 
-{% block main-container %}
-{% endblock main-container %}
+{% block lead %}
+    <div class="page-toolbar">
+        <a class="btn btn-primary" href="/workspace/">Workspaces</a>
+        <a class="btn btn-primary" href="/library/">Library</a>
+        <a class="btn btn-primary" href="/analyses/">Analyses</a>
+        <a class="btn btn-primary" href="/jobs/">Jobs</a>
+    </div>
+{% endblock lead %}
 
-{% block library %}
-    <div class="container main-container no-negative-header">
+{% block main-container %}
+    <div class="container main-container">
         <div class="row">
             <div id="workspace">
                 <div class="page-header">
@@ -59,7 +65,6 @@
                 <p>Launch, create or share notebook workspaces.</p>
                 <div class="workspace">
                     <div class="my-workspaces">
-                        <notebook-project v-for="p in projects" :project="p" filter="owner" ref="my_projects"></notebook-project>
                         <div class="card nb-card nb-card-new" @click="create_project_dialog">
                             <div class="card-img-top" style="background: rgba(0, 0, 0, 0.05);">
                                 <i class="fa fa-plus-circle card-icon"></i>
@@ -69,6 +74,7 @@
                                 <p class="card-text">Create a New Notebook Workspace</p>
                             </div>
                         </div>
+                        <notebook-project v-for="p in projects" :project="p" filter="owner" ref="my_projects"></notebook-project>
                     </div>
                     <div class="shared-with-me">
                         <h3>Shared With Me</h3>
@@ -80,7 +86,7 @@
             </div>
         </div>
     </div>
-{% endblock %}
+{% endblock main-container %}
 
 {% block footer_js %}
     <script type="module">

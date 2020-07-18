@@ -715,6 +715,21 @@ export function login(username, password, next="workspace") {
     // Submit the form
     show_spinner();
 
+    // Define the error callback
+    function error(xhr) {
+        close_modal();
+        hide_spinner();
+
+        // Handle errors
+        try {
+            message(JSON.parse(xhr.responseText).error, 'danger');
+        }
+        catch (e) {
+            console.error(xhr.responseText);
+            message("Unable to log in. Please recheck your username and password.", 'danger');
+        }
+    }
+
     $.ajax({
         beforeSend: function(xhrObj){
             xhrObj.setRequestHeader("X-CSRFToken", get_csrf());
@@ -723,7 +738,15 @@ export function login(username, password, next="workspace") {
         url: `/rest/api-auth/login/`,
         crossDomain: true,
         data: formData,
-        success: function (data) {
+        success: function (data, status, xhr) {
+            // Check for error message
+            if (data.includes('Please enter a correct username and password.')) {
+                error(xhr);
+                return;
+            }
+
+            console.log(xhr.status);
+
             close_modal();
             save_login_cookie(formData);
             message("GenePattern login successful.", "success");
@@ -738,17 +761,7 @@ export function login(username, password, next="workspace") {
             else location.reload();
         },
         error: function(xhr) {
-            close_modal();
-            hide_spinner();
-
-            // Handle errors
-            try {
-                message(JSON.parse(xhr.responseText).error, 'danger');
-            }
-            catch (e) {
-                console.error(xhr.responseText);
-                message("Unable to log in. Please recheck your username and password.", 'danger');
-            }
+            error();
         }
     });
 }
@@ -907,9 +920,10 @@ export function workspace(selector) {
                                     close_modal();
                                     const encoded_user = jupyterhub_encode(workspace_app.user);
                                     const encoded_server = jupyterhub_encode(data.name);
-                                    setTimeout(() => window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${encoded_server}/tree`), 1000);
-                                    // GenePattern.notebook_projects(true).then(r => workspace_app.projects = r);
-                                    location.reload();
+                                    setTimeout(() => {
+                                        window.open(`${PUBLIC_NOTEBOOK_SEVER}user/${encoded_user}/${encoded_server}/tree`);
+                                        location.reload();
+                                    }, 1000);
                                 }).catch(error => {
                                     close_modal();
                                     hide_spinner();
@@ -1606,7 +1620,9 @@ Vue.component('notebook-project', {
             if (event.target.classList.contains('delete-project')) this.confirm_delete();
             else if (event.target.classList.contains('edit-project')) this.edit_dialog();
             else if (event.target.classList.contains('share-project')) this.share_dialog();
+            else if (event.target.classList.contains('shared-icon')) this.share_dialog();
             else if (event.target.classList.contains('publish-project')) this.publish_dialog();
+            else if (event.target.classList.contains('published-icon')) this.publish_dialog();
             else if (event.target.classList.contains('dropdown-toggle') || event.target.classList.contains('fa-cog')) return false;
             else this.launch_project();
         },

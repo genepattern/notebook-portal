@@ -1212,6 +1212,7 @@ div.nb-card-new {
     color: white;
     padding: 0;
     margin: 0;
+    z-index: 1;
 }
 
 .published-icon,
@@ -1226,6 +1227,7 @@ div.nb-card-new {
     color: white;
     border: transparent solid 1px;
     border-radius: 3px;
+    z-index: 1;
 }
 
 .project-gear-menu > button {
@@ -1257,4 +1259,24 @@ div.nb-card-new {
 
 .project-stopped {
     filter: grayscale(100%) brightness(150%);
+}
+
+.page-toolbar {
+    min-width: 90%;
+    width: 90%;
+    max-width: 90%;
+    margin: 0 auto;
+    padding-top: 100px;
+    padding-bottom: 10px;
+}
+
+.page-toolbar > .btn:not(:hover) {
+    color: #000000;
+    background-color: #ffffff;
+    width: 120px;
+}
+
+.page-toolbar > .btn:hover {
+    color: #ffffff;
+    width: 120px;
 }
