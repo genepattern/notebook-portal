@@ -296,9 +296,32 @@ header .nav-link {
     color: white;
     font-weight: 200;
 }
+#body a.btn.btn-use {
+    background: #42bdca;
+    display: inline-block;
+    border-radius: 100px;
+    color: #FEFEFE;
+    border: none;
+    padding: 10px;
+}
 
-#home .btn:hover {
-    background: #ed1c24
+#home a.btn.btn-use {
+    font-size: 150%;
+    width: 350px;
+    margin-top: 20px;
+}
+
+#body a.btn:hover {
+    background: #3ea3b0;
+}
+
+.reveal-on-hover,
+.reveal-on-hover > a {
+    color: rgb(34, 64, 122);
+}
+
+.reveal-on-hover:hover {
+    color: white;
 }
 
 #messages {
@@ -345,6 +368,7 @@ header .nav-link {
     line-height: 2;
     color:white;
 }
+
 .front-link:hover {
     opacity: 0.8;
     text-shadow: 5px 5px 10px black;
