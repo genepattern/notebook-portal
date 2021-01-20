@@ -30,7 +30,7 @@ mezzanine-api==0.7.1
 mysqlclient==1.4.2.post1
 oauthlib==3.0.1
 pamela==1.0.0
-Pillow==6.0.0
+Pillow==7.1.0
 prometheus-client==0.6.0
 pycparser==2.19
 pycurl==7.43.0.2
