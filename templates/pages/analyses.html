@@ -24,21 +24,41 @@
 {% endblock main-content %}
 
     <div class="container main-container no-negative-header">
-        <div class="row">
-            <div id="analyses">
-                <div class="page-header">
-                    <h1>GenePattern Analyses</h1>
-                    <input type="search" placeholder="Search Analyses" class="form-control mod-search" v-model="search" />
-                </div>
-                <div class="categories d-none">
-                    <module-category v-for="c in categories" :category="c"></module-category>
-                </div>
-                <div class="modules d-none">
-                    <module-category v-for="m in modules" :category="m"></module-category>
-                </div>
+        <div id="analyses">
+            <div class="page-header">
+                <h1>GenePattern Analyses</h1>
+                <input type="search" placeholder="Search Analyses" class="form-control mod-search" v-model="search" />
             </div>
+            <p>Search for an analysis tool using the box in the upper right or click on one of the featured categories below.</p>
+            <ul class="nav nav-pills tags">
+                <!-- <module-tag :tag="{'label': 'Featured'}"></module-tag> -->
+                <module-tag :tag="{'label': 'Clustering'}"></module-tag>
+                <module-tag :tag="{'label': 'Differential Expression'}"></module-tag>
+                <module-tag :tag="{'label': 'Preprocess & Utilities'}"></module-tag>
+                <module-tag :tag="{'label': 'Single-Cell'}"></module-tag>
+                <module-tag :tag="{'label': 'RNA-Seq'}"></module-tag>
+                <module-tag :tag="{'label': 'GSEA'}"></module-tag>
+            </ul>
+            <div class="categories d-none">
+                <module-category v-for="c in categories" :category="c"></module-category>
+            </div>
+            <table class="modules table table-bordered w-auto">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Documentation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr is="module-category" v-for="m in modules" :category="m">
+                    </tr>
+                </tbody>
+                
+            </table>
         </div>
     </div>
+
 
 {% block sidebar %} 
 {% endblock sidebar %} 

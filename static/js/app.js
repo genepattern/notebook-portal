@@ -368,6 +368,27 @@ export function login_to_genepattern(suppress_errors=false) {
     });
 }
 
+export function login_to_gpdemo(suppress_errors=false) {
+    // Create the form data object
+    const data = new URLSearchParams();
+    data.append('loginForm', 'loginForm');
+    data.append('loginForm:signIn', 'Sign+in');
+    data.append('javax.faces.ViewState', 'j_id1');
+    data.append('username', 'GPDemo');
+    data.append('password', 'GPDemo');
+
+    // Login to GenePattern server
+    return fetch(`${GENEPATTERN_SERVER}pages/login.jsf`, {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'include',
+        headers: {
+            'origin': location.origin
+        },
+        body: data
+    });
+}
+
 export function get_jupyterhub_token(suppress_errors=false) {
     // Return the token (login response), logging in first if necessary
     if (!_jupyterhub_token) return login_to_jupyterhub(suppress_errors);
@@ -726,14 +747,14 @@ export function analyses(selector) {
                 const search = this.search.trim().toLowerCase();
 
                 // If search is blank display module categories
-                if (search === '') {
-                    window.location.hash = ''; // Remove the hash, if any
-                    document.querySelector(selector).querySelector('.categories').classList.remove('d-none');
-                    document.querySelector(selector).querySelector('.modules').classList.add('d-none');
-                }
+                // if (search === '') {
+                //     window.location.hash = ''; // Remove the hash, if any
+                //     document.querySelector(selector).querySelector('.categories').classList.remove('d-none');
+                //     document.querySelector(selector).querySelector('.modules').classList.add('d-none');
+                // }
 
                 // Otherwise show matching modules
-                else {
+                // else {
                     document.querySelector(selector).querySelector('.categories').classList.add('d-none');
                     document.querySelector(selector).querySelector('.modules').classList.remove('d-none');
 
@@ -745,11 +766,11 @@ export function analyses(selector) {
                         // Not matching module
                         else card.classList.add('d-none');
                     });
-                }
+                // }
             }
         },
         created() {
-            if (window.is_authenticated) GenePattern.login_to_genepattern();
+            GenePattern.login_to_gpdemo();
             GenePattern.genepattern_modules().then(r => this.modules = r);
             GenePattern.module_categories().then(r => this.categories = r);
 
@@ -978,14 +999,81 @@ Vue.component('module-category', {
         if (this.category.lsid) this.$el.classList.add('module');
         else this.$el.classList.add('category')
     },
-    template: `<div class="card mod-card" v-on:click="search_or_launch">  
-                    <div class="card-body"> 
-                        <h8 class="card-title">[[ category.name ]]</h8> 
-                        <div class="d-none">[[ category.tags ]] [[ category.categories ]] [[ category.suites ]]</div>
-                        <p class="card-text">[[ category.description ]]</p>
-                    </div> 
-                </div>`
+    // template: `<div class="card mod-card" v-on:click="search_or_launch">  
+    //                 <div class="card-body"> 
+    //                     <h8 class="card-title">[[ category.name ]]</h8> 
+    //                     <div class="d-none">[[ category.tags ]] [[ category.categories ]] [[ category.suites ]]</div>
+    //                     <p class="card-text">[[ category.description ]]</p>
+    //                 </div> 
+    //             </div>`
+    template: `<tr class="mod-card">  
+                    <td class="table-name"><b>[[ category.name ]]</b></td>
+                    <td width="100%" v-html="category.description">[[ category.description ]]</td>
+                    <td class="d-none">[[ category.tags ]] [[ category.categories ]] [[ category.suites ]]</td>
+                    <td style="text-align:center;"><a v-on:click="search_or_launch" href=""><i class="fa fa-book"></i></a></td>
+                </tr>`
+                
 });
+
+Vue.component('module-tag', {
+    delimiters: ['[[', ']]'],
+    props: ['tag'],
+    methods: {
+        'search_or_launch': function() {
+            document.querySelector('.mod-search').value = this.tag.label;
+            this.$root.search = this.tag.label;
+        }
+    },
+    mounted: function() {
+        this.$el.classList.add('tag');
+    },
+    template: `<ul class="nav-item" v-on:click="search_or_launch">  
+                   <a v-bind:class="{'nav-link': true, 'tag-tab': true, 'active':(tag.label=='featured')}" href="#">[[ tag.label ]]</a> 
+               </ul>`
+});
+
+// Vue.component('module', {
+//     delimiters: ['[[', ']]'],
+//     props: ['module'],
+//     methods: {
+//         'update_hash': function(hash) {
+//             window.location.hash = '#' + encodeURIComponent(hash);
+//         },
+
+//         'search_or_launch': function() {
+//             // If this is a module
+//             if (this.module.lsid) {
+//                 // Update the hash for back button support
+//                 // this.update_hash(this.category.lsid);
+
+//                 // Open the documentation
+//                 if (this.module.documentation) window.open(GENEPATTERN_SERVER.substring(0, GENEPATTERN_SERVER.length - 4) + this.module.documentation);
+//                 else window.open(GENEPATTERN_SERVER + "pages/index.jsf?lsid=" + this.module.lsid)
+
+//                 // Open the run analysis page
+//                 // window.open(`/analyses/${this.category.lsid}/`)
+//             }
+
+//             // If this is a category
+//             else {
+//                 // Update the hash for back button support
+//                 this.update_hash(this.module.name);
+
+//                 document.querySelector('.mod-search').value = this.module.name;
+//                 this.$root.search = this.module.name;
+//             }
+//         }
+//     },
+//     mounted: function() {
+//         if (this.module.lsid) this.$el.classList.add('module');
+//         else this.$el.classList.add('category')
+//     },
+//     template: `<tr class="mod-card" v-on:click="search_or_launch">  
+//                     <th>[[ module.name ]]</th>
+//                     <td>[[ module.description ]]</td>
+//                 </tr>`
+// });
+
 
 Vue.component('notebook-tag', {
     delimiters: ['[[', ']]'],
@@ -1008,6 +1096,7 @@ Vue.component('notebook-tag', {
     //                 </div>
     //             </div>`
 });
+
 
 Vue.component('notebook-card', {
     delimiters: ['[[', ']]'],

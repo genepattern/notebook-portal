@@ -10,7 +10,8 @@ html {
 body {
     /* font-family: 'Roboto', sans-serif; */
     /* font-family: "Helvetica",Helvetica,Arial,sans-serif; */
-    font-family:'Montserrat', sans-serif;
+    /* font-family:'Montserrat', sans-serif; */
+    font-family : 'Avenir';
     /* background-image: url(/static/images/banner-grayscale3.png); */
     background-image: url(/static/images/banner2.jpg);
     background-repeat: no-repeat;
@@ -26,13 +27,13 @@ body {
     line-height: 1.5;
 }
 
-p, span, li, b, td {
-    /* font-size: 1.2vw; */
+/* p, span, li, b, td {
     font-weight: 300;
-}
-h1, h2, h3, h4, h5, h6 {
+} */
+
+/* h1, h2, h3, h4, h5, h6 {
     font-weight:400;
-}
+} */
 .main-container h1, .main-container h2, .main-container h3, .main-container h4, .main-container h5, .main-container h6 {
     font-weight:500;
 }
@@ -283,13 +284,13 @@ header .nav-link {
 #home .btn {
     color: #FEFEFE;
     border: none;
-    background: #428bca;
+    background: #3598a3;
     border-radius: 100px;
     display: inline-block;
     padding: 10px;
     margin-top: 10px;
     margin-left: 5px;
-    width: 250px;
+    width: 200px;
 }
 
 #home .btn > a {
@@ -297,7 +298,7 @@ header .nav-link {
     font-weight: 200;
 }
 #body a.btn.btn-use {
-    background: #42bdca;
+    background: #41abc5;
     display: inline-block;
     border-radius: 100px;
     color: #FEFEFE;
@@ -306,7 +307,7 @@ header .nav-link {
 }
 
 #home a.btn.btn-use {
-    font-size: 150%;
+    font-size: 125%;
     width: 350px;
     margin-top: 20px;
 }
@@ -1003,19 +1004,6 @@ div.nb-card:hover {
     top: 10px;
 }
 
-.mod-card {
-    width: calc(33% - 10px);
-    display: inline-block;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    float: left;
-}
-
-.mod-card.module {
-    height: 100px;
-}
-
 .mod-card.category {
     height: 48px;
     text-transform: capitalize;
@@ -1033,7 +1021,7 @@ div.nb-card:hover {
 }
 
 .mod-card:hover {
-    background: #FEFEFE;
+    background: #eff1fd;
     border-color: #555599;
 }
 
@@ -1042,6 +1030,15 @@ div.nb-card:hover {
     line-height: 16px;
     max-height: 48px;
     overflow: hidden;
+}
+
+.mod-card {
+    /* border: 0.5px solid black; */
+    margin:auto;
+}
+
+.table-name {
+    width: fill;
 }
 
 .login-register .btn {
@@ -1190,6 +1187,10 @@ div.nb-card-new {
     border-radius: 3px;
 }
 
+.btn .btn-use {
+    background-color: #3598a3;
+}
+
 .project-gear-menu > button {
     color: white;
 }
@@ -1225,6 +1226,17 @@ div.nb-card-new {
 }
 .about td {
     padding-bottom: 10px;
+}
+.card-img-top{
+    height: 100px;
+    width: auto;
+}
+
+.card{
+    transition: transform .3s ease;
+}
+.card:hover {
+    transform: scale(1.1);
 }
 
 

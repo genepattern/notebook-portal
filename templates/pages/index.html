@@ -58,7 +58,7 @@
                     <!-- <h1 id="slogan-center">Integrating <a href="/what-is-genepattern" style="font-weight:900; box-shadow: 10px solid black;"><img class="index-logo" src="/static/images/genepattern.png" /> GenePattern</a> Genomic Analyses<br> with the <a target="_blank" href="https://jupyter.org" style="font-weight:900; "><img class="index-logo" src="/static/images/jupyter-white-empty.png" /> Jupyter</a> Notebook Environment</h1> -->
                 </div>
             </div>
-            <div style="margin: auto; text-align:center; margin-bottom: 2%;margin-top: 6%;display: block">
+            <div style="margin: auto; text-align:center; margin-bottom: 4%;margin-top: 6%;display: block">
                 <!-- {% if not user.is_authenticated %}
                     <a href="#" class="btn" onclick="document.querySelector('.login_link').click();">Login</a>
                 {% elif user.is_authenticated%}
@@ -86,7 +86,7 @@
 {% endeditable %} 
 {% endblock main %} -->
 
-<section class="inside">
+<!-- <section class="inside">
     <div class="row">
         <div class="col-md-6">
             <div class="features">
@@ -108,6 +108,116 @@
             <img class="inside-img" src="/static/media/uploads/single-cell-cluster2.png" width="100%" />
         </div>
     </div>
+</section> -->
+
+<section class="inside" style="text-align: center;">
+    <div class="row" style="text-align: center;font-family : 'Avenir' ;padding-top: 30px">
+        <!-- <div class="text-center" style="margin:auto; padding-bottom: 20px;">
+            <h3>Easily create and run a wide range of genomic analyses within shareable electronic notebooks
+            </h3>
+        </div> -->
+
+        <div class="card" style="width: 20rem; border:none; padding: 20px; text-align:center; margin:0 auto;">
+            <div class="text-center">
+                <a href="/analyses/" style="color:black"><img class="card-img-top text-center" src="/static/images/icons/dna_irfansetiawan_noun.png" style="align-content:center">
+            </div>
+            <div class="card-body">
+                <h4 class="card-title" style="font-size: 23px;">Bioinformatics Analysis</h4>
+                <p class="card-text" style="font-size: 90%">Hundreds of genomic analysis tools available from within a notebook, no programming required</p></a>
+            </div>
+        </div>
+        <div class="card" style="width: 20rem; border:none; padding: 20px; text-align:center; margin:0 auto;">
+            <div class="text-center">
+                <a href="/notebook-environment/" style="color:black"><img class="card-img-top text-center" src="/static/images/icons/notebook_andrewwas_noun.png" style="align-content:center">
+            </div>
+            <div class="card-body">
+                <h4 class="card-title" style="font-size: 22px;">Notebook Environment</h4>
+                <p class="card-text" style="font-size: 90%">Executable notebooks based on and compatible with Jupyter Notebooks, accessible through a browser, no installation required
+                </p></a>
+            </div>
+        </div>
+        <div class="card" style="width: 20rem; border:none; padding: 20px; text-align:center; margin:0 auto;">
+            <div class="text-center">
+                <a href="/library/" style="color:black"><img class="card-img-top text-center" src="/static/images/icons/book_madebymade_noun.png" style="align-content:center">
+            </div>
+            <div class="card-body">
+                <h4 class="card-title" style="font-size: 23px;">Notebook Library</h4>
+                <p class="card-text" style="font-size: 90%">Browse a collection of genomic and machine learning notebooks and adapt them for your own use
+                </p></a>
+            </div>
+        </div>
+        <div class="card" style="width: 20rem; border:none; padding: 20px; text-align:center; margin:0 auto;">
+            <div class="text-center">
+                <a href="/publish-and-sharing/" style="color:black"><img class="card-img-top text-center" src="/static/images/icons/file_laree_noun.png" style="align-content: center">
+            </div>
+            <div class="card-body">
+                <h4 class="card-title" style="font-size: 23px;">Publish and Share
+                </h4>
+                <p class="card-text" style="font-size: 90%">Share a notebook with a collaborator or publish it in our library
+                </p></a>
+            </div>
+        </div>
+        <div class="card" style="width: 20rem; border:none; padding: 20px; text-align:center; margin:0 auto;">
+            <div class="text-center">
+                <a href="/projects/" style="color:black"><img class="card-img-top text-center" src="/static/images/icons/package_putukharismayadi_noun.png" style="align-content:center">
+            </div>
+            <div class="card-body">
+                <h4 class="card-title" style="font-size: 23px;">Notebook Projects</h4>
+                <p class="card-text" style="font-size: 90%">Develop notebooks within separate customizable environments
+                </p></a>
+            </div>
+        </div>
+        <div class="card" style="width: 20rem; border:none; padding: 20px; text-align:center; margin:0 auto;">
+            <div class="text-center">
+                <a href="/publications/" style="color:black"><img class="card-img-top text-center" src="/static/images/icons/library-bieutuong_noun.png" style="align-content:center">
+            </div>
+            <div class="card-body">
+                <h4 class="card-title" style="font-size: 23px;">Publications</h4>
+                <p class="card-text" style="font-size: 90%">Ensure reproducibility of your methods by adding a link to your notebook in a publication
+                </p></a>
+            </div>
+        </div>
+        <div class="card" style="width: 20rem; border:none; padding: 20px; text-align:center; margin:0 auto;">
+            <div class="text-center">
+                <a target="_blank" href="https://lab.genepattern.org" style="color:black"><img class="card-img-top text-center" src="/static/images/icons/squarelogo-blacktext-blackbody-blackmoons.png" style="align-content: center">
+            </div>
+            <div class="card-body">
+                <h4 class="card-title" style="font-size: 23px;">JupyterLab (beta)
+                </h4>
+                <p class="card-text" style="font-size: 90%">Try our beta version of GenePattern Notebook on JupyterLab
+                </p></a>
+            </div>
+        </div>
+        <div class="card" style="width: 20rem; border:none; padding: 20px; text-align:center; margin:0 auto;">
+            <div class="text-center">
+                <a href="/external-tools/" style="color:black"> <img class="card-img-top text-center" src="/static/images/icons/project_adirencoquet_noun.png" style="align-content:center">
+            </div>
+            <div class="card-body">
+                <h4 class="card-title" style="font-size: 23px;">External Resources
+                </h4>
+                <p class="card-text" style="font-size: 90%">Easy access to web-based genomic resources from within a notebook
+                </p></a>
+            </div>
+        </div>
+        <div class="card" style="width: 20rem; border:none; padding: 20px; text-align:center; margin:0 auto;">
+            <div class="text-center">
+                <a target="_blank" href="https://github.com/genepattern?q=notebook" style="color:black"><img class="card-img-top text-center" src="/static/images/icons/GitHub-Mark-120px-plus.png" style="align-content:center">
+            </div>
+            <div class="card-body">
+                <h4 class="card-title" style="font-size: 23px;">For Developers
+                </h4></a>
+                <p class="card-text" style="font-size: 90%">
+                    <code style="font-size:80%;">pip install genepattern-notebook</code><br>
+                    <code style="font-size:80%;">conda install -c genepattern genepattern-notebook</code>
+                    <ul>
+                        <li style="font-size: 90%">Also available in <a target="_blank" href="https://hub.docker.com/r/genepattern/genepattern-notebook/">Docker</a></li>
+                        <li style="font-size: 90%">Fork us on <a target="_blank" href="https://github.com/genepattern?q=notebook">Github</a></li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <section id="about" class="about">
@@ -118,6 +228,10 @@
             <br>
             <h3>In the Press</h3>
             <table>
+                <tr>
+                    <td class="text-center news-img"><a href="https://www.genengnews.com/resources/best-of-the-web/genepattern-notebook/" target="_blank"><img alt="" src="/static/images/gen-large.jpg"/></a></td>
+                    <td class="align-bottom"><a href="https://www.genengnews.com/resources/best-of-the-web/genepattern-notebook/" target="_blank">"GenePattern Notebook is a great tool for researchers with large molecular datasets and makes it easy to get started on your data analysis" <small><i class="fas fa-external-link-alt"></i></small></a></td>
+                </tr>
                 <tr>
                     <td class="text-center news-img"><a href="https://datascience.cancer.gov/news-events/blog/informatics-technology-cancer-research-program-drives-and-fosters-community-cancer" target="_blank"><img alt="" src="/static/images/nih-centerforbioinfo.png"/></a></td>
                     <td class="align-bottom"><a href="https://datascience.cancer.gov/news-events/blog/informatics-technology-cancer-research-program-drives-and-fosters-community-cancer" target="_blank">"Informatics Technology for Cancer Research Program Drives and Fosters Community of Cancer Informatics Researchers: An *AMARETTO Tool Success Story" <small><i class="fas fa-external-link-alt"></i></small></a></td>
