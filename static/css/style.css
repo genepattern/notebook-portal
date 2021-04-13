@@ -5,13 +5,15 @@ Author: Forrest Kim, Thorin Tabor
 
 html {
     height: 100%;
+    scroll-behavior: smooth;
+
 }
 
 body {
     /* font-family: 'Roboto', sans-serif; */
     /* font-family: "Helvetica",Helvetica,Arial,sans-serif; */
     /* font-family:'Montserrat', sans-serif; */
-    font-family : 'Avenir';
+    font-family: 'Nunito', sans-serif;
     /* background-image: url(/static/images/banner-grayscale3.png); */
     background-image: url(/static/images/banner2.jpg);
     background-repeat: no-repeat;
@@ -413,12 +415,13 @@ header .nav-link {
 #main {
     height: 100%;
 }
-#dot-nav{    
+
+
+/* #dot-nav{    
     position: fixed;
     right: 10px;
 	top: 50%;
 	height: 100px;
-	z-index: 999;
 }
 
 #dot-nav ul {
@@ -428,8 +431,8 @@ header .nav-link {
 }
 #dot-nav li {
 	position: relative;
-	background-color: #bdc3c7;
-	border:3px solid #bdc3c7;
+	background-color: black;
+	border:3px solid black;
 	border-radius: 15px 15px 15px 15px;
 	cursor: pointer;
 	padding: 5px;
@@ -449,7 +452,7 @@ header .nav-link {
 	margin: 0px 0px 0px 0px;
 	position: relative;
 	top:-5px;
-}
+} */
 
 /* MAIN PAGES */
 
@@ -1239,6 +1242,24 @@ div.nb-card-new {
     transform: scale(1.1);
 }
 
+#myScrollspy {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+}
+
+#myScrollspy a {
+    border: 1px solid lightgrey;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    display: block;
+    margin: 10px;
+}
+
+#myScrollspy a.active, #myScrollspy a:first-child {
+    background: darkgray;
+}
 
 @media (max-width: 900px){
     .inside{
