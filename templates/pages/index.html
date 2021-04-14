@@ -15,7 +15,30 @@
 {% block extra_head %}
 <!-- <meta name="google-site-verification" content="baLhu0Y0s--5YDcQqUMiwUFq2ceR7OKi6v1Z8r_64wQ" /> -->
 <!-- Smooth scroll  -->
-<script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15/dist/smooth-scroll.polyfills.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15/dist/smooth-scroll.polyfills.min.js"></script> -->
+<script src="/static/js/dot-nav-min.js"></script>
+<script>
+    $("#myScrollspy a[href^='#']").on('click', function (e) {
+
+        // prevent default anchor click behavior
+        e.preventDefault();
+
+        // store hash
+        var hash = this.hash;
+
+        // animate
+        $('html, body').animate({
+            scrollTop: $(hash).offset().top
+        }, 400, function () {
+
+            // when done, add hash to url
+            // (default click behaviour)
+            window.location.hash = hash;
+        });
+
+    });
+</script>
+
 {% endblock %} 
 
 {% block meta_description %}{% metablock %} 
@@ -35,16 +58,12 @@
     {% block content %} {% endblock content %} 
 {% endblock main-content %}
 
-<script src="/static/js/dot-nav.js"></script>
-
-<!-- <div id="dot-nav">
-    <ul>
-        <li class="active" title="Home"><a href="#home"></a></li>
-        <li title="About"><a href="#about"></a></li>
-        <li title="Directory"><a href="#directory"></a></li>
-        <li title="News"><a href="#news"></a></li>
-    </ul>
-</div> -->
+<nav id="myScrollspy">
+    <a href="#"></a>
+    <a href="#inside"></a>
+    <a href="#about"></a>
+    <a href="#video"></a>
+</nav>
 
 <section id="home">
     <div class="lead-cover">
@@ -110,7 +129,7 @@
     </div>
 </section> -->
 
-<section class="inside" style="text-align: center;">
+<section class="inside" style="text-align: center;" id="inside">
     <div class="row" style="text-align: center;font-family : 'Avenir' ;padding-top: 30px">
         <!-- <div class="text-center" style="margin:auto; padding-bottom: 20px;">
             <h3>Easily create and run a wide range of genomic analyses within shareable electronic notebooks
@@ -209,7 +228,7 @@
                 <p class="card-text" style="font-size: 90%">
                     <code style="font-size:80%;">pip install genepattern-notebook</code><br>
                     <code style="font-size:80%;">conda install -c genepattern genepattern-notebook</code>
-                    <ul>
+                    <ul class="list-unstyled">
                         <li style="font-size: 90%">Also available in <a target="_blank" href="https://hub.docker.com/r/genepattern/genepattern-notebook/">Docker</a></li>
                         <li style="font-size: 90%">Fork us on <a target="_blank" href="https://github.com/genepattern?q=notebook">Github</a></li>
                     </ul>
@@ -266,7 +285,7 @@
     </div>
 </section>
 
-<section class="video">
+<section class="video" id="video">
     <div class="row">
         <div class="col-md-8">
             <iframe src="https://www.youtube.com/embed/8npzyGLpUHU" height="450" width="700" frameborder="0" align="middle" style="margin: auto; padding: 0px; border-radius: 5px;width:100%; height: 80%;"></iframe>
