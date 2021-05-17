@@ -1,5 +1,5 @@
 // Declare server constants
-export const PUBLIC_NOTEBOOK_SEVER = 'https://notebook.genepattern.org/';
+export const PUBLIC_NOTEBOOK_SEVER = 'http://nbdev.genepattern.org/';
 export const GENEPATTERN_SERVER = 'https://cloud.genepattern.org/gp/';
 
 // Declare data cache
@@ -20,14 +20,14 @@ let _jupyterhub_token = null;
 export function public_notebooks() {
     if (_public_notebooks !== null)
         return new Promise(function(resolve) {
-            resolve(_public_notebooks['results']);
+            resolve(_public_notebooks['projects']);
         });
     else
-        return fetch(PUBLIC_NOTEBOOK_SEVER + 'services/sharing/notebooks/')
+        return fetch(PUBLIC_NOTEBOOK_SEVER + 'services/projects/library/')
             .then(response => response.json())
             .then(function(response) {
                 _public_notebooks = response;
-                return response['results'];
+                return response['projects'];
             });
 }
 
@@ -47,8 +47,8 @@ export function notebook_tags() {
             // Build the map of tags
             const tag_map = {};
             all_notebooks.forEach(function(nb) {
-                nb.tags.forEach(function(tag) {
-                    tag_map[tag.label] = tag;
+                nb.tags.split(',').forEach(function(tag) {
+                    tag_map[tag] = tag;
                 });
             });
 
@@ -622,39 +622,29 @@ export function library(selector) {
             const app = this;
             if (window.is_authenticated) GenePattern.login_to_jupyterhub({suppress_errors: true});
             GenePattern.public_notebooks().then((results) => {
-                const non_workshop = [];
-                results.forEach(nb => {
-                    let found_workshop = false;
-                    nb.tags.forEach(tag => {
-                        if (tag.label === 'workshop') found_workshop = true;
-                    });
-                    if (found_workshop === false) non_workshop.push(nb);
-                })
-                non_workshop.sort((a, b) => {
+                results.sort((a, b) => {
                     const a_name = a.name.toLowerCase();
                     const b_name = b.name.toLowerCase();
                     return (a_name < b_name) ? -1 : (a_name > b_name) ? 1 : 0;
                 });
-                this.notebooks = non_workshop;
+                this.notebooks = results;
             });
             GenePattern.notebook_tags().then((results) => {
                 const sorted_tags = [];
-                results.forEach(nb => {
-                    nb.tags.forEach(tag => {
-                        if (tag.label == true) sorted_tags.push(nb)}
-                        );
-                })
-                sorted_tags.sort()
+                results.forEach(tag => {
+                    sorted_tags.push(tag)
+                });
+                sorted_tags.sort();
                 this.tags = sorted_tags;
             });
             GenePattern.pinned_tags().then((results) => {
                 const sorted_ptags = [];
                 results.forEach(nb => {
-                    nb.tags.forEach(tag => {
-                        if (tag.label == true) sorted_ptag.push(nb)}
+                    nb.tags.split(',').forEach(tag => {
+                        sorted_ptag.push(tag)}
                         );
-                })
-                sorted_ptag.sort()
+                });
+                sorted_ptags.sort();
                 this.pinned = sorted_ptags;
             });
         },
@@ -1119,7 +1109,7 @@ Vue.component('notebook-card', {
 
             // If this is a notebook
             else if (this.nb.quality)
-                window.open(`${PUBLIC_NOTEBOOK_SEVER}services/sharing/notebooks/${this.nb.id}/preview/`);
+                window.open(`${PUBLIC_NOTEBOOK_SEVER}hub/preview?id=${this.nb.id}`);
         }
     },
     computed: {
@@ -1136,8 +1126,8 @@ Vue.component('notebook-card', {
 
             // Filter by tag
             let show = false;
-            this.nb.tags.forEach(tag => {
-                if (tag.label === this.tag_filter) show = true;
+            this.nb.tags.split(',').forEach(tag => {
+                if (tag === this.tag_filter) show = true;
             });
             return show;
         }
@@ -1147,7 +1137,7 @@ Vue.component('notebook-card', {
                         <h8 class="card-title">[[ nb.name ]] <i class="fas fa-external-link-alt" style="font-size: 80%"></i></h8> 
                         <p class="card-text">[[ nb.description ]]</p> 
                         </div>
-                        <div class="d-none card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in nb.tags">[[ tag.label ]]</span></div>
+                        <div class="d-none card-text nb-card-tags"><span class="badge badge-secondary" v-for="tag in nb.tags">[[ tag ]]</span></div>
                     </div> 
                 </div>`
     // template: `<div v-bind:class="{'card': true, 'nb-card': true, 'd-none':!filter}" v-on:click="preview" > 
