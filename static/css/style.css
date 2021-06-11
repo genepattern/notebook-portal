@@ -1235,10 +1235,10 @@ div.nb-card-new {
     width: auto;
 }
 
-.card{
-    transition: transform .3s ease;
+.inside .card{
+    transition: transform .3s;
 }
-.card:hover {
+.inside .card:hover {
     transform: scale(1.1);
 }
 
