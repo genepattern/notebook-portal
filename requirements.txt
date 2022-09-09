@@ -22,7 +22,7 @@ grappelli-safe==0.5.2
 idna==2.8
 ipython-genutils==0.2.0
 Jinja2==2.10.1
-jupyterhub==0.9.6
+jupyterhub==1.5.0
 Mako==1.0.9
 MarkupSafe==1.1.1
 Mezzanine==4.3.1
