@@ -23,7 +23,7 @@ idna==2.8
 ipython-genutils==0.2.0
 Jinja2==2.10.1
 jupyterhub==0.9.6
-Mako==1.0.9
+Mako==1.2.2
 MarkupSafe==1.1.1
 Mezzanine==4.3.1
 mezzanine-api==0.7.1
